@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Kitchen Sink</string>
+    <string name="app_name">Webex Call</string>
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="kitchen_sink">Kitchen Sink</string>
+    <string name="kitchen_sink">Webex Call</string>
     <string name="feedback">Feedback</string>
     <string name="webhooks">Webhooks</string>
     <string name="uc_login">UC Login</string>
