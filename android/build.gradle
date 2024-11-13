@@ -1,0 +1,99 @@
+group = "ae.altkamul.webex_flutter_plugin"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = "1.8.22"
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://devhub.cisco.com/artifactory/webexsdk/' }
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.1.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://devhub.cisco.com/artifactory/webexsdk/' }
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: 'kotlin-kapt'
+apply from: "./resolve_dependencies.gradle"
+
+android {
+    compileSdk = 34
+
+    if (project.android.hasProperty("namespace")) {
+        namespace = "ae.altkamul.webex_flutter_plugin"
+    }
+    dataBinding { enabled = true }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_18
+        targetCompatibility JavaVersion.VERSION_18
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_18
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
+
+    defaultConfig {
+        minSdkVersion 24
+        multiDexEnabled true
+        targetSdkVersion 34
+    }
+
+    dependencies {
+        implementation "com.ciscowebex:webexsdk:3.13.0"
+        implementation 'com.google.android.material:material:1.12.0'
+        implementation 'androidx.appcompat:appcompat:1.7.0'
+        implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+        implementation 'androidx.navigation:navigation-fragment-ktx:2.8.3'
+        implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
+
+        implementation "io.reactivex.rxjava2:rxjava:2.2.11"
+        implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+
+        implementation "com.google.firebase:firebase-bom:26.1.0"
+        implementation "com.google.firebase:firebase-messaging:24.0.3"
+
+        implementation "io.insert-koin:koin-core:2.2.3"
+        implementation "io.insert-koin:koin-androidx-viewmodel:2.2.3"
+
+        implementation  "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+        kapt 'com.android.databinding:compiler:3.1.4'
+        implementation "androidx.media:media:1.1.0"
+
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("org.mockito:mockito-core:5.0.0")
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+
+            testLogging {
+               events "passed", "skipped", "failed", "standardOut", "standardError"
+               outputs.upToDateWhen {false}
+               showStandardStreams = true
+            }
+        }
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+
+    }
+}
