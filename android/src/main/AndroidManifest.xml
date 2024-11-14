@@ -81,10 +81,6 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".auth.LoginActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".auth.JWTLoginActivity"
             android:screenOrientation="portrait" />
 

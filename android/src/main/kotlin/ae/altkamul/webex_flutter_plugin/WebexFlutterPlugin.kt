@@ -1,6 +1,7 @@
 package ae.altkamul.webex_flutter_plugin
 
 import ae.altkamul.webex_flutter_plugin.WebexCallApp.Companion.applicationContext
+import ae.altkamul.webex_flutter_plugin.auth.JWTLoginActivity
 import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
 import android.content.Intent
 import androidx.annotation.NonNull
@@ -34,7 +35,7 @@ class WebexFlutterPlugin : FlutterPlugin, MethodCallHandler {
         if (call.method == "getPlatformVersion") {
 //      result.success("Android ${android.os.Build.VERSION.RELEASE}")
             val intent =
-                Intent(applicationContext(), LoginActivity::class.java).apply {
+                Intent(applicationContext(), JWTLoginActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
             applicationContext().startActivity(intent)

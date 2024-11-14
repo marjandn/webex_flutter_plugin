@@ -28,11 +28,11 @@ import ae.altkamul.webex_flutter_plugin.utils.SharedPrefUtils
 import ae.altkamul.webex_flutter_plugin.webexModule
 
 class LoginActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityLoginBinding
+
     private val webexViewModel: WebexViewModel by viewModel()
  
- 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppConfiguration.setContext(applicationContext)
@@ -79,13 +79,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun loadModule(){
-
-    }
- 
     private fun startJWTActivity() {
-
-
         enableBackgroundConnection()
         startActivity(Intent(this@LoginActivity, JWTLoginActivity::class.java))
         finish()

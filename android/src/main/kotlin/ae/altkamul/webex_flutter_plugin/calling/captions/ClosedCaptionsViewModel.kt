@@ -1,7 +1,7 @@
 package ae.altkamul.webex_flutter_plugin.calling.captions
 
-import androidx.lifecycle.MutableLiveData
 import ae.altkamul.webex_flutter_plugin.BaseViewModel
+import androidx.lifecycle.MutableLiveData
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

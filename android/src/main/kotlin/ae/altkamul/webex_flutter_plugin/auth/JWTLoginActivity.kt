@@ -8,37 +8,59 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import ae.altkamul.webex_flutter_plugin.R
 import ae.altkamul.webex_flutter_plugin.WebexCallApp
+import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.calling.CallActivity
+import ae.altkamul.webex_flutter_plugin.calling.calendarMeeting.calendarMeetingsModule
+import ae.altkamul.webex_flutter_plugin.calling.callModule
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityLoginWithTokenBinding
+import ae.altkamul.webex_flutter_plugin.mainAppModule
+import ae.altkamul.webex_flutter_plugin.person.personModule
 import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
+import ae.altkamul.webex_flutter_plugin.webexModule
+import com.ciscowebex.androidsdk.utils.AppConfiguration
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
 
 class JWTLoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginWithTokenBinding
+
     private val loginViewModel: LoginViewModel by viewModel()
+    private val webexViewModel: WebexViewModel by viewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DataBindingUtil.setContentView<ActivityLoginWithTokenBinding>(this, R.layout.activity_login_with_token)
-                .also { binding = it }
-                .apply {
-                    title.text = getString(R.string.login_jwt)
-                    progressLayout.visibility = View.VISIBLE
-                    loginButton.setOnClickListener {
-                        binding.loginFailedTextView.visibility = View.GONE
-                        if (tokenText.text.isEmpty()) {
-                            showDialogWithMessage(this@JWTLoginActivity, R.string.error_occurred, resources.getString(R.string.login_token_empty_error))
-                        }
-                        else {
-                            binding.loginButton.visibility = View.GONE
-                            progressLayout.visibility = View.VISIBLE
-                            val token = tokenText.text.toString()
-                            loginViewModel.loginWithJWT(token)
-                        }
-                    }
 
-                    loginViewModel.isAuthorized.observe(this@JWTLoginActivity, Observer { isAuthorized ->
+        enableBackgroundConnection()
+
+        DataBindingUtil.setContentView<ActivityLoginWithTokenBinding>(
+            this,
+            R.layout.activity_login_with_token
+        )
+            .also { binding = it }
+            .apply {
+                title.text = getString(R.string.login_jwt)
+                progressLayout.visibility = View.VISIBLE
+                loginButton.setOnClickListener {
+                    binding.loginFailedTextView.visibility = View.GONE
+                    if (tokenText.text.isEmpty()) {
+                        showDialogWithMessage(
+                            this@JWTLoginActivity,
+                            R.string.error_occurred,
+                            resources.getString(R.string.login_token_empty_error)
+                        )
+                    } else {
+                        binding.loginButton.visibility = View.GONE
+                        progressLayout.visibility = View.VISIBLE
+                        val token = tokenText.text.toString()
+                        loginViewModel.loginWithJWT(token)
+                    }
+                }
+
+                loginViewModel.isAuthorized.observe(
+                    this@JWTLoginActivity,
+                    Observer { isAuthorized ->
                         progressLayout.visibility = View.GONE
                         isAuthorized?.let {
                             if (it) {
@@ -49,7 +71,9 @@ class JWTLoginActivity : AppCompatActivity() {
                         }
                     })
 
-                    loginViewModel.isAuthorizedCached.observe(this@JWTLoginActivity, Observer { isAuthorizedCached ->
+                loginViewModel.isAuthorizedCached.observe(
+                    this@JWTLoginActivity,
+                    Observer { isAuthorizedCached ->
                         progressLayout.visibility = View.GONE
                         isAuthorizedCached?.let {
                             if (it) {
@@ -62,13 +86,32 @@ class JWTLoginActivity : AppCompatActivity() {
                         }
                     })
 
-                    loginViewModel.errorData.observe(this@JWTLoginActivity, Observer { errorMessage ->
+                loginViewModel.errorData.observe(
+                    this@JWTLoginActivity,
+                    Observer { errorMessage ->
                         progressLayout.visibility = View.GONE
                         onLoginFailed(errorMessage)
                     })
 
-                    loginViewModel.initialize()
-                }
+                loginViewModel.initialize()
+            }
+    }
+
+    private fun enableBackgroundConnection() {
+        loadKoinModules(
+            listOf(
+                mainAppModule,
+                webexModule,
+                loginModule,
+                JWTWebexModule,
+                callModule,
+                personModule,
+                calendarMeetingsModule
+            )
+        )
+        AppConfiguration.setContext(applicationContext)
+
+        webexViewModel.enableBackgroundConnection(webexViewModel.enableBgConnectiontoggle)
     }
 
     override fun onBackPressed() {
@@ -87,7 +130,7 @@ class JWTLoginActivity : AppCompatActivity() {
                 )
             )
         )
-//        startActivity(Intent(this, Dial::class.java))
+
         finish()
     }
 

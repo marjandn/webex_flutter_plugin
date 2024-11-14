@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import com.ciscowebex.androidsdk.people.PersonRole
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class PersonViewModel(private val personRepo: PersonRepository) : BaseViewModel() {
+class PersonViewModel(private val personRepo: PersonRepository) :
+    BaseViewModel() {
     private val tag = "PersonViewModel"
 
     private val _person = MutableLiveData<PersonModel>()
@@ -28,30 +29,81 @@ class PersonViewModel(private val personRepo: PersonRepository) : BaseViewModel(
 
     @SuppressLint("NullSafeMutableLiveData")
     fun getPersonDetail(personId: String) {
-        personRepo.getPersonDetail(personId).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        personRepo.getPersonDetail(personId)
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({
             _person.postValue(it)
         }, { _person.postValue(null) }).autoDispose()
     }
 
     @SuppressLint("NullSafeMutableLiveData")
-    fun getPeopleList(email: String?, displayName: String?, id: String?, orgId: String?, max: Int) {
-        personRepo.getPeopleList(email, displayName, id, orgId, max).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
-            _personList.postValue(personModels)
-        }, {
-            _personList.postValue(emptyList())
-        }).autoDispose()
+    fun getPeopleList(
+        email: String?,
+        displayName: String?,
+        id: String?,
+        orgId: String?,
+        max: Int
+    ) {
+        personRepo.getPeopleList(email, displayName, id, orgId, max)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ personModels ->
+                _personList.postValue(personModels)
+            }, {
+                _personList.postValue(emptyList())
+            }).autoDispose()
     }
 
-    fun createPerson(email: String, displayName: String?, firstName: String?, lastName: String?, avatar: String?, orgId: String?, roles: List<PersonRole>, licenses: List<String>, siteUrls: List<String>) {
-        personRepo.createPerson(email, displayName, firstName, lastName, avatar, orgId, roles, licenses, siteUrls).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
+    fun createPerson(
+        email: String,
+        displayName: String?,
+        firstName: String?,
+        lastName: String?,
+        avatar: String?,
+        orgId: String?,
+        roles: List<PersonRole>,
+        licenses: List<String>,
+        siteUrls: List<String>
+    ) {
+        personRepo.createPerson(
+            email,
+            displayName,
+            firstName,
+            lastName,
+            avatar,
+            orgId,
+            roles,
+            licenses,
+            siteUrls
+        ).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
             _personList.postValue(listOf(personModels))
         }, {
             _error.postValue(it.message)
         }).autoDispose()
     }
 
-    fun updatePerson(personId: String, email: String, displayName: String?, firstName: String?, lastName: String?, avatar: String?, orgId: String?, roles: List<PersonRole>, licenses: List<String>, siteUrls: List<String>) {
-        personRepo.updatePerson(personId, email, displayName, firstName, lastName, avatar, orgId, roles, licenses, siteUrls).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
+    fun updatePerson(
+        personId: String,
+        email: String,
+        displayName: String?,
+        firstName: String?,
+        lastName: String?,
+        avatar: String?,
+        orgId: String?,
+        roles: List<PersonRole>,
+        licenses: List<String>,
+        siteUrls: List<String>
+    ) {
+        personRepo.updatePerson(
+            personId,
+            email,
+            displayName,
+            firstName,
+            lastName,
+            avatar,
+            orgId,
+            roles,
+            licenses,
+            siteUrls
+        ).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
             _personList.postValue(listOf(personModels))
         }, {
             _error.postValue(it.message)
@@ -59,10 +111,12 @@ class PersonViewModel(private val personRepo: PersonRepository) : BaseViewModel(
     }
 
     fun deletePerson(personId: String) {
-        personRepo.deletePerson(personId).observeOn(AndroidSchedulers.mainThread()).subscribe({ personModels ->
-            _personList.postValue(listOf())
-        }, {
-            _error.postValue(it.message)
-        }).autoDispose()
+        personRepo.deletePerson(personId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ personModels ->
+                _personList.postValue(listOf())
+            }, {
+                _error.postValue(it.message)
+            }).autoDispose()
     }
 }

@@ -1,5 +1,6 @@
 package ae.altkamul.webex_flutter_plugin.auth
 
+import ae.altkamul.webex_flutter_plugin.BaseViewModel
 import android.webkit.WebView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +8,6 @@ import com.ciscowebex.androidsdk.Webex
 import com.ciscowebex.androidsdk.auth.JWTAuthenticator
 import com.ciscowebex.androidsdk.auth.OAuthWebViewAuthenticator
 import com.ciscowebex.androidsdk.auth.TokenAuthenticator
-import ae.altkamul.webex_flutter_plugin.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 class LoginViewModel(private val webex: Webex, private val loginRepository: LoginRepository) : BaseViewModel() {
