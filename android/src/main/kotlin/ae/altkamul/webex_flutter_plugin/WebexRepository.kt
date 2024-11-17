@@ -130,7 +130,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
     var oldCallId: String? = null
     var isSendingAudio = true
     var doMuteAll = true
-    var incomingCallJoinedCallId: String? = null
+//    var incomingCallJoinedCallId: String? = null
     var isLocalVideoMuted = true
     var isRemoteVideoMuted = true
     var isRemoteScreenShareON = false
@@ -140,7 +140,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
 //    var enableHWAcceltoggle = false
 //    var multiStreamNewApproach = true
 //    var logFilter = LogLevel.ALL.name
-    var maxVideoBandwidth = BandWidthOptions.BANDWIDTH_720P.name
+//    var maxVideoBandwidth = BandWidthOptions.BANDWIDTH_720P.name
 //    var isConsoleLoggerEnabled = true
     var callCapability: CallCap = CallCap.Audio_Video
     var scalingMode: Call.VideoRenderMode = Call.VideoRenderMode.Fit
@@ -182,7 +182,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         isAddedCall = false
         currentCallId = null
         oldCallId = null
-        incomingCallJoinedCallId = null
+//        incomingCallJoinedCallId = null
         isSendingAudio = true
         doMuteAll = true
         isLocalVideoMuted = true

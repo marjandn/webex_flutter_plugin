@@ -229,12 +229,14 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             repository.logFilter = value
         }
 */
+/*
 
     var maxVideoBandwidth: String
         get() = repository.maxVideoBandwidth
         set(value) {
             repository.maxVideoBandwidth = value
         }
+*/
 
 /*    var isConsoleLoggerEnabled: Boolean
         get() = repository.isConsoleLoggerEnabled
@@ -974,7 +976,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         })
     }*/
 
-    fun setHardwareAccelerationEnabled(enable: Boolean) {
+/*    fun setHardwareAccelerationEnabled(enable: Boolean) {
         webex.phone.setHardwareAccelerationEnabled(enable)
     }
 
@@ -991,7 +993,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
         }
         return videoBandwidth
-    }
+    }*/
 /*
 
     fun setVideoMaxTxBandwidth(bandwidth: Int){
