@@ -1,6 +1,6 @@
 package ae.altkamul.webex_flutter_plugin
 
-import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
+import ae.altkamul.webex_flutter_plugin.auth.JWTLoginActivity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -63,7 +63,7 @@ class KitchenSinkForegroundService : Service() {
         mNotificationManager?.createNotificationChannel(notificationChannel)
 
 
-        val mainActivity = Intent(this, LoginActivity::class.java)
+        val mainActivity = Intent(this, JWTLoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, mainActivity, PendingIntent.FLAG_IMMUTABLE or 0)
         return NotificationCompat.Builder(
             context,

@@ -50,7 +50,6 @@ import ae.altkamul.webex_flutter_plugin.R
 import ae.altkamul.webex_flutter_plugin.WebexRepository
 import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.AnnotationRenderer
-import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
 import ae.altkamul.webex_flutter_plugin.calling.captions.ClosedCaptionsController
 import ae.altkamul.webex_flutter_plugin.calling.captions.ClosedCaptionsViewModel
 import ae.altkamul.webex_flutter_plugin.calling.captions.LanguageData
@@ -1457,10 +1456,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     private fun onSignedOut() {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
+    /*    val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        startActivity(intent)*/
     }
 
     /*private fun handleOnBackgroundChanged(virtualBackground: VirtualBackground) {

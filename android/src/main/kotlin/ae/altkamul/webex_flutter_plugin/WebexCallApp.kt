@@ -7,10 +7,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
-import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
 import ae.altkamul.webex_flutter_plugin.auth.loginModule
 import ae.altkamul.webex_flutter_plugin.calling.callModule
-import ae.altkamul.webex_flutter_plugin.calling.calendarMeeting.calendarMeetingsModule
 import ae.altkamul.webex_flutter_plugin.person.personModule
 import ae.altkamul.webex_flutter_plugin.utils.SharedPrefUtils
 import org.koin.android.ext.koin.androidContext
@@ -96,7 +94,6 @@ class WebexCallApp : Application(), LifecycleObserver {
                 JWTWebexModule,
                 callModule,
                 personModule,
-                calendarMeetingsModule
             )
         )
         isKoinModulesLoaded = true
@@ -111,7 +108,6 @@ class WebexCallApp : Application(), LifecycleObserver {
                 JWTWebexModule,
                 callModule,
                 personModule,
-                calendarMeetingsModule
             )
         )
         isKoinModulesLoaded = false

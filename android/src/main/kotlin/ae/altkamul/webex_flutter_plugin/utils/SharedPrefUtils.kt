@@ -1,7 +1,6 @@
 package ae.altkamul.webex_flutter_plugin.utils
 
 import android.content.Context
-import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
 
 object SharedPrefUtils {
   /*  fun saveLoginTypePref(context:Context, type: LoginActivity.LoginType) {

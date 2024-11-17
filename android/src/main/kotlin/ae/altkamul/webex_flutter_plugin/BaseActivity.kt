@@ -1,6 +1,6 @@
 package ae.altkamul.webex_flutter_plugin
 
-import ae.altkamul.webex_flutter_plugin.auth.LoginActivity
+import ae.altkamul.webex_flutter_plugin.auth.JWTLoginActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -31,7 +31,7 @@ open class BaseActivity : AppCompatActivity() {
     fun onSignedOut() {
         clearLoginTypePref(this)
         (application as WebexCallApp).unloadKoinModules()
-        KitchenSinkForegroundService.stopForegroundService(this)
+//        KitchenSinkForegroundService.stopForegroundService(this)
         openLoginActivity()
     }
 
@@ -44,7 +44,7 @@ open class BaseActivity : AppCompatActivity() {
 
     // Open login activity and clear all previous activities
     private fun openLoginActivity() {
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, JWTLoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
