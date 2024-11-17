@@ -3362,21 +3362,21 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     private fun showCallHeader(callId: String) {
-       /* mHandler.post {
+        mHandler.post {
             try {
-                if (breakout == null) {
+              /*  if (breakout == null) {
                     val callInfo = webexViewModel.getCall(callId)
                     Log.d(
                         TAG,
                         "CallControlsFragment showCallHeader callerId: $callId"
-                    )
-                    binding.tvName.text = callInfo?.getTitle()
+                    )*/
+//                    binding.tvName.text = callInfo?.getTitle()
                     binding.callingHeader.text = getString(R.string.onCall)
-                }
+//                }
             } catch (e: Exception) {
-                Log.d(TAG, "error: ${e.message}")
+//                Log.d(TAG, "error: ${e.message}")
             }
-        }*/
+        }
     }
 
     private fun onCallFailed(callId: String, failedError: WebexError<Any>?) {
