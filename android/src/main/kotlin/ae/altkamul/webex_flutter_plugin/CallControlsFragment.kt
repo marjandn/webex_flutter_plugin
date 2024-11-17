@@ -590,7 +590,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     ) {
 
 
-        if ((webexViewModel.currentCallId != callId) || (!webexViewModel.multistreamNewApproach)) {
+        if ((webexViewModel.currentCallId != callId)  ) {
             return
         }
 
@@ -1779,9 +1779,9 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         webexViewModel.setVideoEnableCamera2Setting(true)
         webexViewModel.setVideoEnableDecoderMosaicSetting(true)
 
-        webexViewModel.setHardwareAccelerationEnabled(webexViewModel.enableHWAcceltoggle)
-        webexViewModel.setVideoMaxTxBandwidth(webexViewModel.getUserPreferredMaxBandwidth())
-        webexViewModel.setVideoMaxRxBandwidth(webexViewModel.getUserPreferredMaxBandwidth())
+//        webexViewModel.setHardwareAccelerationEnabled(webexViewModel.enableHWAcceltoggle)
+//        webexViewModel.setVideoMaxTxBandwidth(webexViewModel.getUserPreferredMaxBandwidth())
+//        webexViewModel.setVideoMaxRxBandwidth(webexViewModel.getUserPreferredMaxBandwidth())
         webexViewModel.setSharingMaxRxBandwidth(Phone.DefaultBandwidth.MAX_BANDWIDTH_SESSION.getValue())
         webexViewModel.setAudioMaxRxBandwidth(Phone.DefaultBandwidth.MAX_BANDWIDTH_AUDIO.getValue())
 
@@ -3100,16 +3100,16 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                         }
 
                         if (webexViewModel.streamMode != Phone.VideoStreamMode.COMPOSITED) {
-                            if (!webexViewModel.multistreamNewApproach) {
+                       /*     if (!webexViewModel.multistreamNewApproach) {
                                 binding.ivRemoteAudioState.visibility =
                                     View.GONE
                                 binding.tvRemoteUserName.visibility = View.GONE
-                            } else {
+                            } else {*/
                                 binding.ivRemoteAudioState.visibility =
                                     View.VISIBLE
                                 binding.tvRemoteUserName.visibility =
                                     View.VISIBLE
-                            }
+//                            }
                         } else {
                             binding.ivRemoteAudioState.visibility = View.GONE
                             binding.tvRemoteUserName.visibility = View.GONE

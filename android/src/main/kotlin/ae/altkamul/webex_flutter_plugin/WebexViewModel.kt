@@ -77,40 +77,40 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     val _stopAudioDumpLiveData = MutableLiveData<Boolean>()
     val _canStartAudioDumpLiveData = MutableLiveData<Boolean>()
 
-    var callMembershipsLiveData: LiveData<List<CallMembership>> = _callMembershipsLiveData
-    val muteAllLiveData: LiveData<Boolean> = _muteAllLiveData
-    val ucLiveData: LiveData<Pair<WebexRepository.UCCallEvent, String>> = _ucLiveData
+//    var callMembershipsLiveData: LiveData<List<CallMembership>> = _callMembershipsLiveData
+//    val muteAllLiveData: LiveData<Boolean> = _muteAllLiveData
+//    val ucLiveData: LiveData<Pair<WebexRepository.UCCallEvent, String>> = _ucLiveData
     val authLiveData: LiveData<String> = _authLiveData
     val callingLiveData: LiveData<WebexRepository.CallLiveData> = _callingLiveData
     val startAssociationLiveData: LiveData<WebexRepository.CallLiveData> = _startAssociationLiveData
     val startShareLiveData: LiveData<Boolean> = _startShareLiveData
-    val stopShareLiveData: LiveData<Boolean> = _stopShareLiveData
+//    val stopShareLiveData: LiveData<Boolean> = _stopShareLiveData
     val setCompositeLayoutLiveData: LiveData<Pair<Boolean, String>> = _setCompositeLayoutLiveData
-    val setRemoteVideoRenderModeLiveData: LiveData<Pair<Boolean, String>> = _setRemoteVideoRenderModeLiveData
+//    val setRemoteVideoRenderModeLiveData: LiveData<Pair<Boolean, String>> = _setRemoteVideoRenderModeLiveData
     val forceSendingVideoLandscapeLiveData: LiveData<Boolean> = _forceSendingVideoLandscapeLiveData
-    val startAudioDumpLiveData: LiveData<Boolean> = _startAudioDumpLiveData
-    val stopAudioDumpLiveData: LiveData<Boolean> = _stopAudioDumpLiveData
-    val canStartAudioDumpLiveData: LiveData<Boolean> = _canStartAudioDumpLiveData
+//    val startAudioDumpLiveData: LiveData<Boolean> = _startAudioDumpLiveData
+//    val stopAudioDumpLiveData: LiveData<Boolean> = _stopAudioDumpLiveData
+//    val canStartAudioDumpLiveData: LiveData<Boolean> = _canStartAudioDumpLiveData
 
-    private val _incomingListenerLiveData = MutableLiveData<Call?>()
+  /*  private val _incomingListenerLiveData = MutableLiveData<Call?>()
     val incomingListenerLiveData: LiveData<Call?> = _incomingListenerLiveData
     private val _hasConflictCalls = MutableLiveData<Boolean>()
-    val hasConflictCalls: LiveData<Boolean> = _hasConflictCalls
+    val hasConflictCalls: LiveData<Boolean> = _hasConflictCalls*/
 
-    private val _signOutListenerLiveData = MutableLiveData<Boolean>()
+ /*   private val _signOutListenerLiveData = MutableLiveData<Boolean>()
     val signOutListenerLiveData: LiveData<Boolean> = _signOutListenerLiveData
 
     private val _tokenLiveData = MutableLiveData<Pair<String?, PersonModel>>()
     val tokenLiveData: LiveData<Pair<String?, PersonModel>> = _tokenLiveData
 
     private val _virtualBackground = MutableLiveData<List<VirtualBackground>>()
-    val virtualBackground: LiveData<List<VirtualBackground>> = _virtualBackground
+    val virtualBackground: LiveData<List<VirtualBackground>> = _virtualBackground*/
 
     private val _virtualBgError = MutableLiveData<String>()
     val virtualBgError: LiveData<String> = _virtualBgError
 
-    private val _initialSpacesSyncCompletedLiveData = MutableLiveData<Boolean>()
-    val initialSpacesSyncCompletedLiveData: LiveData<Boolean> = _initialSpacesSyncCompletedLiveData
+//    private val _initialSpacesSyncCompletedLiveData = MutableLiveData<Boolean>()
+//    val initialSpacesSyncCompletedLiveData: LiveData<Boolean> = _initialSpacesSyncCompletedLiveData
 
     private val _annotationEvent = MutableLiveData<AnnotationEvent>()
     val annotationEvent: LiveData<AnnotationEvent> get() = _annotationEvent
@@ -125,11 +125,11 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     var callObserverInterface: CallObserverInterface? = null
 
-    var isVideoViewsSwapped: Boolean = true
+//    var isVideoViewsSwapped: Boolean = true
 
     var isSendingVideoForceLandscape: Boolean = false
-    var torchMode = Call.TorchMode.OFF
-    var flashMode = Call.FlashMode.OFF
+ /*   var torchMode = Call.TorchMode.OFF
+    var flashMode = Call.FlashMode.OFF*/
 
     var callCapability: WebexRepository.CallCap
         get() = repository.callCapability
@@ -185,12 +185,12 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             repository.doMuteAll = value
         }
 
-    var incomingCallJoinedCallId: String?
+  /*  var incomingCallJoinedCallId: String?
         get() = repository.incomingCallJoinedCallId
         set(value) {
             repository.incomingCallJoinedCallId = value
         }
-
+*/
     var isLocalVideoMuted: Boolean
         get() = repository.isLocalVideoMuted
         set(value) {
@@ -203,7 +203,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             repository.isRemoteVideoMuted = value
         }
 
-    var isUCServerLoggedIn: Boolean
+  /*  var isUCServerLoggedIn: Boolean
         get() = repository.isUCServerLoggedIn
         set(value) {
             repository.isUCServerLoggedIn = value
@@ -220,7 +220,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         set(value) {
             repository.ucServerConnectionFailureReason = value
         }
-
+*/
     var isRemoteScreenShareON: Boolean
         get() = repository.isRemoteScreenShareON
         set(value) {
@@ -238,6 +238,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         set(value) {
             repository.enableBgConnectiontoggle = value
         }
+/*
 
     var enablePhoneStatePermission: Boolean
         get() = repository.enablePhoneStatePermission
@@ -256,6 +257,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         set(value) {
             repository.logFilter = value
         }
+*/
 
     var maxVideoBandwidth: String
         get() = repository.maxVideoBandwidth
@@ -263,7 +265,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             repository.maxVideoBandwidth = value
         }
 
-    var isConsoleLoggerEnabled: Boolean
+/*    var isConsoleLoggerEnabled: Boolean
         get() = repository.isConsoleLoggerEnabled
         set(value) {
             repository.isConsoleLoggerEnabled = value
@@ -273,7 +275,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         get() = repository.multiStreamNewApproach
         set(value) {
             repository.multiStreamNewApproach = value
-        }
+        }*/
 
     init {
         repository._callMembershipsLiveData = _callMembershipsLiveData
@@ -289,7 +291,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         repository._canStartAudioDumpLiveData = _canStartAudioDumpLiveData
     }
 
-    fun setLogLevel(logLevel: String) {
+/*    fun setLogLevel(logLevel: String) {
         var level: Webex.LogLevel = Webex.LogLevel.ALL
         when (logLevel) {
             WebexRepository.LogLevel.ALL.name -> level = Webex.LogLevel.ALL
@@ -305,13 +307,13 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun enableConsoleLogger(enable: Boolean) {
         webex.enableConsoleLogger(enable)
-    }
+    }*/
 
     override fun onCleared() {
         repository.clearCallData()
         repository._authLiveDataList.remove(_authLiveData)
     }
-
+/*
     fun setSpaceObserver() {
         repository.setSpaceObserver()
     }
@@ -326,9 +328,9 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun setCalendarMeetingObserver() {
         repository.setCalendarMeetingObserver()
-    }
+    }*/
 
-    fun setIncomingListener() {
+/*    fun setIncomingListener() {
         if(!repository.isIncomingCallListenerSet("viewmodel"+this)) {
             repository.setIncomingCallListener("viewmodel"+this, object : Phone.IncomingCallListener {
                 override fun onIncomingCall(call: Call?, hasActiveConflictCalls : Boolean) {
@@ -342,7 +344,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 }
             })
         }
-    }
+    }*/
 
     fun setFCMIncomingListenerObserver(callId: String) {
         val call = CallObjectStorage.getCallObject(callId)
@@ -351,7 +353,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }
 
-    fun signOut() {
+ /*   fun signOut() {
         webex.authenticator?.deauthorize(CompletionHandler { result ->
             result?.let {
                 _signOutListenerLiveData.postValue(it.isSuccessful)
@@ -360,9 +362,9 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 }
             }
         })
-    }
+    }*/
 
-    fun connectPhoneServices(callback: CompletionHandler<PhoneConnectionResult>){
+ /*   fun connectPhoneServices(callback: CompletionHandler<PhoneConnectionResult>){
         webex.phone.connectPhoneServices(callback)
     }
 
@@ -404,7 +406,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
         })
     }
-
+*/
     fun dial(input: String, option: MediaOption) {
         webex.phone.dial(input, option, CompletionHandler { result ->
             Log.d(tag, "dial isSuccessful: ${result.isSuccessful}")
@@ -431,6 +433,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
         })
     }
+/*
 
     fun refreshCaptcha() {
         webex.phone.refreshMeetingCaptcha() {
@@ -455,6 +458,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
         })
     }
+*/
 
 
     inner class VMCallObserver(val call:Call) : CallObserver {
@@ -592,7 +596,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         repository.setCallObserver(call,observer)
     }
 
-    fun setReceivingVideo(call: Call, receiving: Boolean) {
+   /* fun setReceivingVideo(call: Call, receiving: Boolean) {
         call.setReceivingVideo(receiving)
     }
 
@@ -607,12 +611,12 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     fun muteSelfVideo(callId: String, doMute: Boolean) {
         getCall(callId)?.setSendingVideo(!doMute)
     }
-
+*/
     fun getCall(callId: String): Call? {
         return repository.getCall(callId)
     }
 
-    fun muteAllParticipantAudio(callId: String) {
+/*    fun muteAllParticipantAudio(callId: String) {
         Log.d(tag, "postParticipantData muteAllParticipantAudio: $doMuteAll")
         getCall(callId)?.muteAllParticipantAudio(doMuteAll)
     }
@@ -625,14 +629,14 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 getCall(callId)?.muteParticipantAudio(participantId, doMute)
             }
         }
-    }
+    }*/
 
     fun muteSelfAudio(callId: String) {
         Log.d(tag, "muteSelfAudio isSendingAudio: $isSendingAudio")
         getCall(callId)?.setSendingAudio(!isSendingAudio)
     }
 
-    fun switchToAudioOrVideoCall(callId: String, switchToVideoCall: Boolean, callback: CompletionHandler<SwitchToAudioVideoCallResult>) {
+  /*  fun switchToAudioOrVideoCall(callId: String, switchToVideoCall: Boolean, callback: CompletionHandler<SwitchToAudioVideoCallResult>) {
         Log.d(tag, "switchToAudioOrVideoCall call: $switchToVideoCall")
         if(switchToVideoCall)
         {
@@ -672,7 +676,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             _stopShareLiveData.postValue(result.isSuccessful)
         })
     }
-
+*/
     private var annotationRenderer: AnnotationRenderer? = null
     fun initalizeAnnotations(renderer: AnnotationRenderer) {
         getCall(currentCallId.orEmpty())?.getLiveAnnotationHandle()?.let {annotations->
@@ -733,9 +737,9 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }
 
-    fun getCurrentLiveAnnotationPolicy(): LiveAnnotationsPolicy? {
+/*    fun getCurrentLiveAnnotationPolicy(): LiveAnnotationsPolicy? {
         return getCall(currentCallId.orEmpty())?.getLiveAnnotationHandle()?.getLiveAnnotationsPolicy()
-    }
+    }*/
 
     fun setLiveAnnotationPolicy(policy: LiveAnnotationsPolicy) {
         getCall(currentCallId.orEmpty())?.getLiveAnnotationHandle()?.setLiveAnnotationsPolicy(policy) {
@@ -751,7 +755,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         getCall(callId)?.sendFeedback(rating, comment)
     }
 
-    fun sendDTMF(callId: String, keys: String) {
+/*    fun sendDTMF(callId: String, keys: String) {
         getCall(callId)?.sendDTMF(keys, CompletionHandler { result ->
             if (result.isSuccessful) {
                 Log.d(tag, "sendDTMF successful")
@@ -759,7 +763,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 Log.d(tag, "sendDTMF error: ${result.error?.errorMessage}")
             }
         })
-    }
+    }*/
 
     fun cancel() {
         webex.phone.cancel()
@@ -775,7 +779,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         })
     }
 
-    fun rejectCall(callId: String) {
+/*    fun rejectCall(callId: String) {
         getCall(callId)?.reject(CompletionHandler { result ->
             if (result.isSuccessful) {
                 Log.d(tag, "rejectCall successful")
@@ -783,7 +787,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 Log.d(tag, "rejectCall error: ${result.error?.errorMessage}")
             }
         })
-    }
+    }*/
 
     fun holdCall(callId: String) {
         val callInfo = getCall(callId)
@@ -803,7 +807,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }
 
-    fun setUCDomainServerUrl(ucDomain: String, serverUrl: String) {
+  /*  fun setUCDomainServerUrl(ucDomain: String, serverUrl: String) {
         webex.setUCDomainServerUrl(ucDomain, serverUrl)
     }
 
@@ -876,7 +880,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         return webex.getlogFileUri(includelastRunLog)
     }
 
-
+*/
 
     @SuppressLint("NullSafeMutableLiveData")
     fun postParticipantData(data: List<CallMembership>?) {
@@ -904,7 +908,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }
 
-    fun getHeader(state: CallMembership.State): String {
+/*    fun getHeader(state: CallMembership.State): String {
         return when(state) {
             CallMembership.State.UNKNOWN -> "Not in meeting"
             CallMembership.State.JOINED -> "In meeting"
@@ -914,7 +918,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             CallMembership.State.LEFT -> "Left meeting"
             CallMembership.State.NOTIFIED -> "Notified"
         }
-    }
+    }*/
 
     fun setVideoMaxTxFPSSetting(fps: Int) {
         webex.phone.setAdvancedSetting(AdvancedSetting.VideoMaxTxFPS(fps) as AdvancedSetting<*>)
@@ -932,7 +936,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         webex.phone.setAdvancedSetting(AdvancedSetting.VideoEnableCamera2(value) as AdvancedSetting<*>)
     }
 
-    fun enablePhotoCaptureSetting(value :Boolean){
+    /*fun enablePhotoCaptureSetting(value :Boolean){
         webex.phone.setAdvancedSetting((AdvancedSetting.EnablePhotoCapture(value) as AdvancedSetting<*>))
     }
 
@@ -955,29 +959,29 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun getCurrentAudioOutputMode(): Call.AudioOutputMode? {
         return getCall(currentCallId.orEmpty())?.getCurrentAudioOutput()
-    }
+    }*/
 
     fun enableAudioBNR(value: Boolean) {
         webex.phone.enableAudioBNR(value)
     }
-
+/*
     fun isAudioBNREnable(): Boolean {
         return webex.phone.isAudioBNREnable()
-    }
+    }*/
 
     fun setAudioBNRMode(mode: Phone.AudioBRNMode) {
         webex.phone.setAudioBNRMode(mode)
     }
 
-    fun getAudioBNRMode(): Phone.AudioBRNMode {
+/*    fun getAudioBNRMode(): Phone.AudioBRNMode {
         return webex.phone.getAudioBNRMode()
-    }
+    }*/
 
     fun setDefaultFacingMode(mode: Phone.FacingMode) {
         webex.phone.setDefaultFacingMode(mode)
     }
 
-    fun getDefaultFacingMode() : Phone.FacingMode {
+/*    fun getDefaultFacingMode() : Phone.FacingMode {
         return webex.phone.getDefaultFacingMode()
     }
 
@@ -997,7 +1001,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         webex.phone.requestVideoCodecActivation(builder, CompletionHandler { result ->
             Log.d(tag, "requestVideoCodecActivation result action: ${result.data}")
         })
-    }
+    }*/
 
     fun setHardwareAccelerationEnabled(enable: Boolean) {
         webex.phone.setHardwareAccelerationEnabled(enable)
@@ -1129,7 +1133,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         })
     }
 
-    fun closeAuxStream(view: View) {
+   /* fun closeAuxStream(view: View) {
         getCall(currentCallId.orEmpty())?.closeAuxStream(view)
     }
 
@@ -1190,18 +1194,18 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }
 
-    fun isVirtualBackgroundSupported() = webex.phone.isVirtualBackgroundSupported()
+    fun isVirtualBackgroundSupported() = webex.phone.isVirtualBackgroundSupported()*/
 
-    fun fetchVirtualBackgrounds() {
+/*    fun fetchVirtualBackgrounds() {
         repository.getVirtualBackgrounds(CompletionHandler {
             if (it.isSuccessful)
                 _virtualBackground.postValue(it.data)
             else
                 _virtualBgError.postValue(it.error?.errorMessage)
         })
-    }
+    }*/
 
-    fun addVirtualBackground(imgFile: LocalFile) {
+    /*fun addVirtualBackground(imgFile: LocalFile) {
         repository.addVirtualBackground(imgFile, CompletionHandler {
             if (it.isSuccessful)
                 fetchVirtualBackgrounds()
@@ -1261,7 +1265,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun getCameraTorchMode(): Call.TorchMode {
         return getCall(currentCallId.orEmpty())?.getCameraTorchMode() ?: Call.TorchMode.OFF
-    }
+    }*/
 
     fun getCameraExposureDuration(): CameraExposureDuration? {
         return getCall(currentCallId.orEmpty())?.getCameraExposureDuration()
@@ -1275,7 +1279,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         return getCall(currentCallId.orEmpty())?.getCameraExposureTargetBias()
     }
 
-    fun setCameraCustomExposure(duration: Double, iso: Float): Boolean {
+  /*  fun setCameraCustomExposure(duration: Double, iso: Float): Boolean {
         return getCall(currentCallId.orEmpty())?.setCameraCustomExposure(duration, iso) ?: false
     }
 
@@ -1318,12 +1322,12 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     fun removeMediaStreamCategoryC(participantId: String) {
         getCall(currentCallId.orEmpty())?.removeMediaStreamCategoryC(participantId)
     }
-
+*/
     fun getMediaStreams(): List<MediaStream>? {
         return getCall(currentCallId.orEmpty())?.getMediaStreams()
     }
 
-    fun isMediaStreamsPinningSupported(): Boolean {
+   /* fun isMediaStreamsPinningSupported(): Boolean {
         return getCall(currentCallId.orEmpty())?.isMediaStreamsPinningSupported() ?: false
     }
 
@@ -1400,7 +1404,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
         }
     }
-
+*/
     fun cleanup() {
         repository.removeIncomingCallListener("viewmodel"+this)
         for (entry in callObserverMap.entries.iterator()) {
@@ -1418,7 +1422,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         webex.phone.enableStreams(true)
     }
 
-    fun printObservers(writer : PrintWriter) {
+  /*  fun printObservers(writer : PrintWriter) {
         writer.println("******** Call Observers **********")
         callObserverMap.forEach { (key, value) -> writer.println("$key = $value") }
         writer.println("******************")
@@ -1434,7 +1438,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             }
             _startAudioDumpLiveData.postValue(it.isSuccessful)
         }
-    }
+    }*/
 
     fun stopAudioDump() {
         getCall(currentCallId.orEmpty())?.stopRecordingAudioDump() {
@@ -1448,7 +1452,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     }
 
-    fun canStartRecordingAudioDump() {
+    /*fun canStartRecordingAudioDump() {
         getCall(currentCallId.orEmpty())?.canStartRecordingAudioDump {
             if (it.isSuccessful) {
                 Log.d(tag, "[AudioDump] canStartRecordingAudioDump successful")
@@ -1462,5 +1466,5 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun isRecordingAudioDump(): Boolean {
         return getCall(currentCallId.orEmpty())?.isRecordingAudioDump() ?: false
-    }
+    }*/
 }
