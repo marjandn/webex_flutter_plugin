@@ -8,7 +8,6 @@ import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -17,14 +16,8 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import com.ciscowebex.androidsdk.CompletionHandler
-import com.ciscowebex.androidsdk.internal.ResultImpl
-import ae.altkamul.webex_flutter_plugin.BaseActivity
 import ae.altkamul.webex_flutter_plugin.CallControlsFragment
-import ae.altkamul.webex_flutter_plugin.CallRejectService
 import ae.altkamul.webex_flutter_plugin.R
 import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityCallBinding
@@ -37,7 +30,6 @@ import com.ciscowebex.androidsdk.phone.closedCaptions.ClosedCaptionsInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
-import kotlin.math.log
 
 
 class CallActivity : AppCompatActivity(),
@@ -47,7 +39,7 @@ class CallActivity : AppCompatActivity(),
     lateinit var binding: ActivityCallBinding
     private var pictureInPictureParamsBuilder: PictureInPictureParams.Builder? =
         null
-    lateinit var callQueueAdapter: CallQueueAdapter
+//    lateinit var callQueueAdapter: CallQueueAdapter
     var calls: ArrayList<Call> = ArrayList()
 
     //var fragmentMap : HashMap<String, CallControlsFragment> = HashMap()
