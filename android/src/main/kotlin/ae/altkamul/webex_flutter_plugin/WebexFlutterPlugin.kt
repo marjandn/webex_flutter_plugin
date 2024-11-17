@@ -31,7 +31,7 @@ class WebexFlutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "getPlatformVersion") {
+        if (call.method == "startWebexCalling") {
 //      result.success("Android ${android.os.Build.VERSION.RELEASE}")
             val intent =
                 Intent(applicationContext(), JWTLoginActivity::class.java).apply {
