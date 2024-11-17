@@ -11,8 +11,7 @@ import ae.altkamul.webex_flutter_plugin.WebexCallApp
 import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.calling.CallActivity
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityLoginWithTokenBinding
-import ae.altkamul.webex_flutter_plugin.mainAppModule
-import ae.altkamul.webex_flutter_plugin.person.personModule
+
 import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
 import ae.altkamul.webex_flutter_plugin.webexModule
 import com.ciscowebex.androidsdk.utils.AppConfiguration
@@ -98,12 +97,10 @@ class JWTLoginActivity : AppCompatActivity() {
     private fun enableBackgroundConnection() {
         loadKoinModules(
             listOf(
-                mainAppModule,
                 webexModule,
                 loginModule,
                 JWTWebexModule,
 
-                personModule,
             )
         )
         AppConfiguration.setContext(applicationContext)

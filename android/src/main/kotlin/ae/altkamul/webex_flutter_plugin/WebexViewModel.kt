@@ -253,7 +253,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 //        repository._ucLiveData = _ucLiveData
         repository._authLiveDataList.add(_authLiveData)
 //        repository._muteAllLiveData = _muteAllLiveData
-        repository._callingLiveData = _callingLiveData
+//        repository._callingLiveData = _callingLiveData
 //        repository._startAssociationLiveData = _startAssociationLiveData
 //        repository._startShareLiveData = _startShareLiveData
 //        repository._stopShareLiveData = _stopShareLiveData
@@ -875,7 +875,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
             Log.d(tag, "postParticipantData hasMutedAll: $isRemoteSendingAudio")
             doMuteAll = isRemoteSendingAudio
-            repository._muteAllLiveData?.postValue(doMuteAll)
+//            repository._muteAllLiveData?.postValue(doMuteAll)
         }
     }
 
@@ -992,6 +992,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
         return videoBandwidth
     }
+/*
 
     fun setVideoMaxTxBandwidth(bandwidth: Int){
         webex.phone.setVideoMaxTxBandwidth(bandwidth)
@@ -1000,6 +1001,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     fun setVideoMaxRxBandwidth(bandwidth: Int){
         webex.phone.setVideoMaxRxBandwidth(bandwidth)
     }
+*/
 
     fun setSharingMaxRxBandwidth(bandwidth: Int) {
         webex.phone.setSharingMaxRxBandwidth(bandwidth)
@@ -1009,13 +1011,13 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         webex.phone.setAudioMaxRxBandwidth(bandwidth)
     }
 
-    fun startPreview(preView: View) {
+/*    fun startPreview(preView: View) {
         webex.phone.startPreview(preView)
     }
 
     fun stopPreview() {
         webex.phone.stopPreview()
-    }
+    }*/
 
     fun enableBackgroundConnection(enable: Boolean) {
         webex.phone.enableBackgroundConnection(enable)
@@ -1041,7 +1043,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         getCall(callId)?.setVideoRenderViews(null)
     }
 
-    fun forceSendingVideoLandscape(callId: String, forceLandscape: Boolean) {
+/*    fun forceSendingVideoLandscape(callId: String, forceLandscape: Boolean) {
         getCall(callId)?.forceSendingVideoLandscape(forceLandscape, CompletionHandler { result ->
             if (result.isSuccessful) {
                 Log.d(tag, "forceSendingVideoLandscape Lambda isSuccessful")
@@ -1051,7 +1053,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
                 _forceSendingVideoLandscapeLiveData.postValue(false)
             }
         })
-    }
+    }*/
 
     fun getSharingRenderView(callId: String): View? {
         return getCall(callId)?.getSharingRenderView()
@@ -1377,7 +1379,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     }
 */
     fun cleanup() {
-        repository.removeIncomingCallListener("viewmodel"+this)
+//        repository.removeIncomingCallListener("viewmodel"+this)
         for (entry in callObserverMap.entries.iterator()) {
             repository.removeCallObserver(entry.key, entry.value)
         }

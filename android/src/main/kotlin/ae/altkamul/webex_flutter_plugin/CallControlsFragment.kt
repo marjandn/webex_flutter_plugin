@@ -39,7 +39,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ciscowebex.androidsdk.WebexError
 import ae.altkamul.webex_flutter_plugin.databinding.FragmentCallControlsBinding
-import ae.altkamul.webex_flutter_plugin.person.PersonViewModel
 import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
 import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
 import ae.altkamul.webex_flutter_plugin.utils.UIUtils
@@ -82,7 +81,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 //    private var audioManagerUtils: AudioManagerUtils? = null
 //    val SHARE_SCREEN_FOREGROUND_SERVICE_NOTIFICATION_ID = 0xabc61
 //    private val ringerManager: RingerManager by inject()
-    private val personViewModel: PersonViewModel by inject()
+//    private val personViewModel: PersonViewModel by inject()
 //    private lateinit var callOptionsBottomSheetFragment: CallBottomSheetFragment
 //    private lateinit var incomingCallBottomSheetFragment: IncomingCallBottomSheetFragment
 //    private lateinit var cameraOptionsBottomSheetFragment: CameraOptionsBottomSheetFragment
@@ -1071,12 +1070,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
     @SuppressLint("NotifyDataSetChanged")
     private fun observerCallLiveData() {
-
+/*
         personViewModel.person.observe(viewLifecycleOwner, Observer { person ->
             person?.let {
                 webexViewModel.selfPersonId = it.personId
             }
-        })
+        })*/
 
         /* webexViewModel.startShareLiveData.observe(
              viewLifecycleOwner,
@@ -1765,7 +1764,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
     private fun setUpViews(bundle: Bundle?) {
 
-        personViewModel.getMe()
+//        personViewModel.getMe()
         videoViewState(true)
         webexViewModel.callObserverInterface = this
 

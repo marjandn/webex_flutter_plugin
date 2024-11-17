@@ -41,7 +41,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         Audio_Only,
         Audio_Video
     }
-
+/*
     enum class UCCallEvent {
         ShowSSOLogin,
         ShowNonSSOLogin,
@@ -61,7 +61,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         DEBUG,
         ERROR,
         NO
-    }
+    }*/
 
     enum class BandWidthOptions {
         BANDWIDTH_90P,
@@ -71,7 +71,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         BANDWIDTH_1080P
     }
 
-    enum class SpaceEvent {
+/*    enum class SpaceEvent {
         Created,
         Updated,
         CallStarted,
@@ -91,7 +91,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         Deleted,
         MessageThumbnailUpdated,
         Updated
-    }
+    }*/
 
     enum class CallEvent {
         DialCompleted,
@@ -110,11 +110,11 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         CannotStartInstantMeeting
     }
 
-    enum class CalendarMeetingEvent {
+ /*   enum class CalendarMeetingEvent {
         Created,
         Updated,
         Deleted
-    }
+    }*/
 
     data class CallLiveData(val event: CallEvent,
                             val call: Call? = null,
@@ -136,42 +136,41 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
     var isRemoteScreenShareON = false
     var enableBgStreamtoggle = true
     var enableBgConnectiontoggle = true
-    var enablePhoneStatePermission = true
-    var enableHWAcceltoggle = false
-    var multiStreamNewApproach = true
-    var logFilter = LogLevel.ALL.name
+//    var enablePhoneStatePermission = true
+//    var enableHWAcceltoggle = false
+//    var multiStreamNewApproach = true
+//    var logFilter = LogLevel.ALL.name
     var maxVideoBandwidth = BandWidthOptions.BANDWIDTH_720P.name
-    var isConsoleLoggerEnabled = true
+//    var isConsoleLoggerEnabled = true
     var callCapability: CallCap = CallCap.Audio_Video
     var scalingMode: Call.VideoRenderMode = Call.VideoRenderMode.Fit
     var compositedVideoLayout: MediaOption.CompositedVideoLayout = MediaOption.CompositedVideoLayout.FILMSTRIP
     var streamMode: Phone.VideoStreamMode = Phone.VideoStreamMode.AUXILIARY
-    var isSpaceCallStarted = false
-    var spaceCallId:String? = null
+//    var isSpaceCallStarted = false
+//    var spaceCallId:String? = null
 
     val participantMuteMap = hashMapOf<String, Boolean>()
-    var isUCServerLoggedIn = false
-    var ucServerConnectionStatus: UCLoginServerConnectionStatus = UCLoginServerConnectionStatus.Idle
-    var ucServerConnectionFailureReason: PhoneServiceRegistrationFailureReason = PhoneServiceRegistrationFailureReason.Unknown
+//    var isUCServerLoggedIn = false
+//    var ucServerConnectionStatus: UCLoginServerConnectionStatus = UCLoginServerConnectionStatus.Idle
+//    var ucServerConnectionFailureReason: PhoneServiceRegistrationFailureReason = PhoneServiceRegistrationFailureReason.Unknown
 
-    var _callMembershipsLiveData: MutableLiveData<List<CallMembership>>? = null
-    var _muteAllLiveData: MutableLiveData<Boolean>? = null
-    var _ucLiveData: MutableLiveData<Pair<UCCallEvent, String>>? = null
+//    var _callMembershipsLiveData: MutableLiveData<List<CallMembership>>? = null
+//    var _muteAllLiveData: MutableLiveData<Boolean>? = null
+//    var _ucLiveData: MutableLiveData<Pair<UCCallEvent, String>>? = null
     var _authLiveDataList: MutableList<MutableLiveData<String>?> = mutableListOf()
-    var _callingLiveData: MutableLiveData<CallLiveData>? = null
-    var _startAssociationLiveData: MutableLiveData<CallLiveData>? = null
+//    var _callingLiveData: MutableLiveData<CallLiveData>? = null
+/*    var _startAssociationLiveData: MutableLiveData<CallLiveData>? = null
     var _startShareLiveData: MutableLiveData<Boolean>? = null
     var _stopShareLiveData: MutableLiveData<Boolean>? = null
     var _startAudioDumpLiveData: MutableLiveData<Boolean>? = null
     var _stopAudioDumpLiveData: MutableLiveData<Boolean>? = null
-    var _canStartAudioDumpLiveData: MutableLiveData<Boolean>? = null
-    var _spaceEventLiveData: MutableLiveData<Pair<SpaceEvent, Any?>>? = null
-
-    var _membershipEventLiveData: MutableLiveData<Pair<MembershipEvent, Membership?>>? = null
-    var _messageEventLiveData: MutableLiveData<Pair<MessageEvent, Any?>>? = null
-    var _calendarMeetingEventLiveData: MutableLiveData<Pair<CalendarMeetingEvent, Any>>? = null
-    var _isIncomingCallListenerSet = false
-    var _incomingCallListeners : HashMap<String, Phone.IncomingCallListener> = HashMap()
+    var _canStartAudioDumpLiveData: MutableLiveData<Boolean>? = null*/
+//    var _spaceEventLiveData: MutableLiveData<Pair<SpaceEvent, Any?>>? = null
+//    var _membershipEventLiveData: MutableLiveData<Pair<MembershipEvent, Membership?>>? = null
+//    var _messageEventLiveData: MutableLiveData<Pair<MessageEvent, Any?>>? = null
+//    var _calendarMeetingEventLiveData: MutableLiveData<Pair<CalendarMeetingEvent, Any>>? = null
+//    var _isIncomingCallListenerSet = false
+//    var _incomingCallListeners : HashMap<String, Phone.IncomingCallListener> = HashMap()
     var _callObservers : HashMap<String, MutableList<CallObserver>> = HashMap()
 
     init {
@@ -190,23 +189,23 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         isRemoteScreenShareON = false
         isRemoteVideoMuted = true
 
-        _callMembershipsLiveData = null
-        _muteAllLiveData = null
+   /*     _callMembershipsLiveData = null
+//        _muteAllLiveData = null
         _callingLiveData = null
         _startAssociationLiveData = null
         _startShareLiveData = null
         _stopShareLiveData = null
         _startAudioDumpLiveData = null
         _stopAudioDumpLiveData = null
-        _canStartAudioDumpLiveData = null
+        _canStartAudioDumpLiveData = null*/
     }
-
+/*
     fun clearSpaceData(){
 //        spaceEventListener = null
     }
 
     fun setSpaceObserver() {
-  /*      webex.spaces.setSpaceObserver(object : SpaceObserver {
+  *//*      webex.spaces.setSpaceObserver(object : SpaceObserver {
             override fun onEvent(event: SpaceObserver.SpaceEvent) {
                 Log.d(tag, "onEvent: $event with actorID : ${event.getActorId().orEmpty()}")
                 when (event) {
@@ -228,7 +227,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
                     }
                 }
             }
-        })*/
+        })*//*
     }
 
     fun setMembershipObserver() {
@@ -302,12 +301,12 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
     fun removeCalendarMeetingObserver() {
         _calendarMeetingEventLiveData = null
         webex.calendarMeetings.setObserver(null)
-    }
+    }*/
 
     fun getCall(callId: String): Call? {
         return CallObjectStorage.getCallObject(callId)
     }
-
+/*
     fun getCallIdByNotificationId(notificationId: String, callType: NotificationCallType): String {
         return webex.getCallIdByNotificationId(notificationId, callType)
     }
@@ -356,10 +355,10 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
 
     fun setOnInitialSpacesSyncCompletedListener(handler: CompletionHandler<Void>) {
         webex.spaces.setOnInitialSpacesSyncCompletedListener(handler)
-    }
+    }*/
 
     // Callbacks
-    override fun loadUCSSOViewInBackground(ssoUrl: String) {
+/*    override fun loadUCSSOViewInBackground(ssoUrl: String) {
         _ucLiveData?.postValue(Pair(UCCallEvent.ShowSSOLogin, ssoUrl))
         Log.d(tag, "showUCSSOLoginView")
     }
@@ -367,9 +366,9 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
     override fun showUCNonSSOLoginView() {
         _ucLiveData?.postValue(Pair(UCCallEvent.ShowNonSSOLogin, ""))
         Log.d(tag, "showUCNonSSOLoginView")
-    }
+    }*/
 
-    override fun onUCLoginFailed(failureReason: UCLoginFailureReason) {
+    /*override fun onUCLoginFailed(failureReason: UCLoginFailureReason) {
         isUCServerLoggedIn = false
         _ucLiveData?.postValue(Pair(UCCallEvent.OnUCLoginFailed, failureReason.name))
         Log.d(tag, "onUCLoginFailed with reason: $failureReason")
@@ -408,8 +407,8 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         for (liveData in _authLiveDataList) {
             liveData?.postValue(Constants.Callbacks.RE_LOGIN_REQUIRED)
         }
-    }
-
+    }*/
+/*
     private fun registerIncomingCallListener() {
         webex.phone.setIncomingCallListener(object : Phone.IncomingCallListener {
             override fun onIncomingCall(call: Call?, hasActiveConflictCalls : Boolean) {
@@ -423,9 +422,9 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
                 }
             }
         })
-    }
+    }*/
 
-    fun isIncomingCallListenerSet(type: String):Boolean {
+/*    fun isIncomingCallListenerSet(type: String):Boolean {
         return _incomingCallListeners.containsKey(type)
     }
 
@@ -435,12 +434,12 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
             _isIncomingCallListenerSet = true
         }
         _incomingCallListeners[type] = incomingCallListener
-    }
+    }*/
 
-    fun removeIncomingCallListener(type: String) {
+   /* fun removeIncomingCallListener(type: String) {
         _incomingCallListeners.remove(type)
     }
-
+*/
     @Synchronized
     fun setCallObserver(call: Call, callObserver: CallObserver){
         val callId = call.getCallId() ?: return
@@ -732,7 +731,7 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
     fun clearCallObservers(callId: String) {
         _callObservers.remove(callId)
     }
-
+/*
     fun printObservers(writer : PrintWriter) {
         writer.println("******** Incoming calls in Repository **********")
         _incomingCallListeners.forEach { (key, value) -> writer.println("$key = $value") }
@@ -740,5 +739,5 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         _callObservers.forEach { (key, value) -> writer.println("$key = $value") }
         writer.println("******** Calls in storage *****")
         writer.println(CallObjectStorage.size())
-    }
+    }*/
 }

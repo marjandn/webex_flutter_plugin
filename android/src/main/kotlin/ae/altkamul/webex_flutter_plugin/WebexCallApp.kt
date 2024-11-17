@@ -1,6 +1,5 @@
 package ae.altkamul.webex_flutter_plugin
 
-import ae.altkamul.webex_flutter_plugin.auth.JWTWebexModule
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LifecycleObserver
