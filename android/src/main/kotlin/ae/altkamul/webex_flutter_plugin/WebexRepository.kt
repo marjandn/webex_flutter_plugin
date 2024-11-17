@@ -408,7 +408,6 @@ class WebexRepository(val webex: Webex) : WebexUCLoginDelegate, WebexAuthDelegat
         for (liveData in _authLiveDataList) {
             liveData?.postValue(Constants.Callbacks.RE_LOGIN_REQUIRED)
         }
-        Log.d(tag, Constants.Callbacks.RE_LOGIN_REQUIRED)
     }
 
     private fun registerIncomingCallListener() {

@@ -18,11 +18,11 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import ae.altkamul.webex_flutter_plugin.CallControlsFragment
+import ae.altkamul.webex_flutter_plugin.Constants
 import ae.altkamul.webex_flutter_plugin.R
 import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityCallBinding
 import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
-import ae.altkamul.webex_flutter_plugin.utils.Constants
 import androidx.appcompat.app.AppCompatActivity
 import com.ciscowebex.androidsdk.phone.*
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem
@@ -292,7 +292,7 @@ class CallActivity : AppCompatActivity(),
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
-        if (intent?.action == Constants.Action.WEBEX_CALL_ACCEPT_ACTION) {
+   /*     if (intent?.action == Constants.Action.WEBEX_CALL_ACCEPT_ACTION) {
             // Dismiss the notification
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -329,11 +329,11 @@ class CallActivity : AppCompatActivity(),
                 // resume the new call
                 addNewFragment()
 
-                /*  binding.callQueue?.adapter?.notifyDataSetChanged()
-                  binding.callQueue.visibility = View.VISIBLE*/
+                *//*  binding.callQueue?.adapter?.notifyDataSetChanged()
+                  binding.callQueue.visibility = View.VISIBLE*//*
             }
 
-        }
+        }*/
     }
 
     /*    private fun handleIncomingWebexCallFromFCM(callId: String) {

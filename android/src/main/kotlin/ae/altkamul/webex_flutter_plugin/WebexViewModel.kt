@@ -2,88 +2,59 @@ package ae.altkamul.webex_flutter_plugin
 
 import ae.altkamul.webex_flutter_plugin.calling.CallObserverInterface
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Notification
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ciscowebex.androidsdk.Webex
 
-import ae.altkamul.webex_flutter_plugin.person.PersonModel
 import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
 import com.ciscowebex.androidsdk.CompletionHandler
-import com.ciscowebex.androidsdk.WebexError
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.messaging.FirebaseMessaging
-import org.json.JSONObject
-import com.ciscowebex.androidsdk.auth.PhoneServiceRegistrationFailureReason
-import com.ciscowebex.androidsdk.auth.TokenAuthenticator
-import com.ciscowebex.androidsdk.auth.UCLoginServerConnectionStatus
-import com.ciscowebex.androidsdk.internal.ResultImpl
-import com.ciscowebex.androidsdk.message.LocalFile
-import com.ciscowebex.androidsdk.people.ProductCapability
-import com.ciscowebex.androidsdk.phone.ShareConfig
 import com.ciscowebex.androidsdk.phone.BreakoutSession.BreakoutSessionError
 import com.ciscowebex.androidsdk.phone.Call
 import com.ciscowebex.androidsdk.phone.CallObserver
 import com.ciscowebex.androidsdk.phone.MediaOption
 import com.ciscowebex.androidsdk.phone.CallMembership
 import com.ciscowebex.androidsdk.phone.Phone
-import com.ciscowebex.androidsdk.phone.CallAssociationType
 import com.ciscowebex.androidsdk.phone.AdvancedSetting
-import com.ciscowebex.androidsdk.phone.MakeHostError
-import com.ciscowebex.androidsdk.phone.AuxStream
-import com.ciscowebex.androidsdk.phone.VirtualBackground
 import com.ciscowebex.androidsdk.phone.CameraExposureISO
 import com.ciscowebex.androidsdk.phone.CameraExposureDuration
 import com.ciscowebex.androidsdk.phone.CameraExposureTargetBias
 import com.ciscowebex.androidsdk.phone.MediaStream
-import com.ciscowebex.androidsdk.phone.MediaStreamQuality
 import com.ciscowebex.androidsdk.phone.BreakoutSession
 import com.ciscowebex.androidsdk.phone.Breakout
-import com.ciscowebex.androidsdk.phone.DirectTransferResult
-import com.ciscowebex.androidsdk.phone.InviteParticipantError
-import com.ciscowebex.androidsdk.phone.SwitchToAudioVideoCallResult
-import com.ciscowebex.androidsdk.phone.PhoneConnectionResult
 import com.ciscowebex.androidsdk.phone.ReceivingNoiseInfo
-import com.ciscowebex.androidsdk.phone.ReceivingNoiseRemovalEnableResult
-import com.ciscowebex.androidsdk.phone.ReclaimHostError
 import com.ciscowebex.androidsdk.phone.annotation.LiveAnnotationListener
 import com.ciscowebex.androidsdk.phone.annotation.LiveAnnotationsPolicy
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem
 import com.ciscowebex.androidsdk.phone.closedCaptions.ClosedCaptionsInfo
-import com.google.firebase.installations.FirebaseInstallations
-import java.io.PrintWriter
 import kotlin.collections.get
 
 class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseViewModel() {
     private val tag = "WebexViewModel"
 
-    var _callMembershipsLiveData = MutableLiveData<List<CallMembership>>()
-    val _muteAllLiveData = MutableLiveData<Boolean>()
-    val _ucLiveData = MutableLiveData<Pair<WebexRepository.UCCallEvent, String>>()
+//    var _callMembershipsLiveData = MutableLiveData<List<CallMembership>>()
+//    val _muteAllLiveData = MutableLiveData<Boolean>()
+//    val _ucLiveData = MutableLiveData<Pair<WebexRepository.UCCallEvent, String>>()
     private val _authLiveData = MutableLiveData<String>()
     val _callingLiveData = MutableLiveData<WebexRepository.CallLiveData>()
-    val _startAssociationLiveData = MutableLiveData<WebexRepository.CallLiveData>()
-    val _startShareLiveData = MutableLiveData<Boolean>()
-    val _stopShareLiveData = MutableLiveData<Boolean>()
+//    val _startAssociationLiveData = MutableLiveData<WebexRepository.CallLiveData>()
+//    val _startShareLiveData = MutableLiveData<Boolean>()
+//    val _stopShareLiveData = MutableLiveData<Boolean>()
     val _setCompositeLayoutLiveData = MutableLiveData<Pair<Boolean, String>>()
-    val _setRemoteVideoRenderModeLiveData = MutableLiveData<Pair<Boolean, String>>()
+//    val _setRemoteVideoRenderModeLiveData = MutableLiveData<Pair<Boolean, String>>()
     val _forceSendingVideoLandscapeLiveData = MutableLiveData<Boolean>()
-    val _startAudioDumpLiveData = MutableLiveData<Boolean>()
-    val _stopAudioDumpLiveData = MutableLiveData<Boolean>()
-    val _canStartAudioDumpLiveData = MutableLiveData<Boolean>()
+//    val _startAudioDumpLiveData = MutableLiveData<Boolean>()
+//    val _stopAudioDumpLiveData = MutableLiveData<Boolean>()
+//    val _canStartAudioDumpLiveData = MutableLiveData<Boolean>()
 
 //    var callMembershipsLiveData: LiveData<List<CallMembership>> = _callMembershipsLiveData
 //    val muteAllLiveData: LiveData<Boolean> = _muteAllLiveData
 //    val ucLiveData: LiveData<Pair<WebexRepository.UCCallEvent, String>> = _ucLiveData
     val authLiveData: LiveData<String> = _authLiveData
     val callingLiveData: LiveData<WebexRepository.CallLiveData> = _callingLiveData
-    val startAssociationLiveData: LiveData<WebexRepository.CallLiveData> = _startAssociationLiveData
-    val startShareLiveData: LiveData<Boolean> = _startShareLiveData
+//    val startAssociationLiveData: LiveData<WebexRepository.CallLiveData> = _startAssociationLiveData
+//    val startShareLiveData: LiveData<Boolean> = _startShareLiveData
 //    val stopShareLiveData: LiveData<Boolean> = _stopShareLiveData
     val setCompositeLayoutLiveData: LiveData<Pair<Boolean, String>> = _setCompositeLayoutLiveData
 //    val setRemoteVideoRenderModeLiveData: LiveData<Pair<Boolean, String>> = _setRemoteVideoRenderModeLiveData
@@ -278,17 +249,17 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }*/
 
     init {
-        repository._callMembershipsLiveData = _callMembershipsLiveData
-        repository._ucLiveData = _ucLiveData
+//        repository._callMembershipsLiveData = _callMembershipsLiveData
+//        repository._ucLiveData = _ucLiveData
         repository._authLiveDataList.add(_authLiveData)
-        repository._muteAllLiveData = _muteAllLiveData
+//        repository._muteAllLiveData = _muteAllLiveData
         repository._callingLiveData = _callingLiveData
-        repository._startAssociationLiveData = _startAssociationLiveData
-        repository._startShareLiveData = _startShareLiveData
-        repository._stopShareLiveData = _stopShareLiveData
-        repository._startAudioDumpLiveData = _startAudioDumpLiveData
-        repository._stopAudioDumpLiveData = _stopAudioDumpLiveData
-        repository._canStartAudioDumpLiveData = _canStartAudioDumpLiveData
+//        repository._startAssociationLiveData = _startAssociationLiveData
+//        repository._startShareLiveData = _startShareLiveData
+//        repository._stopShareLiveData = _stopShareLiveData
+//        repository._startAudioDumpLiveData = _startAudioDumpLiveData
+//        repository._stopAudioDumpLiveData = _stopAudioDumpLiveData
+//        repository._canStartAudioDumpLiveData = _canStartAudioDumpLiveData
     }
 
 /*    fun setLogLevel(logLevel: String) {
@@ -490,7 +461,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         override fun onDisconnected(event: CallObserver.CallDisconnectedEvent?) {
             Log.d(tag, "CallObserver onDisconnected event: ${this@WebexViewModel} $callObserverInterface $event")
             callObserverInterface?.onDisconnected(call, event)
-            annotationRenderer?.stopRendering()
+//            annotationRenderer?.stopRendering()
         }
 
         override fun onInfoChanged(call: Call?) {
@@ -631,10 +602,10 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         }
     }*/
 
-    fun muteSelfAudio(callId: String) {
+    /*fun muteSelfAudio(callId: String) {
         Log.d(tag, "muteSelfAudio isSendingAudio: $isSendingAudio")
         getCall(callId)?.setSendingAudio(!isSendingAudio)
-    }
+    }*/
 
   /*  fun switchToAudioOrVideoCall(callId: String, switchToVideoCall: Boolean, callback: CompletionHandler<SwitchToAudioVideoCallResult>) {
         Log.d(tag, "switchToAudioOrVideoCall call: $switchToVideoCall")
@@ -677,8 +648,8 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
         })
     }
 */
-    private var annotationRenderer: AnnotationRenderer? = null
-    fun initalizeAnnotations(renderer: AnnotationRenderer) {
+//    private var annotationRenderer: AnnotationRenderer? = null
+  /*  fun initalizeAnnotations(renderer: AnnotationRenderer) {
         getCall(currentCallId.orEmpty())?.getLiveAnnotationHandle()?.let {annotations->
 
             annotations.setLiveAnnotationsPolicy(LiveAnnotationsPolicy.NeedAskForAnnotate){
@@ -725,7 +696,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
             })
         }
-    }
+    }*/
 
     fun handleAnnotationPermission(grant: Boolean, personId: String) {
         getCall(currentCallId.orEmpty())?.getLiveAnnotationHandle()?.respondToLiveAnnotationRequest(personId, grant) {
@@ -800,7 +771,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
 
     fun getParticipants(_callId: String) {
         val callParticipants = getCall(_callId)?.getMemberships() ?: ArrayList()
-        _callMembershipsLiveData.postValue(callParticipants)
+//        _callMembershipsLiveData.postValue(callParticipants)
 
         callParticipants.forEach {
             repository.participantMuteMap[it.getPersonId()] = it.isSendingAudio()
@@ -885,7 +856,7 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     @SuppressLint("NullSafeMutableLiveData")
     fun postParticipantData(data: List<CallMembership>?) {
         synchronized(this) {
-            _callMembershipsLiveData.postValue(data)
+//            _callMembershipsLiveData.postValue(data)
 
             var isRemoteSendingAudio = false
 
@@ -1091,30 +1062,30 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     }
 
     fun setRemoteVideoRenderMode(callId: String, mode: Call.VideoRenderMode) {
-        getCall(callId)?.setRemoteVideoRenderMode(mode, CompletionHandler {
+ /*       getCall(callId)?.setRemoteVideoRenderMode(mode, CompletionHandler {
             it.let {
                 if (it.isSuccessful) {
                     Log.d(tag, "setRemoteVideoRenderMode successful")
-                    _setRemoteVideoRenderModeLiveData.postValue(Pair(true, ""))
+//                    _setRemoteVideoRenderModeLiveData.postValue(Pair(true, ""))
                 } else {
                     Log.d(tag, "setRemoteVideoRenderMode failed: ${it.error?.errorMessage}")
                     _setRemoteVideoRenderModeLiveData.postValue(Pair(false, it.error?.errorMessage ?: ""))
                 }
             }
-        })
+        })*/
     }
 
-    fun letIn(callId: String, callMembership: CallMembership) {
+ /*   fun letIn(callId: String, callMembership: CallMembership) {
         getCall(callId)?.letIn(callMembership)
-    }
+    }*/
 
     fun setVideoStreamMode(mode: Phone.VideoStreamMode) {
         webex.phone.setVideoStreamMode(mode)
     }
 
-    fun getVideoStreamMode(): Phone.VideoStreamMode {
+/*    fun getVideoStreamMode(): Phone.VideoStreamMode {
         return webex.phone.getVideoStreamMode()
-    }
+    }*/
 
     fun getCompositedLayout(): MediaOption.CompositedVideoLayout {
         return getCall(currentCallId.orEmpty())?.getCompositedVideoLayout() ?: MediaOption.CompositedVideoLayout.NOT_SUPPORTED
@@ -1441,14 +1412,14 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
     }*/
 
     fun stopAudioDump() {
-        getCall(currentCallId.orEmpty())?.stopRecordingAudioDump() {
+/*        getCall(currentCallId.orEmpty())?.stopRecordingAudioDump() {
             if (it.isSuccessful) {
                 Log.d(tag, "[AudioDump] stopAudioDump successful")
             } else {
                 Log.d(tag, "[AudioDump] stopAudioDump error: ${it.error?.errorMessage}")
             }
             _stopAudioDumpLiveData.postValue(it.isSuccessful)
-        }
+        }*/
 
     }
 

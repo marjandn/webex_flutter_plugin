@@ -8,13 +8,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -25,9 +22,7 @@ import android.util.Rational
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.View.OnClickListener
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ImageButton
@@ -36,7 +31,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -47,8 +41,6 @@ import com.ciscowebex.androidsdk.WebexError
 import ae.altkamul.webex_flutter_plugin.databinding.FragmentCallControlsBinding
 import ae.altkamul.webex_flutter_plugin.person.PersonViewModel
 import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
-import ae.altkamul.webex_flutter_plugin.utils.Constants
-import ae.altkamul.webex_flutter_plugin.utils.extensions.toast
 import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
 import ae.altkamul.webex_flutter_plugin.utils.UIUtils
 import com.ciscowebex.androidsdk.phone.Call
@@ -78,12 +70,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     RemoteShareCallback {
-//    private val TAG = "CallControlsFragment"
+    //    private val TAG = "CallControlsFragment"
     val webexViewModel: WebexViewModel by viewModel()
-//    val captionsViewModel: ClosedCaptionsViewModel by viewModel()
+
+    //    val captionsViewModel: ClosedCaptionsViewModel by viewModel()
     private lateinit var binding: FragmentCallControlsBinding
     private var callFailed = false
-//    private var isIncomingActivity = false
+
+    //    private var isIncomingActivity = false
 //    private var callingActivity = 0
 //    private var audioManagerUtils: AudioManagerUtils? = null
 //    val SHARE_SCREEN_FOREGROUND_SERVICE_NOTIFICATION_ID = 0xabc61
@@ -105,17 +99,20 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 //    private lateinit var captionsController: ClosedCaptionsController
     private val mAuxStreamViewMap: HashMap<View, AuxStreamViewHolder> =
         HashMap()
-//    private var callerId: String = ""
+
+    //    private var callerId: String = ""
 //    var bottomSheetFragment: BackgroundOptionsBottomSheetFragment? = null
 //    var onCallActionListener: OnCallActionListener? = null
 //    private var breakoutSessions: List<BreakoutSession> = emptyList()
 //    private var breakout: Breakout? = null
 //    private var dialType = DialType.NONE
     private val mediaPlayer: MediaPlayer = MediaPlayer()
-//    private lateinit var passwordDialogBinding: DialogEnterMeetingPinBinding
+
+    //    private lateinit var passwordDialogBinding: DialogEnterMeetingPinBinding
 //    private lateinit var passwordDialog: Dialog
     private var isInPipMode = false
-//    private var screenShareOptionsDialog: AlertDialog? = null
+
+    //    private var screenShareOptionsDialog: AlertDialog? = null
     private lateinit var annotationPermissionDialog: AlertDialog
 //    private lateinit var moveMeeting: CompanionMode
 
@@ -125,13 +122,13 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     private val mHandler = Handler(Looper.getMainLooper())
     private var callManagementServiceIntent: Intent? = null
 
-/*    interface OnCallActionListener {
-        fun onEndAndAnswer(
-            currentCallId: String,
-            newCallId: String,
-            handler: CompletionHandler<Boolean>
-        )
-    }*/
+    /*    interface OnCallActionListener {
+            fun onEndAndAnswer(
+                currentCallId: String,
+                newCallId: String,
+                handler: CompletionHandler<Boolean>
+            )
+        }*/
 
     enum class NetworkStatus {
         PoorUplink,
@@ -142,17 +139,17 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
     var currentNetworkStatus = NetworkStatus.Good
 
- /*   enum class ShareButtonState {
-        OFF,
-        ON,
-        DISABLED
-    }*/
+    /*   enum class ShareButtonState {
+           OFF,
+           ON,
+           DISABLED
+       }*/
 
-   /* enum class DialType {
-        NONE,
-        HOST,
-        OTHERS
-    }*/
+    /* enum class DialType {
+         NONE,
+         HOST,
+         OTHERS
+     }*/
 
     class AuxStreamViewHolder(var item: View) {
         var mediaRenderView: MediaRenderView =
@@ -168,13 +165,13 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         var personID: String? = null
     }
 
-   /* companion object {
-        const val REQUEST_CODE = 1212
-        const val REQUEST_CODE_BLINDTRANSFER = 1213
-        const val TAG = "CallControlsFragment"
-        private const val CALLER_ID = "callerId"
-        const val MEDIA_PROJECTION_REQUEST = 1
-    }*/
+    /* companion object {
+         const val REQUEST_CODE = 1212
+         const val REQUEST_CODE_BLINDTRANSFER = 1213
+         const val TAG = "CallControlsFragment"
+         private const val CALLER_ID = "callerId"
+         const val MEDIA_PROJECTION_REQUEST = 1
+     }*/
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -190,10 +187,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             LayoutInflater.from(context),
             R.layout.fragment_call_controls, container, false
         ).also { binding = it }.apply {
-         /*   Log.d(
-                TAG,
-                "CallControlsFragment onCreateView webexViewModel: $webexViewModel"
-            )*/
+            /*   Log.d(
+                   TAG,
+                   "CallControlsFragment onCreateView webexViewModel: $webexViewModel"
+               )*/
 
             setUpViews(getArguments())
             observerCallLiveData()
@@ -208,10 +205,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         super.onViewCreated(view, savedInstanceState)
         binding.screenShareView.setRemoteShareCallback(this)
     }
-/*
-    private fun initAudioManager() {
-        audioManagerUtils = AudioManagerUtils(requireContext())
-    }*/
+    /*
+        private fun initAudioManager() {
+            audioManagerUtils = AudioManagerUtils(requireContext())
+        }*/
 
     override fun onResume() {
         super.onResume()
@@ -267,53 +264,53 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         captchaId: String = "",
         moveMeeting: CompanionMode = CompanionMode.None
     ) {
-      /*  Log.d(TAG, "dialOutgoingCall")
-        this.callerId = callerId
-        if (isCucmOrWxcCall) {
-            webexViewModel.dialPhoneNumber(
-                callerId,
-                getMediaOption(
-                    isModerator,
-                    pin,
-                    captcha,
-                    captchaId,
-                    moveMeeting
-                )
+        /*  Log.d(TAG, "dialOutgoingCall")
+          this.callerId = callerId
+          if (isCucmOrWxcCall) {
+              webexViewModel.dialPhoneNumber(
+                  callerId,
+                  getMediaOption(
+                      isModerator,
+                      pin,
+                      captcha,
+                      captchaId,
+                      moveMeeting
+                  )
+              )
+          } else {*/
+        webexViewModel.dial(
+            callerId,
+            getMediaOption(
+                isModerator,
+                pin,
+                captcha,
+                captchaId,
+                moveMeeting
             )
-        } else {*/
-            webexViewModel.dial(
-                callerId,
-                getMediaOption(
-                    isModerator,
-                    pin,
-                    captcha,
-                    captchaId,
-                    moveMeeting
-                )
-            )
+        )
 //        }
     }
 
- /*   private fun checkLicenseAPIs() {
-        val license = webexViewModel.getVideoCodecLicense()
-        Log.d(TAG, "checkLicenseAPIs license $license")
-        val URL = webexViewModel.getVideoCodecLicenseURL()
-        Log.d(TAG, "checkLicenseAPIs license URL $URL")
-        webexViewModel.requestVideoCodecActivation(AlertDialog.Builder(activity))
-    }*/
+    /*   private fun checkLicenseAPIs() {
+           val license = webexViewModel.getVideoCodecLicense()
+           Log.d(TAG, "checkLicenseAPIs license $license")
+           val URL = webexViewModel.getVideoCodecLicenseURL()
+           Log.d(TAG, "checkLicenseAPIs license URL $URL")
+           webexViewModel.requestVideoCodecActivation(AlertDialog.Builder(activity))
+       }*/
 
     override fun onConnected(call: Call?) {
-     /*   Log.d(
-            TAG,
-            "CallObserver onConnected callId: ${call?.getCallId()}, hasAnyoneJoined: ${webexViewModel.hasAnyoneJoined()}, " +
-                    "correlationId: ${call?.getCorrelationId()}, " +
-                    "externalTrackingId: ${call?.getExternalTrackingId()}, " +
-                    "isMeeting: ${webexViewModel.isMeeting()}, " +
-                    "isPmr: ${webexViewModel.isPmr()}, " +
-                    "isSelfCreator: ${webexViewModel.isSelfCreator()}, " +
-                    "isSpaceMeeting: ${webexViewModel.isSpaceMeeting()}, " +
-                    "isScheduledMeeting: ${webexViewModel.isScheduledMeeting()}"
-        )*/
+        /*   Log.d(
+               TAG,
+               "CallObserver onConnected callId: ${call?.getCallId()}, hasAnyoneJoined: ${webexViewModel.hasAnyoneJoined()}, " +
+                       "correlationId: ${call?.getCorrelationId()}, " +
+                       "externalTrackingId: ${call?.getExternalTrackingId()}, " +
+                       "isMeeting: ${webexViewModel.isMeeting()}, " +
+                       "isPmr: ${webexViewModel.isPmr()}, " +
+                       "isSelfCreator: ${webexViewModel.isSelfCreator()}, " +
+                       "isSpaceMeeting: ${webexViewModel.isSpaceMeeting()}, " +
+                       "isScheduledMeeting: ${webexViewModel.isScheduledMeeting()}"
+           )*/
         // Setting exception handler before making any call.
         Thread.setDefaultUncaughtExceptionHandler(GlobalExceptionHandler())
         onCallConnected(
@@ -342,9 +339,9 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     "zoom Factor: ${webexViewModel.getVideoZoomFactor()} "
         )*/
 
-       /* if (incomingCallBottomSheetFragment.isVisible) {
-            incomingCallBottomSheetFragment.dismiss()
-        }*/
+        /* if (incomingCallBottomSheetFragment.isVisible) {
+             incomingCallBottomSheetFragment.dismiss()
+         }*/
     }
 
     override fun onStartRinging(call: Call?, ringerType: Call.RingerType) {
@@ -355,8 +352,8 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onStopRinging(call: Call?, ringerType: Call.RingerType) {
-      /*  Log.d(tag, "stopRinger: $ringerType")
-        ringerManager.stopRinger(ringerType)*/
+        /*  Log.d(tag, "stopRinger: $ringerType")
+          ringerManager.stopRinger(ringerType)*/
     }
 
     override fun onWaiting(call: Call?) {
@@ -422,12 +419,13 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             }
 
             else -> {
-               /* val schedules = call?.getSchedules()
-                if (localClose && !attemptingToJoinABreakoutSession) {
-                    if (schedules == null && !isIncomingActivity) {
-                        *//**
-                         * Taken care of space call when local left
-                         *//*
+                /* val schedules = call?.getSchedules()
+                 if (localClose && !attemptingToJoinABreakoutSession) {
+                     if (schedules == null && !isIncomingActivity) {
+                         */
+                /**
+                 * Taken care of space call when local left
+                 *//*
                         onCallTerminated(call?.getCallId().orEmpty())
                     } else {
                         *//*
@@ -447,17 +445,17 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onInfoChanged(call: Call?) {
-     /*   Log.d(TAG, "CallObserver onInfoChanged : " + call?.getCallId())
+        /*   Log.d(TAG, "CallObserver onInfoChanged : " + call?.getCallId())
 
-        mHandler.post {
-            call?.let { _call ->
-//                binding.ibHoldCall.isSelected = _call.isOnHold()
-                Log.d(
-                    TAG,
-                    "CallObserver onInfoChanged isSendingDTMFEnabled : " + _call.isSendingDTMFEnabled()
-                )
+           mHandler.post {
+               call?.let { _call ->
+   //                binding.ibHoldCall.isSelected = _call.isOnHold()
+                   Log.d(
+                       TAG,
+                       "CallObserver onInfoChanged isSendingDTMFEnabled : " + _call.isSendingDTMFEnabled()
+                   )
 
-            *//*    if (_call.isSendingDTMFEnabled() && !callOptionsBottomSheetFragment.isDTMFOptionEnabled()) {
+               *//*    if (_call.isSendingDTMFEnabled() && !callOptionsBottomSheetFragment.isDTMFOptionEnabled()) {
                     Log.d(TAG, "CallObserver onInfoChanged DTMF Enabled")
                     Toast.makeText(
                         activity,
@@ -488,52 +486,52 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 }
 
                 is CallObserver.SendingVideo -> {
-                   /* Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged SendingVideo: ${_event.isSending()}"
-                    )*/
+                    /* Log.d(
+                         TAG,
+                         "CallObserver OnMediaChanged SendingVideo: ${_event.isSending()}"
+                     )*/
                     webexViewModel.isLocalVideoMuted = !_event.isSending()
                     onVideoStreamingChanged(call?.getCallId().orEmpty())
                 }
 
                 is CallObserver.ReceivingVideo -> {
-                 /*   Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged ReceivingVideo: ${_event.isReceiving()}"
-                    )*/
+                    /*   Log.d(
+                           TAG,
+                           "CallObserver OnMediaChanged ReceivingVideo: ${_event.isReceiving()}"
+                       )*/
                     webexViewModel.isRemoteVideoMuted = !_event.isReceiving()
                     onVideoStreamingChanged(call?.getCallId().orEmpty())
                 }
 
                 is CallObserver.RemoteSendingAudioEvent -> {
-                   /* Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged RemoteSendingAudioEvent: ${_event.isSending()}"
-                    )*/
+                    /* Log.d(
+                         TAG,
+                         "CallObserver OnMediaChanged RemoteSendingAudioEvent: ${_event.isSending()}"
+                     )*/
                     audioEventChanged(null, call, null, _event.isSending())
                 }
 
                 is CallObserver.SendingAudio -> {
-                   /* Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged SendingAudio: ${_event.isSending()}"
-                    )*/
+                    /* Log.d(
+                         TAG,
+                         "CallObserver OnMediaChanged SendingAudio: ${_event.isSending()}"
+                     )*/
                     audioEventChanged(null, call, _event.isSending())
                 }
 
                 is CallObserver.ReceivingAudio -> {
-                   /* Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged ReceivingAudio: ${_event.isReceiving()}"
-                    )*/
+                    /* Log.d(
+                         TAG,
+                         "CallObserver OnMediaChanged ReceivingAudio: ${_event.isReceiving()}"
+                     )*/
                     audioEventChanged(null, call, null, _event.isReceiving())
                 }
 
                 is CallObserver.RemoteSendingSharingEvent -> {
-                  /*  Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged RemoteSendingSharingEvent: ${_event.isSending()}"
-                    )*/
+                    /*  Log.d(
+                          TAG,
+                          "CallObserver OnMediaChanged RemoteSendingSharingEvent: ${_event.isSending()}"
+                      )*/
                     onScreenShareStateChanged(
                         call?.getCallId().orEmpty(),
                         call?.getScreenShareLabel().orEmpty()
@@ -544,10 +542,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 }
 
                 is CallObserver.SendingSharingEvent -> {
-                /*    Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged SendingSharingEvent: ${_event.isSending()}"
-                    )*/
+                    /*    Log.d(
+                            TAG,
+                            "CallObserver OnMediaChanged SendingSharingEvent: ${_event.isSending()}"
+                        )*/
                     onScreenShareStateChanged(
                         call?.getCallId().orEmpty(),
                         call?.getScreenShareLabel().orEmpty()
@@ -558,10 +556,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 }
 
                 is CallObserver.ReceivingSharing -> {
-                   /* Log.d(
-                        TAG,
-                        "CallObserver OnMediaChanged ReceivingSharing: ${_event.isReceiving()}"
-                    )*/
+                    /* Log.d(
+                         TAG,
+                         "CallObserver OnMediaChanged ReceivingSharing: ${_event.isReceiving()}"
+                     )*/
                     onScreenShareStateChanged(
                         call?.getCallId().orEmpty(),
                         call?.getScreenShareLabel().orEmpty()
@@ -590,22 +588,22 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     ) {
 
 
-        if ((webexViewModel.currentCallId != callId)  ) {
+        if ((webexViewModel.currentCallId != callId)) {
             return
         }
 
         mHandler.post {
-          /*  Log.d(
-                TAG,
-                "CallObserver OnMediaChanged MediaStreamAvailabilityEvent: ${event.isAvailable()}"
-            )*/
-          /*  val list = webexViewModel.getMediaStreams()
-            list?.let { mediaList ->
-                Log.d(
-                    TAG,
-                    "CallObserver OnMediaChanged MediaStreamAvailabilityEvent list size : ${mediaList.size}"
-                )
-            }*/
+            /*  Log.d(
+                  TAG,
+                  "CallObserver OnMediaChanged MediaStreamAvailabilityEvent: ${event.isAvailable()}"
+              )*/
+            /*  val list = webexViewModel.getMediaStreams()
+              list?.let { mediaList ->
+                  Log.d(
+                      TAG,
+                      "CallObserver OnMediaChanged MediaStreamAvailabilityEvent list size : ${mediaList.size}"
+                  )
+              }*/
 
             if (event.isAvailable()) {
                 if (event.getStream()
@@ -620,53 +618,53 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                             ?: true)
                     )
                 } else {
-                /*
-                    val view = getMediaStreamView(
-                        true,
-                        event.getStream()?.getStreamType()
-                            ?: MediaStreamType.Unknown,
-                        event.getStream()?.getPerson()?.getPersonId()
-                    )
-                    event.getStream()?.setRenderView(view)
-                    val auxStreamViewHolder = mAuxStreamViewMap[view]
-                    auxStreamViewHolder?.let {
-                        binding.viewAuxVideos.addView(it.item)
-                        val membership = event.getStream()?.getPerson()
-                        Log.d(
-                            tag,
-                            "CallObserver OnMediaChanged MediaStreamAvailabilityEvent successful membership: " + membership?.getDisplayName()
+                    /*
+                        val view = getMediaStreamView(
+                            true,
+                            event.getStream()?.getStreamType()
+                                ?: MediaStreamType.Unknown,
+                            event.getStream()?.getPerson()?.getPersonId()
                         )
-                        it.textView.text = membership?.getDisplayName()
-                        val muted = !(membership?.isSendingAudio() ?: true)
+                        event.getStream()?.setRenderView(view)
+                        val auxStreamViewHolder = mAuxStreamViewMap[view]
+                        auxStreamViewHolder?.let {
+                            binding.viewAuxVideos.addView(it.item)
+                            val membership = event.getStream()?.getPerson()
+                            Log.d(
+                                tag,
+                                "CallObserver OnMediaChanged MediaStreamAvailabilityEvent successful membership: " + membership?.getDisplayName()
+                            )
+                            it.textView.text = membership?.getDisplayName()
+                            val muted = !(membership?.isSendingAudio() ?: true)
 
-                        if (muted) {
-                            it.audioState.setImageResource(R.drawable.ic_microphone_muted_bold)
-                        } else {
-                            it.audioState.setImageResource(R.drawable.ic_microphone_36)
-                        }
+                            if (muted) {
+                                it.audioState.setImageResource(R.drawable.ic_microphone_muted_bold)
+                            } else {
+                                it.audioState.setImageResource(R.drawable.ic_microphone_36)
+                            }
 
-                        if (membership?.isSendingVideo() == true) {
-                            auxStreamViewHolder.viewAvatar.visibility =
-                                View.GONE
-                        } else {
-                            auxStreamViewHolder.viewAvatar.visibility =
-                                View.VISIBLE
-                        }
-                    }*/
+                            if (membership?.isSendingVideo() == true) {
+                                auxStreamViewHolder.viewAvatar.visibility =
+                                    View.GONE
+                            } else {
+                                auxStreamViewHolder.viewAvatar.visibility =
+                                    View.VISIBLE
+                            }
+                        }*/
                 }
 
                 event.getStream()?.setOnMediaStreamInfoChanged { type, info ->
                     mediaStreamInfoChangedListener(type, info)
                 }
             } else {
-             /*   mAuxStreamViewMap.containsKey(
-                    event.getStream()?.getRenderView()
-                ).let {
-                    val auxStreamViewHolder =
-                        mAuxStreamViewMap[event.getStream()?.getRenderView()]
-                    mAuxStreamViewMap.remove(event.getStream()?.getRenderView())
-                    binding.viewAuxVideos.removeView(auxStreamViewHolder?.item)
-                }*/
+                /*   mAuxStreamViewMap.containsKey(
+                       event.getStream()?.getRenderView()
+                   ).let {
+                       val auxStreamViewHolder =
+                           mAuxStreamViewMap[event.getStream()?.getRenderView()]
+                       mAuxStreamViewMap.remove(event.getStream()?.getRenderView())
+                       binding.viewAuxVideos.removeView(auxStreamViewHolder?.item)
+                   }*/
             }
         }
     }
@@ -905,7 +903,6 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
 
-
     override fun onMediaQualityInfoChanged(mediaQualityInfo: Call.MediaQualityInfo) {
 
         updateNetworkStatusChange(mediaQualityInfo)
@@ -932,15 +929,15 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onJoinableSessionUpdated(breakoutSessions: List<BreakoutSession>) {
-  /*      this.breakoutSessions = breakoutSessions
-        breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
-        if (breakoutSessionBottomSheetFragment.isAdded && breakoutSessionBottomSheetFragment.isVisible) {
-            breakoutSessionsAdapter.notifyDataSetChanged()
-        }
-        Log.d(
-            tag,
-            "BreakoutSession Joinable sessions updated : size -> ${breakoutSessions.size}"
-        )*/
+        /*      this.breakoutSessions = breakoutSessions
+              breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
+              if (breakoutSessionBottomSheetFragment.isAdded && breakoutSessionBottomSheetFragment.isVisible) {
+                  breakoutSessionsAdapter.notifyDataSetChanged()
+              }
+              Log.d(
+                  tag,
+                  "BreakoutSession Joinable sessions updated : size -> ${breakoutSessions.size}"
+              )*/
     }
 
     override fun onJoinedSessionUpdated(breakoutSession: BreakoutSession) {
@@ -961,12 +958,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onSessionClosing() {
-       /* val closingText =
-            "Breakout Session: Closing in ${breakout?.getDelay()} seconds"
-        lifecycleScope.launch(Dispatchers.Main) {
-            Toast.makeText(requireContext(), closingText, Toast.LENGTH_LONG)
-                .show()
-        }*/
+        /* val closingText =
+             "Breakout Session: Closing in ${breakout?.getDelay()} seconds"
+         lifecycleScope.launch(Dispatchers.Main) {
+             Toast.makeText(requireContext(), closingText, Toast.LENGTH_LONG)
+                 .show()
+         }*/
     }
 
     override fun onSessionEnabled() {
@@ -990,14 +987,14 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onSessionStarted(breakout: Breakout) {
-       /* this.breakout = breakout
-        lifecycleScope.launch(Dispatchers.Main) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.breakout_session_started),
-                Toast.LENGTH_LONG
-            ).show()
-        }*/
+        /* this.breakout = breakout
+         lifecycleScope.launch(Dispatchers.Main) {
+             Toast.makeText(
+                 requireContext(),
+                 getString(R.string.breakout_session_started),
+                 Toast.LENGTH_LONG
+             ).show()
+         }*/
     }
 
     override fun onBreakoutUpdated(breakout: Breakout) {
@@ -1018,50 +1015,50 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onReceivingNoiseInfoChanged(info: ReceivingNoiseInfo) {
-       /* Log.d(
-            tag,
-            "ReceivingNoiseRemoval: Info change noiseDetected = ${info.isNoiseDetected()}, NREnabled = ${info.isNoiseRemovalEnabled()}"
-        )
+        /* Log.d(
+             tag,
+             "ReceivingNoiseRemoval: Info change noiseDetected = ${info.isNoiseDetected()}, NREnabled = ${info.isNoiseRemovalEnabled()}"
+         )
 
-        binding.ivReceivingNoiseRemoval.visibility = View.VISIBLE
-        if (info.isNoiseDetected() && !info.isNoiseRemovalEnabled()) {
-            binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_detected_filled)
-        } else if (!info.isNoiseRemovalEnabled()) {
-            binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_none_filled)
-        } else if (info.isNoiseRemovalEnabled()) {
-            binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_detected_canceled_filled)
-        }*/
+         binding.ivReceivingNoiseRemoval.visibility = View.VISIBLE
+         if (info.isNoiseDetected() && !info.isNoiseRemovalEnabled()) {
+             binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_detected_filled)
+         } else if (!info.isNoiseRemovalEnabled()) {
+             binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_none_filled)
+         } else if (info.isNoiseRemovalEnabled()) {
+             binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_detected_canceled_filled)
+         }*/
     }
 
     override fun onClosedCaptionsArrived(captions: CaptionItem) {
-       /* CoroutineScope(Dispatchers.Main).launch {
-            captionsController.showCaptionView(binding.root, captions)
-            if (captions.isFinal) {
-                captionsViewModel.updateData(captions)
-                Log.d(
-                    TAG,
-                    " Captions are arrived from ${captions.getDisplayName()}"
-                )
-            }
-        }*/
+        /* CoroutineScope(Dispatchers.Main).launch {
+             captionsController.showCaptionView(binding.root, captions)
+             if (captions.isFinal) {
+                 captionsViewModel.updateData(captions)
+                 Log.d(
+                     TAG,
+                     " Captions are arrived from ${captions.getDisplayName()}"
+                 )
+             }
+         }*/
     }
 
     override fun onClosedCaptionsInfoChanged(closedCaptionsInfo: ClosedCaptionsInfo) {
-      /*  Log.d(
-            TAG,
-            " Captions Info changed: current spkn: ${
-                closedCaptionsInfo.getCurrentSpokenLanguage().getLanguageTitle()
-            } and trns ${
-                closedCaptionsInfo.getCurrentTranslationLanguage()
-                    .getLanguageTitle()
-            }"
-        )
-        captionsController.setLanguages(
-            requireContext(),
-            closedCaptionsInfo
-        ) { intent, code ->
-            startActivityForResult(intent, code)
-        }*/
+        /*  Log.d(
+              TAG,
+              " Captions Info changed: current spkn: ${
+                  closedCaptionsInfo.getCurrentSpokenLanguage().getLanguageTitle()
+              } and trns ${
+                  closedCaptionsInfo.getCurrentTranslationLanguage()
+                      .getLanguageTitle()
+              }"
+          )
+          captionsController.setLanguages(
+              requireContext(),
+              closedCaptionsInfo
+          ) { intent, code ->
+              startActivityForResult(intent, code)
+          }*/
     }
 
     override fun onMoveMeetingFailed(call: Call?) {
@@ -1081,41 +1078,41 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             }
         })
 
-        webexViewModel.startShareLiveData.observe(
-            viewLifecycleOwner,
-            Observer { status ->
-                status?.let {
-                    if (it) {
-                        // For this share screen session initialize live annotations
-                        webexViewModel.initalizeAnnotations(
-                            AnnotationRenderer(
-                                requireContext()
-                            )
-                        )
-                        /*  if(BuildConfig.FLAVOR != "wxc") {
+        /* webexViewModel.startShareLiveData.observe(
+             viewLifecycleOwner,
+             Observer { status ->
+                 status?.let {
+                     if (it) {
+                         // For this share screen session initialize live annotations
+                         webexViewModel.initalizeAnnotations(
+                             AnnotationRenderer(
+                                 requireContext()
+                             )
+                         )
+                         *//*  if(BuildConfig.FLAVOR != "wxc") {
                               binding.annotationPolicy.visibility = VISIBLE
                               binding.annotationPolicy.text = webexViewModel.getCurrentLiveAnnotationPolicy().toString()
-                          }*/
+                          }*//*
 
                     } else {
 //                    updateScreenShareButtonState(ShareButtonState.OFF)
 //                        Log.d(TAG, "User cancelled screen request")
                     }
                 }
-            })
-
-/*        webexViewModel.stopShareLiveData.observe(
-            viewLifecycleOwner,
-            Observer { status ->
-                status?.let {
-                    if (it) {
-                        Log.d(TAG, "stopShareLiveData success")
-                    } else {
-                        Log.d(TAG, "stopShareLiveData Failed")
-                    }
-                }
-//                binding.annotationPolicy.visibility = INVISIBLE
             })*/
+
+        /*        webexViewModel.stopShareLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer { status ->
+                        status?.let {
+                            if (it) {
+                                Log.d(TAG, "stopShareLiveData success")
+                            } else {
+                                Log.d(TAG, "stopShareLiveData Failed")
+                            }
+                        }
+        //                binding.annotationPolicy.visibility = INVISIBLE
+                    })*/
 
         webexViewModel.setCompositeLayoutLiveData.observe(
             viewLifecycleOwner,
@@ -1131,25 +1128,25 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 }
             })
 
-       /* webexViewModel.setRemoteVideoRenderModeLiveData.observe(
-            viewLifecycleOwner,
-            Observer { result ->
-                result?.let {
-                    if (it.first) {
-                        Log.d(TAG, "setRemoteVideoRenderModeLiveData success")
-                    } else {
-                        Log.d(
-                            TAG,
-                            "setRemoteVideoRenderModeLiveData Failed: ${it.second}"
-                        )
-                        showDialogWithMessage(
-                            requireContext(),
-                            R.string.scaling_mode,
-                            it.second
-                        )
-                    }
-                }
-            })*/
+        /* webexViewModel.setRemoteVideoRenderModeLiveData.observe(
+             viewLifecycleOwner,
+             Observer { result ->
+                 result?.let {
+                     if (it.first) {
+                         Log.d(TAG, "setRemoteVideoRenderModeLiveData success")
+                     } else {
+                         Log.d(
+                             TAG,
+                             "setRemoteVideoRenderModeLiveData Failed: ${it.second}"
+                         )
+                         showDialogWithMessage(
+                             requireContext(),
+                             R.string.scaling_mode,
+                             it.second
+                         )
+                     }
+                 }
+             })*/
 
         webexViewModel.callingLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -1178,87 +1175,87 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                         )
                     }
 
-                /*    WebexRepository.CallEvent.AnswerCompleted -> {
-                        webexViewModel.currentCallId = call?.getCallId()
-                        Log.d(
-                            TAG,
-                            "answer Lambda callInfo Id: ${call?.getCallId()}"
-                        )
-                        dismissErrorDialog()
-                        onCallJoined(call)
-                        handleCallControls(null)
-                    }
+                    /*    WebexRepository.CallEvent.AnswerCompleted -> {
+                            webexViewModel.currentCallId = call?.getCallId()
+                            Log.d(
+                                TAG,
+                                "answer Lambda callInfo Id: ${call?.getCallId()}"
+                            )
+                            dismissErrorDialog()
+                            onCallJoined(call)
+                            handleCallControls(null)
+                        }
 
-                    WebexRepository.CallEvent.AnswerFailed -> {
-                        Log.d(TAG, "answer Lambda failed $errorMessage")
-                        dismissErrorDialog()
-                        callEndedUIUpdate(call?.getCallId().orEmpty())
-                    }*/
+                        WebexRepository.CallEvent.AnswerFailed -> {
+                            Log.d(TAG, "answer Lambda failed $errorMessage")
+                            dismissErrorDialog()
+                            callEndedUIUpdate(call?.getCallId().orEmpty())
+                        }*/
 
-               /*     WebexRepository.CallEvent.MeetingPinOrPasswordRequired,
-                    WebexRepository.CallEvent.InCorrectPassword,
-                    WebexRepository.CallEvent.InCorrectPasswordOrHostKey,
-                    WebexRepository.CallEvent.CaptchaRequired,
-                    WebexRepository.CallEvent.InCorrectPasswordWithCaptcha,
-                    WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha -> {
-                        Log.d(
-                            TAG,
-                            "Call Observer Error case : " + it.errorMessage
-                        )
-                        onMeetingHostPinError(it.captcha, event)
-                    }*/
+                    /*     WebexRepository.CallEvent.MeetingPinOrPasswordRequired,
+                         WebexRepository.CallEvent.InCorrectPassword,
+                         WebexRepository.CallEvent.InCorrectPasswordOrHostKey,
+                         WebexRepository.CallEvent.CaptchaRequired,
+                         WebexRepository.CallEvent.InCorrectPasswordWithCaptcha,
+                         WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha -> {
+                             Log.d(
+                                 TAG,
+                                 "Call Observer Error case : " + it.errorMessage
+                             )
+                             onMeetingHostPinError(it.captcha, event)
+                         }*/
 
                     else -> {
 //                        dismissErrorDialog()
                     }
                 }
 
-               /* call?.let {
-                    captionsController = ClosedCaptionsController(call)
-                }*/
+                /* call?.let {
+                     captionsController = ClosedCaptionsController(call)
+                 }*/
             }
         })
 
-        webexViewModel.startAssociationLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    val event = it.event
-                    val call = it.call
-                    val errorMessage = it.errorMessage
+        /* webexViewModel.startAssociationLiveData.observe(
+             viewLifecycleOwner,
+             Observer {
+                 it?.let {
+                     val event = it.event
+                     val call = it.call
+                     val errorMessage = it.errorMessage
 
-                    when (event) {
-                        WebexRepository.CallEvent.AssociationCallCompleted -> {
-                            webexViewModel.isAddedCall = true
-                            webexViewModel.oldCallId =
-                                webexViewModel.currentCallId
-                            webexViewModel.currentCallId =
-                                call?.getCallId() ?: ""
+                     when (event) {
+                         WebexRepository.CallEvent.AssociationCallCompleted -> {
+                             webexViewModel.isAddedCall = true
+                             webexViewModel.oldCallId =
+                                 webexViewModel.currentCallId
+                             webexViewModel.currentCallId =
+                                 call?.getCallId() ?: ""
 
-                            call?.let { _call ->
-                                CallObjectStorage.addCallObject(_call)
-                            }
-                            onCallJoined(call)
-                            handleCallControls(call)
-                            Log.d(
-                                tag,
-                                "startAssociatedCall currentCallId = ${webexViewModel.currentCallId}, oldCallId = ${webexViewModel.oldCallId}"
-                            )
-                        }
+                             call?.let { _call ->
+                                 CallObjectStorage.addCallObject(_call)
+                             }
+                             onCallJoined(call)
+                             handleCallControls(call)
+                             Log.d(
+                                 tag,
+                                 "startAssociatedCall currentCallId = ${webexViewModel.currentCallId}, oldCallId = ${webexViewModel.oldCallId}"
+                             )
+                         }
 
-                        WebexRepository.CallEvent.AssociationCallFailed -> {
+                         WebexRepository.CallEvent.AssociationCallFailed -> {
 
-                            val callActivity = activity as CallActivity?
-                            callActivity?.alertDialog(
-                                false,
-                                resources.getString(R.string.start_associated_call_failed)
-                            )
-                        }
+                             val callActivity = activity as CallActivity?
+                             callActivity?.alertDialog(
+                                 false,
+                                 resources.getString(R.string.start_associated_call_failed)
+                             )
+                         }
 
-                        else -> {}
-                    }
-                }
-            })
+                         else -> {}
+                     }
+                 }
+             })*/
 
         webexViewModel.forceSendingVideoLandscapeLiveData.observe(
             viewLifecycleOwner,
@@ -1272,73 +1269,75 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         webexViewModel.virtualBgError.observe(
             viewLifecycleOwner,
             Observer { error ->
-                Log.d(tag, error)
-                requireContext().toast(error)
+
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT)
+                    .show()
+
             })
 
-   /*     webexViewModel.virtualBackground.observe(viewLifecycleOwner, Observer {
-            val emptyBackground = VirtualBackground()
+        /*     webexViewModel.virtualBackground.observe(viewLifecycleOwner, Observer {
+                 val emptyBackground = VirtualBackground()
 
-            if (bottomSheetFragment == null) {
-                bottomSheetFragment =
-                    BackgroundOptionsBottomSheetFragment(onBackgroundChanged = { virtualBackground ->
-                        if (!webexViewModel.isVirtualBackgroundSupported()) {
-                            Log.d(
-                                tag,
-                                getString(R.string.virtual_bg_not_supported)
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.virtual_bg_not_supported),
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            return@BackgroundOptionsBottomSheetFragment
-                        }
+                 if (bottomSheetFragment == null) {
+                     bottomSheetFragment =
+                         BackgroundOptionsBottomSheetFragment(onBackgroundChanged = { virtualBackground ->
+                             if (!webexViewModel.isVirtualBackgroundSupported()) {
+                                 Log.d(
+                                     tag,
+                                     getString(R.string.virtual_bg_not_supported)
+                                 )
+                                 Toast.makeText(
+                                     requireContext(),
+                                     getString(R.string.virtual_bg_not_supported),
+                                     Toast.LENGTH_SHORT
+                                 )
+                                     .show()
+                                 return@BackgroundOptionsBottomSheetFragment
+                             }
 
-                        webexViewModel.applyVirtualBackground(
-                            virtualBackground,
-                            Phone.VirtualBackgroundMode.CALL
-                        )
-                    },
-                        onBackgroundRemoved = { virtualBackground ->
-                            webexViewModel.removeVirtualBackground(
-                                virtualBackground
-                            )
-                        },
-                        onNewBackgroundAdded = { file ->
-                            if (!webexViewModel.isVirtualBackgroundSupported()) {
-                                Log.d(
-                                    tag,
-                                    getString(R.string.virtual_bg_not_supported)
-                                )
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.virtual_bg_not_supported),
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                return@BackgroundOptionsBottomSheetFragment
-                            }
+                             webexViewModel.applyVirtualBackground(
+                                 virtualBackground,
+                                 Phone.VirtualBackgroundMode.CALL
+                             )
+                         },
+                             onBackgroundRemoved = { virtualBackground ->
+                                 webexViewModel.removeVirtualBackground(
+                                     virtualBackground
+                                 )
+                             },
+                             onNewBackgroundAdded = { file ->
+                                 if (!webexViewModel.isVirtualBackgroundSupported()) {
+                                     Log.d(
+                                         tag,
+                                         getString(R.string.virtual_bg_not_supported)
+                                     )
+                                     Toast.makeText(
+                                         requireContext(),
+                                         getString(R.string.virtual_bg_not_supported),
+                                         Toast.LENGTH_SHORT
+                                     )
+                                         .show()
+                                     return@BackgroundOptionsBottomSheetFragment
+                                 }
 
-                            val localFile = processAttachmentFile(file)
-                            webexViewModel.addVirtualBackground(localFile)
-                        },
-                        onBottomSheetDimissed = {
-                            bottomSheetFragment = null
-                        })
+                                 val localFile = processAttachmentFile(file)
+                                 webexViewModel.addVirtualBackground(localFile)
+                             },
+                             onBottomSheetDimissed = {
+                                 bottomSheetFragment = null
+                             })
 
-                bottomSheetFragment?.show(
-                    childFragmentManager,
-                    BackgroundOptionsBottomSheetFragment::class.java.name
-                )
-            }
+                     bottomSheetFragment?.show(
+                         childFragmentManager,
+                         BackgroundOptionsBottomSheetFragment::class.java.name
+                     )
+                 }
 
-            bottomSheetFragment?.backgrounds?.clear()
-            bottomSheetFragment?.backgrounds?.addAll(it)
-            bottomSheetFragment?.backgrounds?.add(emptyBackground)
-            bottomSheetFragment?.adapter?.notifyDataSetChanged()
-        })*/
+                 bottomSheetFragment?.backgrounds?.clear()
+                 bottomSheetFragment?.backgrounds?.addAll(it)
+                 bottomSheetFragment?.backgrounds?.add(emptyBackground)
+                 bottomSheetFragment?.adapter?.notifyDataSetChanged()
+             })*/
 
         webexViewModel.annotationEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -1359,59 +1358,59 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 onSignedOut()
             }
         })
-/*
-        webexViewModel.startAudioDumpLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    if (it) {
-                        Log.d(TAG, "startAudioDumpLiveData success")
-                        showRecordingAlertDialog(requireActivity())
-                    } else {
-                        Log.d(TAG, "startAudioDumpLiveData Failed")
-                        showSnackbar("Failed to start audio dump")
-                    }
-                }
-            })*/
-       /* webexViewModel.stopAudioDumpLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    if (alertDialogBuilder?.isShowing == true) {
-                        alertDialogBuilder?.dismiss()
-                    }
-                    timerHandler.removeCallbacksAndMessages(null)
-                    if (it) {
-                        Log.d(TAG, "stopAudioDumpLiveData success")
-                    } else {
-                        Log.d(TAG, "stopAudioDumpLiveData Failed")
-                        showSnackbar("Failed to stop audio dump")
-                    }
-                }
-            })*/
-       /* webexViewModel.canStartAudioDumpLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    if (it) {
-                        Log.d(TAG, "canStartAudioDumpLiveData success")
-                        if (!webexViewModel.isRecordingAudioDump()) {
-                            webexViewModel.startAudioDump()
+        /*
+                webexViewModel.startAudioDumpLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        it?.let {
+                            if (it) {
+                                Log.d(TAG, "startAudioDumpLiveData success")
+                                showRecordingAlertDialog(requireActivity())
+                            } else {
+                                Log.d(TAG, "startAudioDumpLiveData Failed")
+                                showSnackbar("Failed to start audio dump")
+                            }
                         }
+                    })*/
+        /* webexViewModel.stopAudioDumpLiveData.observe(
+             viewLifecycleOwner,
+             Observer {
+                 it?.let {
+                     if (alertDialogBuilder?.isShowing == true) {
+                         alertDialogBuilder?.dismiss()
+                     }
+                     timerHandler.removeCallbacksAndMessages(null)
+                     if (it) {
+                         Log.d(TAG, "stopAudioDumpLiveData success")
+                     } else {
+                         Log.d(TAG, "stopAudioDumpLiveData Failed")
+                         showSnackbar("Failed to stop audio dump")
+                     }
+                 }
+             })*/
+        /* webexViewModel.canStartAudioDumpLiveData.observe(
+             viewLifecycleOwner,
+             Observer {
+                 it?.let {
+                     if (it) {
+                         Log.d(TAG, "canStartAudioDumpLiveData success")
+                         if (!webexViewModel.isRecordingAudioDump()) {
+                             webexViewModel.startAudioDump()
+                         }
 
-                    } else {
-                        Log.d(TAG, "canStartAudioDumpLiveData Failed")
-                        showSnackbar("Audio dump is not supported")
-                    }
-                }
-            })*/
+                     } else {
+                         Log.d(TAG, "canStartAudioDumpLiveData Failed")
+                         showSnackbar("Audio dump is not supported")
+                     }
+                 }
+             })*/
     }
 
     private fun onSignedOut() {
-    /*    val intent = Intent(requireContext(), LoginActivity::class.java)
-        intent.flags =
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)*/
+        /*    val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)*/
     }
 
     /*private fun handleOnBackgroundChanged(virtualBackground: VirtualBackground) {
@@ -1453,201 +1452,201 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         return LocalFile(file, null, thumbnail, null)
     }*/
 
-/*    private fun onMeetingHostPinError(
-        captcha: Phone.Captcha?,
-        error: WebexRepository.CallEvent
-    ) {
+    /*    private fun onMeetingHostPinError(
+            captcha: Phone.Captcha?,
+            error: WebexRepository.CallEvent
+        ) {
 
-        if (dialType == DialType.NONE) { // this is the case when the dialed called first time, so decide the dial type here
-            showDialogWithMessage(requireContext(),
-                getString(R.string.meeting_error),
-                getString(R.string.are_you_host),
-                cancelable = false,
-                onPositiveButtonClick = { dialog, _ ->
-                    dialog.dismiss()
-                    dialType = DialType.HOST
-                    createErrorDialog(true, captcha, error)
+            if (dialType == DialType.NONE) { // this is the case when the dialed called first time, so decide the dial type here
+                showDialogWithMessage(requireContext(),
+                    getString(R.string.meeting_error),
+                    getString(R.string.are_you_host),
+                    cancelable = false,
+                    onPositiveButtonClick = { dialog, _ ->
+                        dialog.dismiss()
+                        dialType = DialType.HOST
+                        createErrorDialog(true, captcha, error)
 
-                },
-                onNegativeButtonClick = { dialog, _ ->
-                    dialog.dismiss()
-                    dialType = DialType.OTHERS
-                    createErrorDialog(false, captcha, error)
-                })
-        } else { // second time onwards just set host or others to bypass the host confirming dialog
-            if (passwordDialog.isShowing) {
-                updateErrorDialog(captcha, error)
-            } else {
-                createErrorDialog(dialType == DialType.HOST, captcha, error)
-            }
-        }
-    }*/
-
-   /* private fun updateErrorDialog(
-        captchaData: Phone.Captcha? = null,
-        error: WebexRepository.CallEvent = WebexRepository.CallEvent.MeetingPinOrPasswordRequired
-    ) {
-        val isCaptchaAvailable = (captchaData != null)
-        passwordDialogBinding.root.apply {
-            if (isCaptchaAvailable) {
-                passwordDialogBinding.captchaRootLayout.visibility =
-                    View.VISIBLE
-                Glide.with(requireContext())
-                    .load(captchaData?.getImageUrl()) // image url
-                    .placeholder(R.color.black) // any placeholder to load at start
-                    .centerCrop()
-                    .into(passwordDialogBinding.captchImage)
-                passwordDialogBinding.captchaAudio.tag =
-                    captchaData?.getAudioUrl()
-                passwordDialogBinding.submit.tag = captchaData
-            } else {
-                passwordDialogBinding.captchaRootLayout.visibility = View.GONE
-            }
-
-            passwordDialogBinding.progressBar.visibility = View.GONE
-            passwordDialogBinding.submit.visibility = View.VISIBLE
-
-            passwordDialogBinding.pinTitleEditText.text.clear()
-            passwordDialogBinding.captchaInputText.text.clear()
-
-            when (error) {
-                WebexRepository.CallEvent.MeetingPinOrPasswordRequired,
-                WebexRepository.CallEvent.CaptchaRequired -> {
-                    passwordDialogBinding.errorText.text = ""
+                    },
+                    onNegativeButtonClick = { dialog, _ ->
+                        dialog.dismiss()
+                        dialType = DialType.OTHERS
+                        createErrorDialog(false, captcha, error)
+                    })
+            } else { // second time onwards just set host or others to bypass the host confirming dialog
+                if (passwordDialog.isShowing) {
+                    updateErrorDialog(captcha, error)
+                } else {
+                    createErrorDialog(dialType == DialType.HOST, captcha, error)
                 }
-
-                WebexRepository.CallEvent.InCorrectPassword,
-                WebexRepository.CallEvent.InCorrectPasswordWithCaptcha -> {
-                    passwordDialogBinding.errorText.text =
-                        getString(R.string.incorrectPin)
-                }
-
-                WebexRepository.CallEvent.InCorrectPasswordOrHostKey,
-                WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha -> {
-                    passwordDialogBinding.errorText.text =
-                        getString(R.string.incorrectPinOrHostKey)
-                }
-
-                else -> {}
             }
-        }
-    }
+        }*/
 
-    private fun createErrorDialog(
-        isHost: Boolean,
-        captchaData: Phone.Captcha? = null,
-        error: WebexRepository.CallEvent = WebexRepository.CallEvent.MeetingPinOrPasswordRequired
-    ) {
+    /* private fun updateErrorDialog(
+         captchaData: Phone.Captcha? = null,
+         error: WebexRepository.CallEvent = WebexRepository.CallEvent.MeetingPinOrPasswordRequired
+     ) {
+         val isCaptchaAvailable = (captchaData != null)
+         passwordDialogBinding.root.apply {
+             if (isCaptchaAvailable) {
+                 passwordDialogBinding.captchaRootLayout.visibility =
+                     View.VISIBLE
+                 Glide.with(requireContext())
+                     .load(captchaData?.getImageUrl()) // image url
+                     .placeholder(R.color.black) // any placeholder to load at start
+                     .centerCrop()
+                     .into(passwordDialogBinding.captchImage)
+                 passwordDialogBinding.captchaAudio.tag =
+                     captchaData?.getAudioUrl()
+                 passwordDialogBinding.submit.tag = captchaData
+             } else {
+                 passwordDialogBinding.captchaRootLayout.visibility = View.GONE
+             }
 
-        passwordDialogBinding =
-            DialogEnterMeetingPinBinding.inflate(layoutInflater)
-                .apply {
+             passwordDialogBinding.progressBar.visibility = View.GONE
+             passwordDialogBinding.submit.visibility = View.VISIBLE
 
-                    // Captcha data validation if any
-                    if (captchaData != null) {
-                        captchaRootLayout.visibility = View.VISIBLE
-                        Glide.with(requireContext())
-                            .load(captchaData.getImageUrl()) // image url
-                            .placeholder(R.color.black) // any placeholder to load at start
-                            .centerCrop()
-                            .into(captchImage)
-                        captchaAudio.tag = captchaData.getAudioUrl()
-                    } else {
-                        captchaRootLayout.visibility = View.GONE
-                    }
+             passwordDialogBinding.pinTitleEditText.text.clear()
+             passwordDialogBinding.captchaInputText.text.clear()
 
-                    // Prepare error message
-                    errorText.text = ""
-                    if (error == WebexRepository.CallEvent.InCorrectPassword ||
-                        error == WebexRepository.CallEvent.InCorrectPasswordWithCaptcha
-                    ) {
-                        errorText.text = getString(R.string.incorrectPin)
-                    } else if (error == WebexRepository.CallEvent.InCorrectPasswordOrHostKey ||
-                        error == WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha
-                    ) {
-                        errorText.text =
-                            getString(R.string.incorrectPinOrHostKey)
-                    }
+             when (error) {
+                 WebexRepository.CallEvent.MeetingPinOrPasswordRequired,
+                 WebexRepository.CallEvent.CaptchaRequired -> {
+                     passwordDialogBinding.errorText.text = ""
+                 }
 
-                    // Handle submit action for pin and captcha
-                    submit.tag = captchaData
-                    submit.setOnClickListener {
-                        it.let {
-                            // reset the previous error
-                            errorText.text = ""
+                 WebexRepository.CallEvent.InCorrectPassword,
+                 WebexRepository.CallEvent.InCorrectPasswordWithCaptcha -> {
+                     passwordDialogBinding.errorText.text =
+                         getString(R.string.incorrectPin)
+                 }
 
-                            if (pinTitleEditText.text.isEmpty()) {
-                                val error =
-                                    if (isHost) getString(R.string.host_key_required) else getString(
-                                        R.string.meeting_pin_required
-                                    )
-                                errorText.text = error
-                            } else if (captchaData != null && captchaInputText.text.isEmpty()) {
-                                val error =
-                                    getString(R.string.captcha_empty_error)
-                                errorText.text = error
-                            } else {
-                                submit.visibility = View.INVISIBLE
-                                progressBar.visibility = View.VISIBLE
-                                val data = it.tag as Phone.Captcha?
+                 WebexRepository.CallEvent.InCorrectPasswordOrHostKey,
+                 WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha -> {
+                     passwordDialogBinding.errorText.text =
+                         getString(R.string.incorrectPinOrHostKey)
+                 }
 
-                                dialOutgoingCall(
-                                    callerId, isHost,
-                                    pinTitleEditText.text.toString(),
-                                    captchaInputText.text.toString(),
-                                    data?.getId() ?: "",
-                                )
-                            }
-                        }
-                    }
+                 else -> {}
+             }
+         }
+     }
 
-                    //initialize audio action
-                    captchaAudio.setOnClickListener {
-                        it?.let {
-                            playAudio(it.tag as String)
-                        }
-                    }
+     private fun createErrorDialog(
+         isHost: Boolean,
+         captchaData: Phone.Captcha? = null,
+         error: WebexRepository.CallEvent = WebexRepository.CallEvent.MeetingPinOrPasswordRequired
+     ) {
 
-                    //initialize refresh action
-                    refresh.setOnClickListener {
-                        mediaPlayer.reset()
-                        webexViewModel.refreshCaptcha()
-                    }
+         passwordDialogBinding =
+             DialogEnterMeetingPinBinding.inflate(layoutInflater)
+                 .apply {
+
+                     // Captcha data validation if any
+                     if (captchaData != null) {
+                         captchaRootLayout.visibility = View.VISIBLE
+                         Glide.with(requireContext())
+                             .load(captchaData.getImageUrl()) // image url
+                             .placeholder(R.color.black) // any placeholder to load at start
+                             .centerCrop()
+                             .into(captchImage)
+                         captchaAudio.tag = captchaData.getAudioUrl()
+                     } else {
+                         captchaRootLayout.visibility = View.GONE
+                     }
+
+                     // Prepare error message
+                     errorText.text = ""
+                     if (error == WebexRepository.CallEvent.InCorrectPassword ||
+                         error == WebexRepository.CallEvent.InCorrectPasswordWithCaptcha
+                     ) {
+                         errorText.text = getString(R.string.incorrectPin)
+                     } else if (error == WebexRepository.CallEvent.InCorrectPasswordOrHostKey ||
+                         error == WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha
+                     ) {
+                         errorText.text =
+                             getString(R.string.incorrectPinOrHostKey)
+                     }
+
+                     // Handle submit action for pin and captcha
+                     submit.tag = captchaData
+                     submit.setOnClickListener {
+                         it.let {
+                             // reset the previous error
+                             errorText.text = ""
+
+                             if (pinTitleEditText.text.isEmpty()) {
+                                 val error =
+                                     if (isHost) getString(R.string.host_key_required) else getString(
+                                         R.string.meeting_pin_required
+                                     )
+                                 errorText.text = error
+                             } else if (captchaData != null && captchaInputText.text.isEmpty()) {
+                                 val error =
+                                     getString(R.string.captcha_empty_error)
+                                 errorText.text = error
+                             } else {
+                                 submit.visibility = View.INVISIBLE
+                                 progressBar.visibility = View.VISIBLE
+                                 val data = it.tag as Phone.Captcha?
+
+                                 dialOutgoingCall(
+                                     callerId, isHost,
+                                     pinTitleEditText.text.toString(),
+                                     captchaInputText.text.toString(),
+                                     data?.getId() ?: "",
+                                 )
+                             }
+                         }
+                     }
+
+                     //initialize audio action
+                     captchaAudio.setOnClickListener {
+                         it?.let {
+                             playAudio(it.tag as String)
+                         }
+                     }
+
+                     //initialize refresh action
+                     refresh.setOnClickListener {
+                         mediaPlayer.reset()
+                         webexViewModel.refreshCaptcha()
+                     }
+                 }
+
+         val title =
+             if (isHost) getString(R.string.enter_host_key) else getString(R.string.enter_meeting_pin)
+         passwordDialog.setTitle(title)
+         passwordDialogBinding.pinTitleLabel.text = title
+         passwordDialog.setContentView(passwordDialogBinding.root)
+         passwordDialog.show()
+     }*/
+
+    /*  private fun dismissErrorDialog() {
+          if (passwordDialog.isShowing) passwordDialog.dismiss()
+      }*/
+
+    /*    private fun playAudio(url: String) {
+            try {
+                val uri: Uri = Uri.parse(url)
+                mediaPlayer.stop()
+                mediaPlayer.reset()
+                mediaPlayer.setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+                mediaPlayer.setDataSource(requireContext(), uri)
+                mediaPlayer.prepareAsync()
+
+                mediaPlayer.setOnPreparedListener {
+                    it.start()
                 }
-
-        val title =
-            if (isHost) getString(R.string.enter_host_key) else getString(R.string.enter_meeting_pin)
-        passwordDialog.setTitle(title)
-        passwordDialogBinding.pinTitleLabel.text = title
-        passwordDialog.setContentView(passwordDialogBinding.root)
-        passwordDialog.show()
-    }*/
-
-  /*  private fun dismissErrorDialog() {
-        if (passwordDialog.isShowing) passwordDialog.dismiss()
-    }*/
-
-/*    private fun playAudio(url: String) {
-        try {
-            val uri: Uri = Uri.parse(url)
-            mediaPlayer.stop()
-            mediaPlayer.reset()
-            mediaPlayer.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-            mediaPlayer.setDataSource(requireContext(), uri)
-            mediaPlayer.prepareAsync()
-
-            mediaPlayer.setOnPreparedListener {
-                it.start()
+            } catch (e: java.lang.Exception) {
+                println(e.toString())
             }
-        } catch (e: java.lang.Exception) {
-            println(e.toString())
-        }
-    }*/
+        }*/
 
     private fun audioEventChanged(
         callMembership: CallMembership?,
@@ -1685,34 +1684,34 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }
 
-   /* private fun schedulesChanged(call: Call?) {
-        val schedules = call?.getSchedules()
-        schedules?.let {
-            for (item in schedules) {
-                incomingInfoAdapter.info.forEach { model ->
-                    if ((model is MeetingInfoModel) && (model.meetingId == item.getId())) {
-                        val infoModel =
-                            MeetingInfoModel.convertToMeetingInfoModel(
-                                call,
-                                item
-                            )
-                        incomingInfoAdapter.info.remove(model)
-                        incomingInfoAdapter.info.add(infoModel)
-                        incomingInfoAdapter.notifyDataSetChanged()
-                        return
-                    }
-                }
-            }
-        } ?: run {
-            //Canceled meeting
-            incomingInfoAdapter.info.forEach { model ->
-                if (model is MeetingInfoModel) {
-                    incomingInfoAdapter.info.remove(model)
-                }
-            }
-            incomingInfoAdapter.notifyDataSetChanged()
-        }
-    }*/
+    /* private fun schedulesChanged(call: Call?) {
+         val schedules = call?.getSchedules()
+         schedules?.let {
+             for (item in schedules) {
+                 incomingInfoAdapter.info.forEach { model ->
+                     if ((model is MeetingInfoModel) && (model.meetingId == item.getId())) {
+                         val infoModel =
+                             MeetingInfoModel.convertToMeetingInfoModel(
+                                 call,
+                                 item
+                             )
+                         incomingInfoAdapter.info.remove(model)
+                         incomingInfoAdapter.info.add(infoModel)
+                         incomingInfoAdapter.notifyDataSetChanged()
+                         return
+                     }
+                 }
+             }
+         } ?: run {
+             //Canceled meeting
+             incomingInfoAdapter.info.forEach { model ->
+                 if (model is MeetingInfoModel) {
+                     incomingInfoAdapter.info.remove(model)
+                 }
+             }
+             incomingInfoAdapter.notifyDataSetChanged()
+         }
+     }*/
 
     private fun handleCallControls(call: Call?) {
         mHandler.post {
@@ -1787,45 +1786,45 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
         webexViewModel.setVideoStreamMode(webexViewModel.streamMode)
 
-       /* val incomingCallPickEvent: (Call?) -> Unit = { call ->
-            Log.d(tag, "incomingCallPickEvent")
-            ringerManager.stopRinger(Call.RingerType.Incoming)
-            call?.let {
-                if (webexViewModel.hasAnyoneJoined()) {
-                    onCallActionListener?.onEndAndAnswer(
-                        webexViewModel.currentCallId.orEmpty(),
-                        call.getCallId().orEmpty(),
-                        CompletionHandler { result ->
-                            if (result.isSuccessful && result.data == false) {
-                                answerCall(it)
-                            }
-                        }
-                    )
-                } else answerCall(it)
-            }
-        }
+        /* val incomingCallPickEvent: (Call?) -> Unit = { call ->
+             Log.d(tag, "incomingCallPickEvent")
+             ringerManager.stopRinger(Call.RingerType.Incoming)
+             call?.let {
+                 if (webexViewModel.hasAnyoneJoined()) {
+                     onCallActionListener?.onEndAndAnswer(
+                         webexViewModel.currentCallId.orEmpty(),
+                         call.getCallId().orEmpty(),
+                         CompletionHandler { result ->
+                             if (result.isSuccessful && result.data == false) {
+                                 answerCall(it)
+                             }
+                         }
+                     )
+                 } else answerCall(it)
+             }
+         }
 
-        val incomingCallCancelEvent: (Call?) -> Unit = { call ->
-            Log.d(tag, "incomingCallEndEvent callId: ${call?.getCallId()}")
-            ringerManager.stopRinger(Call.RingerType.Incoming)
-            endIncomingCall(call?.getCallId().orEmpty())
-        }
+         val incomingCallCancelEvent: (Call?) -> Unit = { call ->
+             Log.d(tag, "incomingCallEndEvent callId: ${call?.getCallId()}")
+             ringerManager.stopRinger(Call.RingerType.Incoming)
+             endIncomingCall(call?.getCallId().orEmpty())
+         }
 
-        incomingInfoAdapter =
-            IncomingCallBottomSheetFragment.IncomingInfoAdapter(
-                incomingCallPickEvent,
-                incomingCallCancelEvent
-            )*/
+         incomingInfoAdapter =
+             IncomingCallBottomSheetFragment.IncomingInfoAdapter(
+                 incomingCallPickEvent,
+                 incomingCallCancelEvent
+             )*/
 
-       /* breakoutSessionsAdapter =
-            BreakoutSessionsBottomSheetFragment.BreakoutSessionsAdapter {
-                webexViewModel.joinBreakoutSession(it)
-                breakoutSessionBottomSheetFragment.dismiss()
-                attemptingToJoinABreakoutSession = true
-            }*/
+        /* breakoutSessionsAdapter =
+             BreakoutSessionsBottomSheetFragment.BreakoutSessionsAdapter {
+                 webexViewModel.joinBreakoutSession(it)
+                 breakoutSessionBottomSheetFragment.dismiss()
+                 attemptingToJoinABreakoutSession = true
+             }*/
 
-      /*  callOptionsBottomSheetFragment = CallBottomSheetFragment(
-            { call -> *//*showIncomingCallBottomSheet()*//* },
+        /*  callOptionsBottomSheetFragment = CallBottomSheetFragment(
+              { call -> *//*showIncomingCallBottomSheet()*//* },
             { call -> showTranscriptions(call) },
             { call -> toggleWXAClickListener(call) },
             { call -> receivingVideoListener(call) },
@@ -1844,138 +1843,138 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             { call -> *//*showCaptionDialog(call) *//*},
             { startAudioDump() })*/
 
-    /*    multiStreamOptionsBottomSheetFragment =
-            MultiStreamOptionsBottomSheetFragment({ call ->
-                setCategoryAOptionClickListener(
-                    call
-                )
-            },
-                { call -> setCategoryBOptionClickListener(call) },
-                { call -> removeCategoryAClickListener(call) },
-                { call -> removeCategoryBClickListener(call) })
-
-        multiStreamDataOptionsBottomSheetFragment =
-            MultiStreamDataOptionsBottomSheetFragment(
-                { call, quality, duplicate ->
-                    categoryAOptionsOkListener(
-                        call,
-                        quality,
-                        duplicate
+        /*    multiStreamOptionsBottomSheetFragment =
+                MultiStreamOptionsBottomSheetFragment({ call ->
+                    setCategoryAOptionClickListener(
+                        call
                     )
                 },
-                { call, numStreams, quality ->
-                    categoryBOptionsOkListener(
-                        call,
-                        numStreams,
-                        quality
-                    )
-                })*/
+                    { call -> setCategoryBOptionClickListener(call) },
+                    { call -> removeCategoryAClickListener(call) },
+                    { call -> removeCategoryBClickListener(call) })
 
-  /*      mediaStreamBottomSheetFragment = MediaStreamBottomSheetFragment(
-            { renderView, personID, quality ->
-                pinStreamClickListener(
-                    renderView,
-                    personID,
-                    quality
-                )
-            },
-            { renderView, personID ->
-                unpinStreamClickListener(
-                    renderView,
-                    personID
-                )
-            },
-            { renderView, personID ->
-                closeStreamStreamClickListener(
-                    renderView,
-                    personID
-                )
-            })
-*/
+            multiStreamDataOptionsBottomSheetFragment =
+                MultiStreamDataOptionsBottomSheetFragment(
+                    { call, quality, duplicate ->
+                        categoryAOptionsOkListener(
+                            call,
+                            quality,
+                            duplicate
+                        )
+                    },
+                    { call, numStreams, quality ->
+                        categoryBOptionsOkListener(
+                            call,
+                            numStreams,
+                            quality
+                        )
+                    })*/
+
+        /*      mediaStreamBottomSheetFragment = MediaStreamBottomSheetFragment(
+                  { renderView, personID, quality ->
+                      pinStreamClickListener(
+                          renderView,
+                          personID,
+                          quality
+                      )
+                  },
+                  { renderView, personID ->
+                      unpinStreamClickListener(
+                          renderView,
+                          personID
+                      )
+                  },
+                  { renderView, personID ->
+                      closeStreamStreamClickListener(
+                          renderView,
+                          personID
+                      )
+                  })
+      */
 //        initIncomingCallBottomSheet()
 
-       /* breakoutSessionBottomSheetFragment =
-            BreakoutSessionsBottomSheetFragment()*/
+        /* breakoutSessionBottomSheetFragment =
+             BreakoutSessionsBottomSheetFragment()*/
 
-       /* cameraOptionsBottomSheetFragment =
-            CameraOptionsBottomSheetFragment({ call ->
-                zoomFactorClickListener(call)
-            },
-                { call -> torchModeClickListener(call) },
-                { call -> flashModeClickListener(call) },
-                { call -> cameraFocusClickListener(call) },
-                { call -> cameraCustomExposureClickListener(call) },
-                { call -> cameraAutoExposureClickListener(call) },
-                { call -> takePhotoClickListener(call) })
+        /* cameraOptionsBottomSheetFragment =
+             CameraOptionsBottomSheetFragment({ call ->
+                 zoomFactorClickListener(call)
+             },
+                 { call -> torchModeClickListener(call) },
+                 { call -> flashModeClickListener(call) },
+                 { call -> cameraFocusClickListener(call) },
+                 { call -> cameraCustomExposureClickListener(call) },
+                 { call -> cameraAutoExposureClickListener(call) },
+                 { call -> takePhotoClickListener(call) })
 
-        cameraOptionsDataBottomSheetFragment =
-            CameraOptionsDataBottomSheetFragment({ x ->
-                zoomfactorValueSetListener(
-                    x
-                )
-            },
-                { x, y -> cameraFocusValueSetClickListener(x, y) },
-                { x, y -> cameraCustomExposureValueSetClickListener(x, y) },
-                { x -> cameraAutoExposureValueSetClickListener(x) })*/
+         cameraOptionsDataBottomSheetFragment =
+             CameraOptionsDataBottomSheetFragment({ x ->
+                 zoomfactorValueSetListener(
+                     x
+                 )
+             },
+                 { x, y -> cameraFocusValueSetClickListener(x, y) },
+                 { x, y -> cameraCustomExposureValueSetClickListener(x, y) },
+                 { x -> cameraAutoExposureValueSetClickListener(x) })*/
 
-  /*      photoViewerBottomSheetFragment = PhotoViewerBottomSheetFragment()*/
+        /*      photoViewerBottomSheetFragment = PhotoViewerBottomSheetFragment()*/
 
         /*    switchAudioBottomSheetFragment = SwitchAudioBottomSheetFragment({toggleAudioMode(AudioMode.EARPIECE)},
                 {toggleAudioMode(AudioMode.SPEAKER)}, {toggleAudioMode(AudioMode.BLUETOOTH)}, {toggleAudioMode(AudioMode.WIRED_HEADSET)})*/
 
- /*       callingActivity =
-            bundle?.getInt(Constants.Intent.CALLING_ACTIVITY_ID, 0)!!*/
-       /* moveMeeting =
-            if (bundle.getBoolean(Constants.Intent.MOVE_MEETING, false)) {
-                CompanionMode.MoveMeeting
-            } else {
-                CompanionMode.None
-            }*/
-      /*  val incomingCallId = bundle.getString(Constants.Intent.CALL_ID) ?: ""
-        if (callingActivity == 1) {
-            isIncomingActivity = true
-            binding.mainContentLayout.visibility = View.GONE
-            binding.incomingCallHeader.visibility = View.VISIBLE
-            val acceptedCall =
-                bundle.getBoolean(Constants.Action.WEBEX_CALL_ACCEPT_ACTION)
-            if (!acceptedCall) {
-                incomingLayoutState(false)
-                ringerManager.startRinger(Call.RingerType.Incoming)
-            }
-            val _call = CallObjectStorage.getCallObject(incomingCallId)
-            _call?.let { call ->
-                webexViewModel.setCallObserver(call)
-            }
+        /*       callingActivity =
+                   bundle?.getInt(Constants.Intent.CALLING_ACTIVITY_ID, 0)!!*/
+        /* moveMeeting =
+             if (bundle.getBoolean(Constants.Intent.MOVE_MEETING, false)) {
+                 CompanionMode.MoveMeeting
+             } else {
+                 CompanionMode.None
+             }*/
+        /*  val incomingCallId = bundle.getString(Constants.Intent.CALL_ID) ?: ""
+          if (callingActivity == 1) {
+              isIncomingActivity = true
+              binding.mainContentLayout.visibility = View.GONE
+              binding.incomingCallHeader.visibility = View.VISIBLE
+              val acceptedCall =
+                  bundle.getBoolean(Constants.Action.WEBEX_CALL_ACCEPT_ACTION)
+              if (!acceptedCall) {
+                  incomingLayoutState(false)
+                  ringerManager.startRinger(Call.RingerType.Incoming)
+              }
+              val _call = CallObjectStorage.getCallObject(incomingCallId)
+              _call?.let { call ->
+                  webexViewModel.setCallObserver(call)
+              }
 
-            if (acceptedCall) {
-                _call?.let {
-                    if (it.getStatus() != Call.CallStatus.CONNECTED) { // For resumed fragments
-                        answerCall(it)
-                    } else {
-                        binding.incomingCallHeader.visibility = View.GONE
-                        incomingLayoutState(true)
-                        onCallJoined(it)
-                        handleCallControls(it)
-                        onConnected(it)
-                        webexViewModel.currentCallId = it.getCallId()
-                        it.holdCall(false)
-                    }
-                }
-            }
+              if (acceptedCall) {
+                  _call?.let {
+                      if (it.getStatus() != Call.CallStatus.CONNECTED) { // For resumed fragments
+                          answerCall(it)
+                      } else {
+                          binding.incomingCallHeader.visibility = View.GONE
+                          incomingLayoutState(true)
+                          onCallJoined(it)
+                          handleCallControls(it)
+                          onConnected(it)
+                          webexViewModel.currentCallId = it.getCallId()
+                          it.holdCall(false)
+                      }
+                  }
+              }
 
-            if (_call?.getStatus() != Call.CallStatus.CONNECTED) {
-                onIncomingCall(_call, !acceptedCall)
-            }
+              if (_call?.getStatus() != Call.CallStatus.CONNECTED) {
+                  onIncomingCall(_call, !acceptedCall)
+              }
 
-        } else {*/
-      /*      isIncomingActivity = false
-            binding.incomingCallHeader.visibility = View.GONE
-            incomingLayoutState(true)*/
+          } else {*/
+        /*      isIncomingActivity = false
+              binding.incomingCallHeader.visibility = View.GONE
+              incomingLayoutState(true)*/
 
-            binding.callingHeader.text = getString(R.string.calling)
-            val callerId =
-                bundle?.getString(Constants.Intent.OUTGOING_CALL_CALLER_ID)
-            binding.tvName.text = callerId
+        binding.callingHeader.text = getString(R.string.calling)
+        val callerId =
+            bundle?.getString(Constants.Intent.OUTGOING_CALL_CALLER_ID)
+        binding.tvName.text = callerId
         /*    val _call = CallObjectStorage.getCallObject(incomingCallId)
             _call?.let {
                 webexViewModel.setCallObserver(it)
@@ -2064,7 +2063,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         builder.setPositiveButton("STOP") { dialog, _ ->
             dialog.dismiss()
             timerHandler.removeCallbacks(timerRunnable)
-            webexViewModel.stopAudioDump()
+//            webexViewModel.stopAudioDump()
         }
 
         alertDialogBuilder = builder.create()
@@ -2072,43 +2071,43 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         alertDialogBuilder?.show()
     }
 
-   /* private fun showCaptionDialog(call: Call?) {
-        captionsController.showCaptionDialog(
-            requireContext(),
-            call
-        ) { intent, code ->
-            startActivityForResult(intent, code)
-        }
-    }*/
+    /* private fun showCaptionDialog(call: Call?) {
+         captionsController.showCaptionDialog(
+             requireContext(),
+             call
+         ) { intent, code ->
+             startActivityForResult(intent, code)
+         }
+     }*/
 
-  /*  private fun showBreakoutSessions() {
-        breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
-        breakoutSessionBottomSheetFragment.adapter = breakoutSessionsAdapter
-        activity?.supportFragmentManager?.let {
-            breakoutSessionBottomSheetFragment.show(
-                it,
-                BreakoutSessionsBottomSheetFragment.TAG
-            )
-        }
-        breakoutSessionsAdapter.notifyDataSetChanged()
-    }*/
+    /*  private fun showBreakoutSessions() {
+          breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
+          breakoutSessionBottomSheetFragment.adapter = breakoutSessionsAdapter
+          activity?.supportFragmentManager?.let {
+              breakoutSessionBottomSheetFragment.show(
+                  it,
+                  BreakoutSessionsBottomSheetFragment.TAG
+              )
+          }
+          breakoutSessionsAdapter.notifyDataSetChanged()
+      }*/
 
- /*   fun answerCall(call: Call) {
-        webexViewModel.answer(call, getMediaOption())
-        captionsController = ClosedCaptionsController(call)
-    }*/
+    /*   fun answerCall(call: Call) {
+           webexViewModel.answer(call, getMediaOption())
+           captionsController = ClosedCaptionsController(call)
+       }*/
 
-/*    private fun initIncomingCallBottomSheet() {
-        incomingCallBottomSheetFragment =
-            IncomingCallBottomSheetFragment { bottomSheet ->
-                ringerManager.stopRinger(Call.RingerType.Incoming)
-                if (webexViewModel.hasAnyoneJoined()) {
-                    bottomSheet.dismiss()
-                } else {
-                    requireActivity().finish()
+    /*    private fun initIncomingCallBottomSheet() {
+            incomingCallBottomSheetFragment =
+                IncomingCallBottomSheetFragment { bottomSheet ->
+                    ringerManager.stopRinger(Call.RingerType.Incoming)
+                    if (webexViewModel.hasAnyoneJoined()) {
+                        bottomSheet.dismiss()
+                    } else {
+                        requireActivity().finish()
+                    }
                 }
-            }
-    }*/
+        }*/
 
     override fun onClick(v: View?) {
         webexViewModel.currentCallId?.let { callId ->
@@ -2177,36 +2176,36 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 /* binding.btnReturnToMainSession -> {
                      webexViewModel.returnToMainSession()
                  }*/
-            /*    binding.ivReceivingNoiseRemoval -> {
-                    if (webexViewModel.getReceivingNoiseInfo()
-                            ?.isNoiseRemovalEnabled() == true
-                    )
-                        webexViewModel.enableReceivingNoiseRemoval(false) {
-                            if (it.isSuccessful)
-                                Log.d(
-                                    TAG,
-                                    "ReceivingNoiseRemoval enableAPIResult = successfully disabled NR"
-                                )
-                            else
-                                Log.d(
-                                    TAG,
-                                    "ReceivingNoiseRemoval enableAPIResult = error : ${it.error?.errorMessage.orEmpty()}"
-                                )
-                        }
-                    else
-                        webexViewModel.enableReceivingNoiseRemoval(true) {
-                            if (it.isSuccessful)
-                                Log.d(
-                                    TAG,
-                                    "ReceivingNoiseRemoval enableAPIResult = successfully enabled NR"
-                                )
-                            else
-                                Log.d(
-                                    TAG,
-                                    "ReceivingNoiseRemoval enableAPIResult = error : ${it.error?.errorMessage.orEmpty()}"
-                                )
-                        }
-                }*/
+                /*    binding.ivReceivingNoiseRemoval -> {
+                        if (webexViewModel.getReceivingNoiseInfo()
+                                ?.isNoiseRemovalEnabled() == true
+                        )
+                            webexViewModel.enableReceivingNoiseRemoval(false) {
+                                if (it.isSuccessful)
+                                    Log.d(
+                                        TAG,
+                                        "ReceivingNoiseRemoval enableAPIResult = successfully disabled NR"
+                                    )
+                                else
+                                    Log.d(
+                                        TAG,
+                                        "ReceivingNoiseRemoval enableAPIResult = error : ${it.error?.errorMessage.orEmpty()}"
+                                    )
+                            }
+                        else
+                            webexViewModel.enableReceivingNoiseRemoval(true) {
+                                if (it.isSuccessful)
+                                    Log.d(
+                                        TAG,
+                                        "ReceivingNoiseRemoval enableAPIResult = successfully enabled NR"
+                                    )
+                                else
+                                    Log.d(
+                                        TAG,
+                                        "ReceivingNoiseRemoval enableAPIResult = error : ${it.error?.errorMessage.orEmpty()}"
+                                    )
+                            }
+                    }*/
 
                 else -> {
                 }
@@ -2238,10 +2237,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         builder.show()
     }
 
-   /* private fun mainContentLayoutClickListener() {
-        Log.d(TAG, "mainContentLayoutClickListener")
+    /* private fun mainContentLayoutClickListener() {
+         Log.d(TAG, "mainContentLayoutClickListener")
 
-        *//* if (binding.controlGroup.visibility == View.VISIBLE) {
+         *//* if (binding.controlGroup.visibility == View.VISIBLE) {
              binding.controlGroup.visibility = View.GONE
          } else {
              binding.controlGroup.visibility = View.VISIBLE
@@ -2321,31 +2320,31 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         return channelId
     }
 
- /*   private fun buildScreenShareForegroundServiceNotification(): Notification {
-        val contentId = R.string.notification_start_share_foreground_text
+    /*   private fun buildScreenShareForegroundServiceNotification(): Notification {
+           val contentId = R.string.notification_start_share_foreground_text
 
-        val channelId =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel(
-                    "screen_share_service_v3_sdk",
-                    "Background Screen Share Service v3 SDK"
-                )
-            } else {
-                ""
-            }
+           val channelId =
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                   createNotificationChannel(
+                       "screen_share_service_v3_sdk",
+                       "Background Screen Share Service v3 SDK"
+                   )
+               } else {
+                   ""
+               }
 
 
-        val notificationBuilder =
-            NotificationCompat.Builder(requireContext(), channelId)
-                .setSmallIcon(R.drawable.app_notification_icon)
-                .setContentTitle(getString(R.string.notification_share_foreground_title))
-                .setContentText(getString(contentId))
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setTicker(getString(contentId))
-                .setDefaults(Notification.DEFAULT_SOUND)
+           val notificationBuilder =
+               NotificationCompat.Builder(requireContext(), channelId)
+                   .setSmallIcon(R.drawable.app_notification_icon)
+                   .setContentTitle(getString(R.string.notification_share_foreground_title))
+                   .setContentText(getString(contentId))
+                   .setPriority(NotificationCompat.PRIORITY_MAX)
+                   .setTicker(getString(contentId))
+                   .setDefaults(Notification.DEFAULT_SOUND)
 
-        return notificationBuilder.build()
-    }*/
+           return notificationBuilder.build()
+       }*/
 
     /*private fun shareScreen() {
         Log.d(TAG, "shareScreen")
@@ -2366,71 +2365,71 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }*/
 
-/*    private fun screenShareConfigDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        var shareConfig: ShareConfig? = ShareConfig()
-        builder.setTitle(getString(R.string.screenShare_config))
-        ScreenshareconfigBinding.inflate(layoutInflater).apply {
-            builder.setView(this.root)
-            optimizeTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                when (checkedId) {
-                    R.id.defaultShare -> {
-                        shareConfig?.setShareType(Call.ShareOptimizeType.Default)
-                    }
+    /*    private fun screenShareConfigDialog() {
+            val builder = AlertDialog.Builder(requireContext())
+            var shareConfig: ShareConfig? = ShareConfig()
+            builder.setTitle(getString(R.string.screenShare_config))
+            ScreenshareconfigBinding.inflate(layoutInflater).apply {
+                builder.setView(this.root)
+                optimizeTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.defaultShare -> {
+                            shareConfig?.setShareType(Call.ShareOptimizeType.Default)
+                        }
 
-                    R.id.autoDetection -> {
-                        shareConfig?.setShareType(Call.ShareOptimizeType.AutoDetection)
-                    }
+                        R.id.autoDetection -> {
+                            shareConfig?.setShareType(Call.ShareOptimizeType.AutoDetection)
+                        }
 
-                    R.id.optimizeForText -> {
-                        shareConfig?.setShareType(Call.ShareOptimizeType.OptimizeText)
-                    }
+                        R.id.optimizeForText -> {
+                            shareConfig?.setShareType(Call.ShareOptimizeType.OptimizeText)
+                        }
 
-                    R.id.optimizeForVideo -> {
-                        shareConfig?.setShareType(Call.ShareOptimizeType.OptimizeVideo)
-                    }
+                        R.id.optimizeForVideo -> {
+                            shareConfig?.setShareType(Call.ShareOptimizeType.OptimizeVideo)
+                        }
 
-                    R.id.noOptimizeType -> {
-                        shareConfig = null
+                        R.id.noOptimizeType -> {
+                            shareConfig = null
+                        }
                     }
                 }
-            }
-            enableAudioGroup.setOnCheckedChangeListener { _, checkedId ->
-                when (checkedId) {
-                    R.id.enableAudioTrue -> {
-                        shareConfig?.setEnableAudio(true)
-                    }
+                enableAudioGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.enableAudioTrue -> {
+                            shareConfig?.setEnableAudio(true)
+                        }
 
-                    R.id.enableAudioFalse -> {
-                        shareConfig?.setEnableAudio(false)
+                        R.id.enableAudioFalse -> {
+                            shareConfig?.setEnableAudio(false)
+                        }
                     }
                 }
-            }
-            builder.setPositiveButton(android.R.string.ok) { _, _ ->
-//                updateScreenShareButtonState(ShareButtonState.DISABLED)
-                if (requireContext().applicationInfo.targetSdkVersion >= 29) {
-                    webexViewModel.startShare(
-                        webexViewModel.currentCallId.orEmpty(),
-                        buildScreenShareForegroundServiceNotification(),
-                        SHARE_SCREEN_FOREGROUND_SERVICE_NOTIFICATION_ID,
-                        shareConfig
-                    )
-                } else {
-                    webexViewModel.startShare(
-                        webexViewModel.currentCallId.orEmpty(),
-                        shareConfig
-                    )
+                builder.setPositiveButton(android.R.string.ok) { _, _ ->
+    //                updateScreenShareButtonState(ShareButtonState.DISABLED)
+                    if (requireContext().applicationInfo.targetSdkVersion >= 29) {
+                        webexViewModel.startShare(
+                            webexViewModel.currentCallId.orEmpty(),
+                            buildScreenShareForegroundServiceNotification(),
+                            SHARE_SCREEN_FOREGROUND_SERVICE_NOTIFICATION_ID,
+                            shareConfig
+                        )
+                    } else {
+                        webexViewModel.startShare(
+                            webexViewModel.currentCallId.orEmpty(),
+                            shareConfig
+                        )
+                    }
+                }
+                builder.setNeutralButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+                builder.setOnDismissListener {
+                    screenShareOptionsDialog = null
                 }
             }
-            builder.setNeutralButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
-            builder.setOnDismissListener {
-                screenShareOptionsDialog = null
-            }
-        }
-        screenShareOptionsDialog = builder.create()
-        screenShareOptionsDialog?.setCanceledOnTouchOutside(false)
-        screenShareOptionsDialog?.show()
-    }*/
+            screenShareOptionsDialog = builder.create()
+            screenShareOptionsDialog?.setCanceledOnTouchOutside(false)
+            screenShareOptionsDialog?.show()
+        }*/
 
     private fun toggleAnnotationPermissionDialog(
         show: Boolean,
@@ -2456,11 +2455,11 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     fun needBackPressed(): Boolean {
-       /* if (isIncomingActivity &&
-            webexViewModel.currentCallId == null
-        ) {
-            return false
-        }*/
+        /* if (isIncomingActivity &&
+             webexViewModel.currentCallId == null
+         ) {
+             return false
+         }*/
 
         return true
     }
@@ -2471,25 +2470,25 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
 
     private fun endCall() {
-       /* if (isIncomingActivity) {
-            if (!incomingCallBottomSheetFragment.isVisible) {
-                webexViewModel.currentCallId?.let {
-                    webexViewModel.hangup(it)
-                    activity?.finish()
-                } ?: run {
-                    activity?.finish()
-                }
-            } else {
-                incomingCallBottomSheetFragment.dismiss()
-                endIncomingCall()
-            }
-        } else {*/
-            webexViewModel.currentCallId?.let {
-                webexViewModel.hangup(it)
-                activity?.finish()
-            } ?: run {
-                activity?.finish()
-            }
+        /* if (isIncomingActivity) {
+             if (!incomingCallBottomSheetFragment.isVisible) {
+                 webexViewModel.currentCallId?.let {
+                     webexViewModel.hangup(it)
+                     activity?.finish()
+                 } ?: run {
+                     activity?.finish()
+                 }
+             } else {
+                 incomingCallBottomSheetFragment.dismiss()
+                 endIncomingCall()
+             }
+         } else {*/
+        webexViewModel.currentCallId?.let {
+            webexViewModel.hangup(it)
+            activity?.finish()
+        } ?: run {
+            activity?.finish()
+        }
 //        }
     }
 
@@ -2638,20 +2637,20 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
          }
      }*/
 
-/*    private fun endIncomingCall() {
-        webexViewModel.currentCallId?.let {
-            endIncomingCall(it)
-        } ?: run {
-            activity?.finish()
+    /*    private fun endIncomingCall() {
+            webexViewModel.currentCallId?.let {
+                endIncomingCall(it)
+            } ?: run {
+                activity?.finish()
+            }
         }
-    }
 
-    private fun endIncomingCall(callId: String) {
-        if (webexViewModel.incomingCallJoinedCallId != null && webexViewModel.incomingCallJoinedCallId == callId)
-            webexViewModel.hangup(callId)
-        else
-            webexViewModel.rejectCall(callId)
-    }*/
+        private fun endIncomingCall(callId: String) {
+            if (webexViewModel.incomingCallJoinedCallId != null && webexViewModel.incomingCallJoinedCallId == callId)
+                webexViewModel.hangup(callId)
+            else
+                webexViewModel.rejectCall(callId)
+        }*/
 
     private fun onCallConnected(
         callId: String,
@@ -2673,156 +2672,156 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 webexViewModel.scalingMode
             )
 
-           /* if (!webexViewModel.multistreamNewApproach) {
-                binding.tvRemoteUserName.visibility = View.GONE
-                binding.ivRemoteAudioState.visibility = View.GONE
+            /* if (!webexViewModel.multistreamNewApproach) {
+                 binding.tvRemoteUserName.visibility = View.GONE
+                 binding.ivRemoteAudioState.visibility = View.GONE
 
-                webexViewModel.getCall(callId)
-                    ?.setMultiStreamObserver(object : MultiStreamObserver {
-                        override fun onAuxStreamChanged(event: MultiStreamObserver.AuxStreamChangedEvent?) {
-                            Log.d(
-                                tag,
-                                "MultiStreamObserver onAuxStreamChanged : $event"
-                            )
-                            mHandler.post {
-                                val auxStream: AuxStream? =
-                                    event?.getAuxStream()
+                 webexViewModel.getCall(callId)
+                     ?.setMultiStreamObserver(object : MultiStreamObserver {
+                         override fun onAuxStreamChanged(event: MultiStreamObserver.AuxStreamChangedEvent?) {
+                             Log.d(
+                                 tag,
+                                 "MultiStreamObserver onAuxStreamChanged : $event"
+                             )
+                             mHandler.post {
+                                 val auxStream: AuxStream? =
+                                     event?.getAuxStream()
 
-                                when (event) {
-                                    is MultiStreamObserver.AuxStreamOpenedEvent -> {
-                                        if (event.isSuccessful()) {
-                                            val auxStreamViewHolder =
-                                                mAuxStreamViewMap[event.getRenderView()]
-                                            Log.d(
-                                                tag,
-                                                "MultiStreamObserver AuxStreamOpenedEvent successful"
-                                            )
-                                            auxStreamViewHolder?.let {
-                                                binding.viewAuxVideos.addView(it.item)
-                                                val membership =
-                                                    auxStream?.getPerson()
-                                                Log.d(
-                                                    tag,
-                                                    "MultiStreamObserver AuxStreamOpenedEvent successful membership: " + membership?.getDisplayName()
-                                                )
-                                                it.textView.text =
-                                                    membership?.getDisplayName()
-                                            }
-                                        } else {
-                                            Log.d(
-                                                tag,
-                                                "MultiStreamObserver AuxStreamOpenedEvent failed: " + event.getError()?.errorMessage
-                                            )
-                                            mAuxStreamViewMap.remove(event.getRenderView())
-                                        }
-                                    }
+                                 when (event) {
+                                     is MultiStreamObserver.AuxStreamOpenedEvent -> {
+                                         if (event.isSuccessful()) {
+                                             val auxStreamViewHolder =
+                                                 mAuxStreamViewMap[event.getRenderView()]
+                                             Log.d(
+                                                 tag,
+                                                 "MultiStreamObserver AuxStreamOpenedEvent successful"
+                                             )
+                                             auxStreamViewHolder?.let {
+                                                 binding.viewAuxVideos.addView(it.item)
+                                                 val membership =
+                                                     auxStream?.getPerson()
+                                                 Log.d(
+                                                     tag,
+                                                     "MultiStreamObserver AuxStreamOpenedEvent successful membership: " + membership?.getDisplayName()
+                                                 )
+                                                 it.textView.text =
+                                                     membership?.getDisplayName()
+                                             }
+                                         } else {
+                                             Log.d(
+                                                 tag,
+                                                 "MultiStreamObserver AuxStreamOpenedEvent failed: " + event.getError()?.errorMessage
+                                             )
+                                             mAuxStreamViewMap.remove(event.getRenderView())
+                                         }
+                                     }
 
-                                    is MultiStreamObserver.AuxStreamClosedEvent -> {
-                                        if (event.isSuccessful()) {
-                                            Log.d(
-                                                tag,
-                                                "MultiStreamObserver AuxStreamClosedEvent successful"
-                                            )
-                                            val auxStreamViewHolder =
-                                                mAuxStreamViewMap[event.getRenderView()]
-                                            mAuxStreamViewMap.remove(event.getRenderView())
-                                            binding.viewAuxVideos.removeView(
-                                                auxStreamViewHolder?.item
-                                            )
-                                        } else {
-                                            Log.d(
-                                                tag,
-                                                "MultiStreamObserver AuxStreamClosedEvent failed: " + event.getError()?.errorMessage
-                                            )
-                                        }
-                                    }
+                                     is MultiStreamObserver.AuxStreamClosedEvent -> {
+                                         if (event.isSuccessful()) {
+                                             Log.d(
+                                                 tag,
+                                                 "MultiStreamObserver AuxStreamClosedEvent successful"
+                                             )
+                                             val auxStreamViewHolder =
+                                                 mAuxStreamViewMap[event.getRenderView()]
+                                             mAuxStreamViewMap.remove(event.getRenderView())
+                                             binding.viewAuxVideos.removeView(
+                                                 auxStreamViewHolder?.item
+                                             )
+                                         } else {
+                                             Log.d(
+                                                 tag,
+                                                 "MultiStreamObserver AuxStreamClosedEvent failed: " + event.getError()?.errorMessage
+                                             )
+                                         }
+                                     }
 
-                                    is MultiStreamObserver.AuxStreamSendingVideoEvent -> {
-                                        Log.d(
-                                            tag,
-                                            "AuxStreamSendingVideoEvent: " + auxStream?.isSendingVideo()
-                                        )
-                                        auxStream?.let {
-                                            val auxStreamViewHolder =
-                                                mAuxStreamViewMap[it.getRenderView()]
+                                     is MultiStreamObserver.AuxStreamSendingVideoEvent -> {
+                                         Log.d(
+                                             tag,
+                                             "AuxStreamSendingVideoEvent: " + auxStream?.isSendingVideo()
+                                         )
+                                         auxStream?.let {
+                                             val auxStreamViewHolder =
+                                                 mAuxStreamViewMap[it.getRenderView()]
 
-                                            if (auxStreamViewHolder != null) {
-                                                if (it.isSendingVideo()) {
-                                                    auxStreamViewHolder.viewAvatar.visibility =
-                                                        View.GONE
-                                                } else {
-                                                    val membership =
-                                                        it.getPerson()
-                                                    membership?.let { member ->
-                                                        if (member.getPersonId()
-                                                                .isNotEmpty()
-                                                        ) {
-                                                            auxStreamViewHolder.viewAvatar.visibility =
-                                                                View.VISIBLE
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                             if (auxStreamViewHolder != null) {
+                                                 if (it.isSendingVideo()) {
+                                                     auxStreamViewHolder.viewAvatar.visibility =
+                                                         View.GONE
+                                                 } else {
+                                                     val membership =
+                                                         it.getPerson()
+                                                     membership?.let { member ->
+                                                         if (member.getPersonId()
+                                                                 .isNotEmpty()
+                                                         ) {
+                                                             auxStreamViewHolder.viewAvatar.visibility =
+                                                                 View.VISIBLE
+                                                         }
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                     }
 
-                                    is MultiStreamObserver.AuxStreamPersonChangedEvent -> {
-                                        Log.d(
-                                            tag,
-                                            "MultiStreamObserver AuxStreamPersonChangedEvent getPerson: " + auxStream?.getPerson() + " from: " + event.from() + " to: " + event.to()
-                                        )
-                                        auxStream?.let {
-                                            val auxStreamViewHolder =
-                                                mAuxStreamViewMap[it.getRenderView()]
-                                            val membership = it.getPerson()
-                                            membership?.let { member ->
-                                                Log.d(
-                                                    tag,
-                                                    "MultiStreamObserver AuxStreamPersonChangedEvent name: " + member.getDisplayName()
-                                                )
-                                                auxStreamViewHolder?.viewAvatar?.visibility =
-                                                    if (it.isSendingVideo()) View.GONE else View.VISIBLE
-                                                auxStreamViewHolder?.textView?.text =
-                                                    member.getDisplayName()
-                                            }
-                                        }
-                                    }
+                                     is MultiStreamObserver.AuxStreamPersonChangedEvent -> {
+                                         Log.d(
+                                             tag,
+                                             "MultiStreamObserver AuxStreamPersonChangedEvent getPerson: " + auxStream?.getPerson() + " from: " + event.from() + " to: " + event.to()
+                                         )
+                                         auxStream?.let {
+                                             val auxStreamViewHolder =
+                                                 mAuxStreamViewMap[it.getRenderView()]
+                                             val membership = it.getPerson()
+                                             membership?.let { member ->
+                                                 Log.d(
+                                                     tag,
+                                                     "MultiStreamObserver AuxStreamPersonChangedEvent name: " + member.getDisplayName()
+                                                 )
+                                                 auxStreamViewHolder?.viewAvatar?.visibility =
+                                                     if (it.isSendingVideo()) View.GONE else View.VISIBLE
+                                                 auxStreamViewHolder?.textView?.text =
+                                                     member.getDisplayName()
+                                             }
+                                         }
+                                     }
 
-                                    is MultiStreamObserver.AuxStreamSizeChangedEvent -> {
-                                        Log.d(
-                                            tag,
-                                            "MultiStreamObserver AuxStreamSizeChangedEvent width: " + event.getAuxStream()
-                                                ?.getSize()?.width +
-                                                    " height: " + event.getAuxStream()
-                                                ?.getSize()?.height
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                                     is MultiStreamObserver.AuxStreamSizeChangedEvent -> {
+                                         Log.d(
+                                             tag,
+                                             "MultiStreamObserver AuxStreamSizeChangedEvent width: " + event.getAuxStream()
+                                                 ?.getSize()?.width +
+                                                     " height: " + event.getAuxStream()
+                                                 ?.getSize()?.height
+                                         )
+                                     }
+                                 }
+                             }
+                         }
 
-                        override fun onAuxStreamAvailable(): View? {
-                            Log.d(
-                                tag,
-                                "MultiStreamObserver onAuxStreamAvailable"
-                            )
-                            return getMediaStreamView(
-                                false,
-                                MediaStreamType.Unknown,
-                                null
-                            )
-                        }
+                         override fun onAuxStreamAvailable(): View? {
+                             Log.d(
+                                 tag,
+                                 "MultiStreamObserver onAuxStreamAvailable"
+                             )
+                             return getMediaStreamView(
+                                 false,
+                                 MediaStreamType.Unknown,
+                                 null
+                             )
+                         }
 
-                        override fun onAuxStreamUnavailable(): View? {
-                            Log.d(
-                                tag,
-                                "MultiStreamObserver onAuxStreamUnavailable"
-                            )
-                            return null
-                        }
+                         override fun onAuxStreamUnavailable(): View? {
+                             Log.d(
+                                 tag,
+                                 "MultiStreamObserver onAuxStreamUnavailable"
+                             )
+                             return null
+                         }
 
-                    })
-            }*/
+                     })
+             }*/
 
             if (callId == webexViewModel.currentCallId) {
                 val callInfo = webexViewModel.getCall(callId)
@@ -2836,12 +2835,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 }
                 binding.videoCallLayout.visibility = View.VISIBLE
 
-              /*  if (isIncomingActivity) {
-                    if (callId == webexViewModel.currentCallId) {
-                        binding.videoCallLayout.visibility = View.VISIBLE
-                        incomingLayoutState(true)
-                    }
-                }*/
+                /*  if (isIncomingActivity) {
+                      if (callId == webexViewModel.currentCallId) {
+                          binding.videoCallLayout.visibility = View.VISIBLE
+                          incomingLayoutState(true)
+                      }
+                  }*/
 
                 webexViewModel.isLocalVideoMuted = isSelfVideoMuted
 
@@ -2892,12 +2891,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         personID?.let { id ->
             webexViewModel.getMediaStreams()?.let { streamList ->
 
-             /*   for (stream in streamList) {
-                    Log.d(
-                        TAG,
-                        "CallControlsFragment isMediaStreamAlreadyPinned personID: $personID, isPinned: ${stream.isPinned()}, streamType: ${stream.getStreamType()}"
-                    )
-                }*/
+                /*   for (stream in streamList) {
+                       Log.d(
+                           TAG,
+                           "CallControlsFragment isMediaStreamAlreadyPinned personID: $personID, isPinned: ${stream.isPinned()}, streamType: ${stream.getStreamType()}"
+                       )
+                   }*/
 
                 val stream =
                     streamList.find { stream -> stream.getStreamType() == streamType }
@@ -2973,11 +2972,11 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }*/
 
     private fun onScreenShareStateChanged(callId: String, label: String) {
-    /*    Log.d(
-            TAG,
-            "CallControlsFragment onScreenShareStateChanged callerId: $callId, label: $label"
-        )
-*/
+        /*    Log.d(
+                TAG,
+                "CallControlsFragment onScreenShareStateChanged callerId: $callId, label: $label"
+            )
+    */
         if (webexViewModel.currentCallId != callId) {
             return
         }
@@ -2988,11 +2987,11 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
             val remoteSharing = isReceivingSharing(callId)
             val localSharing = isLocalSharing(callId)*/
-        /*    Log.d(
-                TAG,
-                "CallControlsFragment onScreenShareStateChanged isRemoteSharing: $remoteSharing, isLocalSharing: $localSharing"
-            )
-*/
+            /*    Log.d(
+                    TAG,
+                    "CallControlsFragment onScreenShareStateChanged isRemoteSharing: $remoteSharing, isLocalSharing: $localSharing"
+                )
+    */
             /*  if (localSharing) {
                   updateScreenShareButtonState(ShareButtonState.ON)
               } else {
@@ -3006,10 +3005,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         callId: String,
         remoteStartedSharing: Boolean? = null
     ) {
-     /*   Log.d(
-            TAG,
-            "CallControlsFragment onScreenShareVideoStreamInUseChanged callerId: $callId"
-        )*/
+        /*   Log.d(
+               TAG,
+               "CallControlsFragment onScreenShareVideoStreamInUseChanged callerId: $callId"
+           )*/
         if (webexViewModel.currentCallId != callId) {
             return
         }
@@ -3017,10 +3016,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         mHandler.post {
             val remoteSharing = isReceivingSharing(callId)
             val localSharing = isLocalSharing(callId)
-       /*     Log.d(
-                TAG,
-                "CallControlsFragment onScreenShareVideoStreamInUseChanged isRemoteSharing: ${remoteSharing}, isLocalSharing: ${localSharing}"
-            )*/
+            /*     Log.d(
+                     TAG,
+                     "CallControlsFragment onScreenShareVideoStreamInUseChanged isRemoteSharing: ${remoteSharing}, isLocalSharing: ${localSharing}"
+                 )*/
             if (remoteSharing) {
 //                binding.controlGroup.visibility = View.GONE
                 screenShareViewRemoteState(false)
@@ -3052,10 +3051,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     private fun onVideoStreamingChanged(callId: String) {
-      /*  Log.d(
-            TAG,
-            "CallControlsFragment onVideoStreamingChanged callerId: $callId"
-        )*/
+        /*  Log.d(
+              TAG,
+              "CallControlsFragment onVideoStreamingChanged callerId: $callId"
+          )*/
 
         if (webexViewModel.currentCallId == null) {
             return
@@ -3100,15 +3099,15 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                         }
 
                         if (webexViewModel.streamMode != Phone.VideoStreamMode.COMPOSITED) {
-                       /*     if (!webexViewModel.multistreamNewApproach) {
-                                binding.ivRemoteAudioState.visibility =
-                                    View.GONE
-                                binding.tvRemoteUserName.visibility = View.GONE
-                            } else {*/
-                                binding.ivRemoteAudioState.visibility =
-                                    View.VISIBLE
-                                binding.tvRemoteUserName.visibility =
-                                    View.VISIBLE
+                            /*     if (!webexViewModel.multistreamNewApproach) {
+                                     binding.ivRemoteAudioState.visibility =
+                                         View.GONE
+                                     binding.tvRemoteUserName.visibility = View.GONE
+                                 } else {*/
+                            binding.ivRemoteAudioState.visibility =
+                                View.VISIBLE
+                            binding.tvRemoteUserName.visibility =
+                                View.VISIBLE
 //                            }
                         } else {
                             binding.ivRemoteAudioState.visibility = View.GONE
@@ -3119,10 +3118,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
                 videoViewTextColorState(webexViewModel.isRemoteVideoMuted)
 
-              /*  Log.d(
-                    TAG,
-                    "CallControlsFragment onVideoStreamingChanged isLocalVideoMuted: ${webexViewModel.isLocalVideoMuted}, isRemoteVideoMuted: ${webexViewModel.isRemoteVideoMuted}"
-                )*/
+                /*  Log.d(
+                      TAG,
+                      "CallControlsFragment onVideoStreamingChanged isLocalVideoMuted: ${webexViewModel.isLocalVideoMuted}, isRemoteVideoMuted: ${webexViewModel.isRemoteVideoMuted}"
+                  )*/
                 /*
                                 if (webexViewModel.isLocalVideoMuted) {
                                     videoButtonState(true)
@@ -3143,10 +3142,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         if (!webexViewModel.isRemoteVideoMuted) {
 
             val streams = webexViewModel.getMediaStreams()
-           /* Log.d(
-                TAG,
-                "CallControlsFragment isMainStageRemoteVideoUnMuted streams: ${streams?.size}"
-            )*/
+            /* Log.d(
+                 TAG,
+                 "CallControlsFragment isMainStageRemoteVideoUnMuted streams: ${streams?.size}"
+             )*/
             streams?.let { streamList ->
                 val stream =
                     streamList.find { stream -> stream.getStreamType() == MediaStreamType.Stream1 }
@@ -3158,10 +3157,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 status = false
             }
         }
-      /*  Log.d(
-            TAG,
-            "CallControlsFragment isMainStageRemoteVideoUnMuted return status: $status"
-        )*/
+        /*  Log.d(
+              TAG,
+              "CallControlsFragment isMainStageRemoteVideoUnMuted return status: $status"
+          )*/
         return status
     }
 
@@ -3207,90 +3206,90 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }
 
- /*   private fun onIncomingCall(call: Call?, showBottomSheet: Boolean = true) {
-        mHandler.post {
-            Log.d(
-                TAG,
-                "CallControlsFragment onIncomingCall callerId: ${call?.getCallId()}, callInfo title: ${call?.getTitle()}"
-            )
-            // Start call monitoring service when incoming call is received.
-            startCallMonitoringForegroundService()
-            binding.incomingCallHeader.visibility = View.GONE
-            val schedules = call?.getSchedules()
-            incomingLayoutState(false)
-            val twentyFourHrsFromNow = Date().time + 86400000
-            // Only get meetings till next 24 hours.
-            val filteredMeetings =
-                schedules?.filter { it.getStart()?.time ?: (twentyFourHrsFromNow + 10) <= twentyFourHrsFromNow }
-            filteredMeetings?.let { meetings ->
-                for (meeting in meetings) {
-                    Log.d(
-                        TAG,
-                        "subject = ${meeting.getSubject()} & meetingId = ${meeting.getId()}"
-                    )
-                    if (!checkIncomingAdapterList(meeting)) {
-                        val model = MeetingInfoModel.convertToMeetingInfoModel(
-                            call,
-                            meeting
-                        )
-                        incomingInfoAdapter.info.add(model)
-                        Log.d(
-                            TAG,
-                            "CallControlsFragment onIncomingCall meetings size: ${meetings.size}"
-                        )
-                    }
-                }
-            } ?: run {
-                val group = call?.isGroupCall() ?: false
-                if (group) {
-                    val model = SpaceIncomingCallModel(call)
-                    incomingInfoAdapter.info.add(model)
-                } else {
-                    val model = OneToOneIncomingCallModel(call)
-                    incomingInfoAdapter.info.add(model)
-                }
-            }
+    /*   private fun onIncomingCall(call: Call?, showBottomSheet: Boolean = true) {
+           mHandler.post {
+               Log.d(
+                   TAG,
+                   "CallControlsFragment onIncomingCall callerId: ${call?.getCallId()}, callInfo title: ${call?.getTitle()}"
+               )
+               // Start call monitoring service when incoming call is received.
+               startCallMonitoringForegroundService()
+               binding.incomingCallHeader.visibility = View.GONE
+               val schedules = call?.getSchedules()
+               incomingLayoutState(false)
+               val twentyFourHrsFromNow = Date().time + 86400000
+               // Only get meetings till next 24 hours.
+               val filteredMeetings =
+                   schedules?.filter { it.getStart()?.time ?: (twentyFourHrsFromNow + 10) <= twentyFourHrsFromNow }
+               filteredMeetings?.let { meetings ->
+                   for (meeting in meetings) {
+                       Log.d(
+                           TAG,
+                           "subject = ${meeting.getSubject()} & meetingId = ${meeting.getId()}"
+                       )
+                       if (!checkIncomingAdapterList(meeting)) {
+                           val model = MeetingInfoModel.convertToMeetingInfoModel(
+                               call,
+                               meeting
+                           )
+                           incomingInfoAdapter.info.add(model)
+                           Log.d(
+                               TAG,
+                               "CallControlsFragment onIncomingCall meetings size: ${meetings.size}"
+                           )
+                       }
+                   }
+               } ?: run {
+                   val group = call?.isGroupCall() ?: false
+                   if (group) {
+                       val model = SpaceIncomingCallModel(call)
+                       incomingInfoAdapter.info.add(model)
+                   } else {
+                       val model = OneToOneIncomingCallModel(call)
+                       incomingInfoAdapter.info.add(model)
+                   }
+               }
 
-            val incomingCalls =
-                incomingInfoAdapter.info.filter { it.call?.getCallId() != webexViewModel.currentCallId }
-            incomingInfoAdapter.info.clear()
-            incomingInfoAdapter.info.addAll(incomingCalls)
-            if (showBottomSheet) {
-                if (!incomingInfoAdapter.info.isEmpty()) {
-                    showIncomingCallBottomSheet()
-                }
-            }
-        }
-    }*/
+               val incomingCalls =
+                   incomingInfoAdapter.info.filter { it.call?.getCallId() != webexViewModel.currentCallId }
+               incomingInfoAdapter.info.clear()
+               incomingInfoAdapter.info.addAll(incomingCalls)
+               if (showBottomSheet) {
+                   if (!incomingInfoAdapter.info.isEmpty()) {
+                       showIncomingCallBottomSheet()
+                   }
+               }
+           }
+       }*/
 
-   /* private fun showIncomingCallBottomSheet() {
-        Log.d(
-            TAG,
-            "showIncomingCallBottomSheet " + incomingCallBottomSheetFragment
-        )
-        if (!incomingCallBottomSheetFragment.isAdded && !incomingCallBottomSheetFragment.isVisible) {
-            incomingCallBottomSheetFragment.adapter = incomingInfoAdapter
-            incomingCallBottomSheetFragment.isCancelable = false
-            activity?.supportFragmentManager?.let {
-                incomingCallBottomSheetFragment.show(
-                    it,
-                    IncomingCallBottomSheetFragment.TAG
-                )
-            }
-            incomingCallBottomSheetFragment.view?.requestLayout()
-        }
-        incomingInfoAdapter.notifyDataSetChanged()
-    }
+    /* private fun showIncomingCallBottomSheet() {
+         Log.d(
+             TAG,
+             "showIncomingCallBottomSheet " + incomingCallBottomSheetFragment
+         )
+         if (!incomingCallBottomSheetFragment.isAdded && !incomingCallBottomSheetFragment.isVisible) {
+             incomingCallBottomSheetFragment.adapter = incomingInfoAdapter
+             incomingCallBottomSheetFragment.isCancelable = false
+             activity?.supportFragmentManager?.let {
+                 incomingCallBottomSheetFragment.show(
+                     it,
+                     IncomingCallBottomSheetFragment.TAG
+                 )
+             }
+             incomingCallBottomSheetFragment.view?.requestLayout()
+         }
+         incomingInfoAdapter.notifyDataSetChanged()
+     }
 
-    private fun checkIncomingAdapterList(item: CallSchedule): Boolean {
-        incomingInfoAdapter.info.forEach { _model ->
-            if ((_model is MeetingInfoModel) && (_model.meetingId == item.getId())) {
-                return true
-            }
-        }
+     private fun checkIncomingAdapterList(item: CallSchedule): Boolean {
+         incomingInfoAdapter.info.forEach { _model ->
+             if ((_model is MeetingInfoModel) && (_model.meetingId == item.getId())) {
+                 return true
+             }
+         }
 
-        return false
-    }*/
+         return false
+     }*/
 
     private fun onCallJoined(call: Call?) {
 
@@ -3304,10 +3303,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     }
                 }
             }
-           /* if (callingActivity == 1) {
-                webexViewModel.incomingCallJoinedCallId =
-                    call?.getCallId().orEmpty()
-            }*/
+            /* if (callingActivity == 1) {
+                 webexViewModel.incomingCallJoinedCallId =
+                     call?.getCallId().orEmpty()
+             }*/
 
         }
     }
@@ -3315,14 +3314,14 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     private fun showCallHeader(callId: String) {
         mHandler.post {
             try {
-              /*  if (breakout == null) {
-                    val callInfo = webexViewModel.getCall(callId)
-                    Log.d(
-                        TAG,
-                        "CallControlsFragment showCallHeader callerId: $callId"
-                    )*/
+                /*  if (breakout == null) {
+                      val callInfo = webexViewModel.getCall(callId)
+                      Log.d(
+                          TAG,
+                          "CallControlsFragment showCallHeader callerId: $callId"
+                      )*/
 //                    binding.tvName.text = callInfo?.getTitle()
-                    binding.callingHeader.text = getString(R.string.onCall)
+                binding.callingHeader.text = getString(R.string.onCall)
 //                }
             } catch (e: Exception) {
 //                Log.d(TAG, "error: ${e.message}")
@@ -3348,26 +3347,26 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }
 
-/*    private fun onCallDisconnected(call: Call?) {
-        call?.let { _call ->
-            Log.d(
-                TAG,
-                "CallControlsFragment onCallDisconnected callerId: ${
-                    _call.getCallId().orEmpty()
-                }"
-            )
-            mHandler.post {
-                val schedules = call.getSchedules()
-                schedules?.let {
-                    incomingLayoutState(false)
-                } ?: run {
-                    if (call.isGroupCall()) {
+    /*    private fun onCallDisconnected(call: Call?) {
+            call?.let { _call ->
+                Log.d(
+                    TAG,
+                    "CallControlsFragment onCallDisconnected callerId: ${
+                        _call.getCallId().orEmpty()
+                    }"
+                )
+                mHandler.post {
+                    val schedules = call.getSchedules()
+                    schedules?.let {
                         incomingLayoutState(false)
+                    } ?: run {
+                        if (call.isGroupCall()) {
+                            incomingLayoutState(false)
+                        }
                     }
                 }
             }
-        }
-    }*/
+        }*/
 
     private fun onCallTerminated(callId: String) {
         webexViewModel.clearCallObservers(callId)
@@ -3421,7 +3420,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 } else activity?.finish()
             }
         } else {*/
-            activity?.finish()
+        activity?.finish()
 //        }
     }
 
@@ -3456,105 +3455,105 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }
 
-/*    private fun startAssociatedCall(
-        dialNumber: String,
-        associationType: CallAssociationType,
-        audioCall: Boolean
-    ) {
-        Log.d(
-            tag,
-            "startAssociatedCall dialNumber = $dialNumber : associationType = $associationType : audioCall = $audioCall"
-        )
-        webexViewModel.currentCallId?.let { callId ->
-            onNewCallHeader(callId)
-            webexViewModel.startAssociatedCall(
-                callId,
-                dialNumber,
-                associationType,
-                audioCall
+    /*    private fun startAssociatedCall(
+            dialNumber: String,
+            associationType: CallAssociationType,
+            audioCall: Boolean
+        ) {
+            Log.d(
+                tag,
+                "startAssociatedCall dialNumber = $dialNumber : associationType = $associationType : audioCall = $audioCall"
             )
-        }
-    }
-
-    private fun transferCall() {
-        Log.d(
-            tag,
-            "transferCall currentCallId = ${webexViewModel.currentCallId}, oldCallId = ${webexViewModel.oldCallId}"
-        )
-        if (webexViewModel.currentCallId != null && webexViewModel.oldCallId != null) {
-            webexViewModel.transferCall(
-                webexViewModel.oldCallId!!,
-                webexViewModel.currentCallId!!
-            )
-        }
-    }
-
-    private fun directTransferCall(toPhoneNumber: String) {
-        Log.d(
-            tag,
-            "directTransferCall currentCallId = ${webexViewModel.currentCallId}"
-        )
-        webexViewModel.currentCallId?.let { callId ->
-            webexViewModel.directTransferCall(callId, toPhoneNumber) { result ->
-                if (!result.isSuccessful) {
-                    Log.d(
-                        tag,
-                        "DirectTransferCall result : ${result.error?.errorMessage}"
-                    )
-                }
+            webexViewModel.currentCallId?.let { callId ->
+                onNewCallHeader(callId)
+                webexViewModel.startAssociatedCall(
+                    callId,
+                    dialNumber,
+                    associationType,
+                    audioCall
+                )
             }
         }
-    }
 
-    private fun mergeCalls() {
-        Log.d(
-            tag,
-            "mergeCalls currentCallId = ${webexViewModel.currentCallId}, targetCallId = ${webexViewModel.oldCallId}"
-        )
-        if (webexViewModel.currentCallId != null && webexViewModel.oldCallId != null) {
-            webexViewModel.mergeCalls(
-                webexViewModel.currentCallId!!,
-                webexViewModel.oldCallId!!
+        private fun transferCall() {
+            Log.d(
+                tag,
+                "transferCall currentCallId = ${webexViewModel.currentCallId}, oldCallId = ${webexViewModel.oldCallId}"
             )
+            if (webexViewModel.currentCallId != null && webexViewModel.oldCallId != null) {
+                webexViewModel.transferCall(
+                    webexViewModel.oldCallId!!,
+                    webexViewModel.currentCallId!!
+                )
+            }
         }
-    }
 
-    private fun switchToAudioOrVideoCall() {
-        Log.d(tag, "callId = ${webexViewModel.currentCallId}")
-        if (webexViewModel.currentCallId != null) {
-            val callInfo =
-                webexViewModel.getCall(webexViewModel.currentCallId.toString())
-            if (callInfo != null) {
-                webexViewModel.switchToAudioOrVideoCall(
-                    webexViewModel.currentCallId.toString(),
-                    callInfo.isAudioOnly()
-                ) { result ->
+        private fun directTransferCall(toPhoneNumber: String) {
+            Log.d(
+                tag,
+                "directTransferCall currentCallId = ${webexViewModel.currentCallId}"
+            )
+            webexViewModel.currentCallId?.let { callId ->
+                webexViewModel.directTransferCall(callId, toPhoneNumber) { result ->
                     if (!result.isSuccessful) {
                         Log.d(
                             tag,
-                            "SwitchToAudioOrVideoCall call result : ${result.error?.errorMessage}"
+                            "DirectTransferCall result : ${result.error?.errorMessage}"
                         )
                     }
                 }
             }
         }
-    }*/
 
-   /* override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        handleActivityResult(requestCode, resultCode, data)
-    }
+        private fun mergeCalls() {
+            Log.d(
+                tag,
+                "mergeCalls currentCallId = ${webexViewModel.currentCallId}, targetCallId = ${webexViewModel.oldCallId}"
+            )
+            if (webexViewModel.currentCallId != null && webexViewModel.oldCallId != null) {
+                webexViewModel.mergeCalls(
+                    webexViewModel.currentCallId!!,
+                    webexViewModel.oldCallId!!
+                )
+            }
+        }
 
-    private fun handleActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-      *//*  if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        private fun switchToAudioOrVideoCall() {
+            Log.d(tag, "callId = ${webexViewModel.currentCallId}")
+            if (webexViewModel.currentCallId != null) {
+                val callInfo =
+                    webexViewModel.getCall(webexViewModel.currentCallId.toString())
+                if (callInfo != null) {
+                    webexViewModel.switchToAudioOrVideoCall(
+                        webexViewModel.currentCallId.toString(),
+                        callInfo.isAudioOnly()
+                    ) { result ->
+                        if (!result.isSuccessful) {
+                            Log.d(
+                                tag,
+                                "SwitchToAudioOrVideoCall call result : ${result.error?.errorMessage}"
+                            )
+                        }
+                    }
+                }
+            }
+        }*/
+
+    /* override fun onActivityResult(
+         requestCode: Int,
+         resultCode: Int,
+         data: Intent?
+     ) {
+         super.onActivityResult(requestCode, resultCode, data)
+         handleActivityResult(requestCode, resultCode, data)
+     }
+
+     private fun handleActivityResult(
+         requestCode: Int,
+         resultCode: Int,
+         data: Intent?
+     ) {
+       *//*  if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val callNumber = data?.getStringExtra(CALLER_ID) ?: ""
             //start call association to add new person on call
             startAssociatedCall(callNumber, CallAssociationType.Transfer, true)
@@ -3575,235 +3574,235 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }*//*
     }*/
 
-/*    private fun muteSelfVideo(value: Boolean) {
-        webexViewModel.currentCallId?.let {
-            webexViewModel.muteSelfVideo(it, value)
+    /*    private fun muteSelfVideo(value: Boolean) {
+            webexViewModel.currentCallId?.let {
+                webexViewModel.muteSelfVideo(it, value)
+            }
         }
-    }
 
-    private fun showTranscriptions(call: Call?) {
-        Log.d(TAG, "showTranscriptions")
-        call?.let {
-            val bottomSheet = TranscriptionsDialogFragment()
-            bottomSheet.show(
-                childFragmentManager,
-                TranscriptionsDialogFragment::class.java.simpleName
-            )
-        }
-    }
-
-    private fun toggleWXAClickListener(call: Call?) {
-        if (call?.getWXA()?.canControlWXA() == true) {
-            val isEnabled = call.getWXA().isEnabled()
-            call.getWXA().enableWXA(!isEnabled, CompletionHandler { result ->
-                Log.d(
-                    TAG,
-                    "enableWXA callback: result ${{ result.isSuccessful }} isEnabled ${result.data}"
+        private fun showTranscriptions(call: Call?) {
+            Log.d(TAG, "showTranscriptions")
+            call?.let {
+                val bottomSheet = TranscriptionsDialogFragment()
+                bottomSheet.show(
+                    childFragmentManager,
+                    TranscriptionsDialogFragment::class.java.simpleName
                 )
-            })
-        }
-    }
-
-    private fun receivingVideoListener(call: Call?) {
-        Log.d(TAG, "receivingVideoListener")
-        call?.let {
-            if (it.isReceivingVideo()) {
-                webexViewModel.setReceivingVideo(it, false)
-            } else {
-                webexViewModel.setReceivingVideo(it, true)
             }
         }
-    }
 
-    private fun receivingAudioListener(call: Call?) {
-        Log.d(TAG, "receivingAudioListener")
-        call?.let {
-            if (it.isReceivingAudio()) {
-                webexViewModel.setReceivingAudio(it, false)
-            } else {
-                webexViewModel.setReceivingAudio(it, true)
+        private fun toggleWXAClickListener(call: Call?) {
+            if (call?.getWXA()?.canControlWXA() == true) {
+                val isEnabled = call.getWXA().isEnabled()
+                call.getWXA().enableWXA(!isEnabled, CompletionHandler { result ->
+                    Log.d(
+                        TAG,
+                        "enableWXA callback: result ${{ result.isSuccessful }} isEnabled ${result.data}"
+                    )
+                })
             }
         }
-    }
 
-    private fun receivingSharingListener(call: Call?) {
-        Log.d(TAG, "receivingSharingListener")
-        call?.let {
-            if (it.isReceivingSharing()) {
-                webexViewModel.setReceivingSharing(it, false)
-            } else {
-                webexViewModel.setReceivingSharing(it, true)
-            }
-        }
-    }
-
-    private fun swapVideoClickListener(call: Call?) {
-        Log.d(TAG, "swapVideoClickListener")
-        if (webexViewModel.isVideoViewsSwapped) {
-            webexViewModel.setVideoRenderViews(
-                webexViewModel.currentCallId.orEmpty(),
-                binding.remoteView,
-                binding.localView
-            )
-            webexViewModel.isVideoViewsSwapped = false
-        } else {
-            webexViewModel.setVideoRenderViews(
-                webexViewModel.currentCallId.orEmpty(),
-                binding.localView,
-                binding.remoteView
-            )
-            webexViewModel.isVideoViewsSwapped = true
-        }
-    }
-
-    private fun forceLandscapeClickListener(call: Call?) {
-        Log.d(
-            TAG,
-            "forceLandscapeClickListener isSendingVideoForceLandscape: ${webexViewModel.isSendingVideoForceLandscape}"
-        )
-        val value = !webexViewModel.isSendingVideoForceLandscape
-        webexViewModel.forceSendingVideoLandscape(
-            webexViewModel.currentCallId.orEmpty(),
-            value
-        )
-    }*/
-
-/*    private fun cameraOptionsClickListener(call: Call?) {
-        Log.d(TAG, "cameraOptionsClickListener")
-        showCameraOptionsBottomSheet(call)
-    }*/
-
- /*   private fun multiStreamOptionsClickListener(call: Call?) {
-        Log.d(TAG, "multiStreamOptionsClickListener")
-        showMultiStreamOptionsBottomSheetFragment(call)
-    }*/
-/*
-    private fun sendDTMFClickListener(call: Call?) {
-        Log.d(TAG, "sendDTMFClickListener")
-        showDialogForDTMF(
-            requireContext(),
-            getString(R.string.enter_dtmf_number),
-            onPositiveButtonClick = { dialog: DialogInterface, number: String ->
-                webexViewModel.sendDTMF(
-                    webexViewModel.currentCallId.orEmpty(),
-                    number
-                )
-                dialog.dismiss()
-            },
-            onNegativeButtonClick = { dialog: DialogInterface, _: Int ->
-                dialog.dismiss()
-            })
-    }
-
-    private fun claimHostClickListener() {
-        Log.d(TAG, "claimHostClickListener")
-        showDialogForHostKey(
-            requireContext(),
-            getString(R.string.enter_host_key),
-            onPositiveButtonClick = { dialog: DialogInterface, number: String ->
-                webexViewModel.reclaimHost(number) {
-                    if (it.isSuccessful) {
-                        showSnackbar("Reclaim Host Successful")
-                        Log.d(TAG, "Reclaim Host Successful")
-                    } else {
-                        showSnackbar("Reclaim Host failed ${it.error?.errorMessage}")
-                        Log.d(
-                            TAG,
-                            "Reclaim Host failed ${it.error?.errorMessage}"
-                        )
-                    }
+        private fun receivingVideoListener(call: Call?) {
+            Log.d(TAG, "receivingVideoListener")
+            call?.let {
+                if (it.isReceivingVideo()) {
+                    webexViewModel.setReceivingVideo(it, false)
+                } else {
+                    webexViewModel.setReceivingVideo(it, true)
                 }
-                dialog.dismiss()
-            },
-            onNegativeButtonClick = { dialog: DialogInterface, _: Int ->
-                dialog.dismiss()
-            })
-    }*/
-
-/*    private fun setCategoryAOptionClickListener(call: Call?) {
-        Log.d(TAG, "setCategoryAOptionClickListener")
-        showMultiStreamDataOptionsBottomSheetFragment(
-            call,
-            MultiStreamDataOptionsBottomSheetFragment.OptionType.CategoryA
-        )
-    }
-
-    private fun setCategoryBOptionClickListener(call: Call?) {
-        Log.d(TAG, "setCategoryBOptionClickListener")
-        showMultiStreamDataOptionsBottomSheetFragment(
-            call,
-            MultiStreamDataOptionsBottomSheetFragment.OptionType.CategoryB
-        )
-    }*/
-
-/*    private fun removeCategoryAClickListener(call: Call?) {
-        webexViewModel.removeMediaStreamCategoryA()
-    }
-
-    private fun removeCategoryBClickListener(call: Call?) {
-        Log.d(TAG, "removeCategoryBClickListener")
-        webexViewModel.removeMediaStreamsCategoryB()
-    }
-
-    private fun categoryAOptionsOkListener(
-        call: Call?,
-        quality: MediaStreamQuality,
-        duplicate: Boolean
-    ) {
-        Log.d(
-            TAG,
-            "categoryAOptionsOkListener quality: $quality, duplicate: $duplicate"
-        )
-        webexViewModel.setMediaStreamCategoryA(duplicate, quality)
-    }
-
-    private fun categoryBOptionsOkListener(
-        call: Call?,
-        numStreams: String?,
-        quality: MediaStreamQuality
-    ) {
-        Log.d(
-            TAG,
-            "categoryBOptionsOkListener numStreams: $numStreams, quality: $quality"
-        )
-        var streams = 0
-        if (!numStreams.isNullOrEmpty()) {
-            streams = numStreams.toInt()
+            }
         }
-        webexViewModel.setMediaStreamsCategoryB(streams, quality)
-    }*/
 
-/*    private fun showMultiStreamOptionsBottomSheetFragment(call: Call?) {
-        multiStreamOptionsBottomSheetFragment.call = call
-        activity?.supportFragmentManager?.let {
-            multiStreamOptionsBottomSheetFragment.show(
-                it,
-                MultiStreamOptionsBottomSheetFragment.TAG
+        private fun receivingAudioListener(call: Call?) {
+            Log.d(TAG, "receivingAudioListener")
+            call?.let {
+                if (it.isReceivingAudio()) {
+                    webexViewModel.setReceivingAudio(it, false)
+                } else {
+                    webexViewModel.setReceivingAudio(it, true)
+                }
+            }
+        }
+
+        private fun receivingSharingListener(call: Call?) {
+            Log.d(TAG, "receivingSharingListener")
+            call?.let {
+                if (it.isReceivingSharing()) {
+                    webexViewModel.setReceivingSharing(it, false)
+                } else {
+                    webexViewModel.setReceivingSharing(it, true)
+                }
+            }
+        }
+
+        private fun swapVideoClickListener(call: Call?) {بهمث
+            Log.d(TAG, "swapVideoClickListener")
+            if (webexViewModel.isVideoViewsSwapped) {
+                webexViewModel.setVideoRenderViews(
+                    webexViewModel.currentCallId.orEmpty(),
+                    binding.remoteView,
+                    binding.localView
+                )
+                webexViewModel.isVideoViewsSwapped = false
+            } else {
+                webexViewModel.setVideoRenderViews(
+                    webexViewModel.currentCallId.orEmpty(),
+                    binding.localView,
+                    binding.remoteView
+                )
+                webexViewModel.isVideoViewsSwapped = true
+            }
+        }
+
+        private fun forceLandscapeClickListener(call: Call?) {
+            Log.d(
+                TAG,
+                "forceLandscapeClickListener isSendingVideoForceLandscape: ${webexViewModel.isSendingVideoForceLandscape}"
+            )
+            val value = !webexViewModel.isSendingVideoForceLandscape
+            webexViewModel.forceSendingVideoLandscape(
+                webexViewModel.currentCallId.orEmpty(),
+                value
+            )
+        }*/
+
+    /*    private fun cameraOptionsClickListener(call: Call?) {
+            Log.d(TAG, "cameraOptionsClickListener")
+            showCameraOptionsBottomSheet(call)
+        }*/
+
+    /*   private fun multiStreamOptionsClickListener(call: Call?) {
+           Log.d(TAG, "multiStreamOptionsClickListener")
+           showMultiStreamOptionsBottomSheetFragment(call)
+       }*/
+    /*
+        private fun sendDTMFClickListener(call: Call?) {
+            Log.d(TAG, "sendDTMFClickListener")
+            showDialogForDTMF(
+                requireContext(),
+                getString(R.string.enter_dtmf_number),
+                onPositiveButtonClick = { dialog: DialogInterface, number: String ->
+                    webexViewModel.sendDTMF(
+                        webexViewModel.currentCallId.orEmpty(),
+                        number
+                    )
+                    dialog.dismiss()
+                },
+                onNegativeButtonClick = { dialog: DialogInterface, _: Int ->
+                    dialog.dismiss()
+                })
+        }
+
+        private fun claimHostClickListener() {
+            Log.d(TAG, "claimHostClickListener")
+            showDialogForHostKey(
+                requireContext(),
+                getString(R.string.enter_host_key),
+                onPositiveButtonClick = { dialog: DialogInterface, number: String ->
+                    webexViewModel.reclaimHost(number) {
+                        if (it.isSuccessful) {
+                            showSnackbar("Reclaim Host Successful")
+                            Log.d(TAG, "Reclaim Host Successful")
+                        } else {
+                            showSnackbar("Reclaim Host failed ${it.error?.errorMessage}")
+                            Log.d(
+                                TAG,
+                                "Reclaim Host failed ${it.error?.errorMessage}"
+                            )
+                        }
+                    }
+                    dialog.dismiss()
+                },
+                onNegativeButtonClick = { dialog: DialogInterface, _: Int ->
+                    dialog.dismiss()
+                })
+        }*/
+
+    /*    private fun setCategoryAOptionClickListener(call: Call?) {
+            Log.d(TAG, "setCategoryAOptionClickListener")
+            showMultiStreamDataOptionsBottomSheetFragment(
+                call,
+                MultiStreamDataOptionsBottomSheetFragment.OptionType.CategoryA
             )
         }
-    }
 
-    private fun showMultiStreamDataOptionsBottomSheetFragment(
-        call: Call?,
-        optionType: MultiStreamDataOptionsBottomSheetFragment.OptionType
-    ) {
-        multiStreamDataOptionsBottomSheetFragment.call = call
-        multiStreamDataOptionsBottomSheetFragment.type = optionType
-        activity?.supportFragmentManager?.let {
-            multiStreamDataOptionsBottomSheetFragment.show(
-                it,
-                MultiStreamDataOptionsBottomSheetFragment.TAG
+        private fun setCategoryBOptionClickListener(call: Call?) {
+            Log.d(TAG, "setCategoryBOptionClickListener")
+            showMultiStreamDataOptionsBottomSheetFragment(
+                call,
+                MultiStreamDataOptionsBottomSheetFragment.OptionType.CategoryB
             )
-        }
-    }*/
+        }*/
 
-  /*  private fun showMediaStreamBottomSheet(
-        call: Call?,
-        renderView: MediaRenderView,
-        personID: String?,
-        alreadyPinned: Boolean
-    ) {
-       *//* mediaStreamBottomSheetFragment.call = call
+    /*    private fun removeCategoryAClickListener(call: Call?) {
+            webexViewModel.removeMediaStreamCategoryA()
+        }
+
+        private fun removeCategoryBClickListener(call: Call?) {
+            Log.d(TAG, "removeCategoryBClickListener")
+            webexViewModel.removeMediaStreamsCategoryB()
+        }
+
+        private fun categoryAOptionsOkListener(
+            call: Call?,
+            quality: MediaStreamQuality,
+            duplicate: Boolean
+        ) {
+            Log.d(
+                TAG,
+                "categoryAOptionsOkListener quality: $quality, duplicate: $duplicate"
+            )
+            webexViewModel.setMediaStreamCategoryA(duplicate, quality)
+        }
+
+        private fun categoryBOptionsOkListener(
+            call: Call?,
+            numStreams: String?,
+            quality: MediaStreamQuality
+        ) {
+            Log.d(
+                TAG,
+                "categoryBOptionsOkListener numStreams: $numStreams, quality: $quality"
+            )
+            var streams = 0
+            if (!numStreams.isNullOrEmpty()) {
+                streams = numStreams.toInt()
+            }
+            webexViewModel.setMediaStreamsCategoryB(streams, quality)
+        }*/
+
+    /*    private fun showMultiStreamOptionsBottomSheetFragment(call: Call?) {
+            multiStreamOptionsBottomSheetFragment.call = call
+            activity?.supportFragmentManager?.let {
+                multiStreamOptionsBottomSheetFragment.show(
+                    it,
+                    MultiStreamOptionsBottomSheetFragment.TAG
+                )
+            }
+        }
+
+        private fun showMultiStreamDataOptionsBottomSheetFragment(
+            call: Call?,
+            optionType: MultiStreamDataOptionsBottomSheetFragment.OptionType
+        ) {
+            multiStreamDataOptionsBottomSheetFragment.call = call
+            multiStreamDataOptionsBottomSheetFragment.type = optionType
+            activity?.supportFragmentManager?.let {
+                multiStreamDataOptionsBottomSheetFragment.show(
+                    it,
+                    MultiStreamDataOptionsBottomSheetFragment.TAG
+                )
+            }
+        }*/
+
+    /*  private fun showMediaStreamBottomSheet(
+          call: Call?,
+          renderView: MediaRenderView,
+          personID: String?,
+          alreadyPinned: Boolean
+      ) {
+         *//* mediaStreamBottomSheetFragment.call = call
         mediaStreamBottomSheetFragment.renderView = renderView
         mediaStreamBottomSheetFragment.alreadyPinned = alreadyPinned
         mediaStreamBottomSheetFragment.personID = personID
@@ -3865,285 +3864,285 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         Log.d(TAG, "closeStreamStreamClickListener")
     }*/
 
-/*    private fun showCameraDataOptionsBottomSheetFragment(
-        call: Call?,
-        type: CameraOptionsDataBottomSheetFragment.OptionType,
-        propertyText1: String?,
-        propertyText2: String?,
-        property2Visibility: Boolean
-    ) {
-        cameraOptionsDataBottomSheetFragment.call = call
-        cameraOptionsDataBottomSheetFragment.type = type
-        cameraOptionsDataBottomSheetFragment.propertyText = propertyText1
-        cameraOptionsDataBottomSheetFragment.propertyText2 = propertyText2
-        cameraOptionsDataBottomSheetFragment.doMakeProperty2RelLayoutVisible =
-            property2Visibility
-        activity?.supportFragmentManager?.let {
-            cameraOptionsDataBottomSheetFragment.show(
-                it,
-                CameraOptionsDataBottomSheetFragment.TAG
-            )
-        }
-    }*/
-
-   /* private fun zoomFactorClickListener(call: Call?) {
-        Log.d(TAG, "zoomFactorClickListener")
-        val propertyText1 =
-            resources.getString(R.string.zoom_factor) + " " + String.format(
-                "%.1f",
-                webexViewModel.getVideoZoomFactor()
-            )
-        showCameraDataOptionsBottomSheetFragment(
-            call,
-            CameraOptionsDataBottomSheetFragment.OptionType.ZOOM_FACTOR,
-            propertyText1,
-            null,
-            false
-        )
-    }
-
-    private fun torchModeClickListener(call: Call?) {
-        Log.d(TAG, "torchModeClickListener")
-        if (webexViewModel.torchMode == Call.TorchMode.OFF) {
-            webexViewModel.torchMode = Call.TorchMode.ON
-        } else if (webexViewModel.torchMode == Call.TorchMode.ON) {
-            webexViewModel.torchMode = Call.TorchMode.AUTO
-        } else {
-            webexViewModel.torchMode = Call.TorchMode.OFF
-        }
-        val status = webexViewModel.setCameraTorchMode(webexViewModel.torchMode)
-        Log.d(TAG, "torchModeClickListener status: $status")
-    }
-
-    private fun flashModeClickListener(call: Call?) {
-        Log.d(TAG, "flashModeClickListener")
-        if (webexViewModel.flashMode == Call.FlashMode.OFF) {
-            webexViewModel.flashMode = Call.FlashMode.ON
-        } else if (webexViewModel.flashMode == Call.FlashMode.ON) {
-            webexViewModel.flashMode = Call.FlashMode.AUTO
-        } else {
-            webexViewModel.flashMode = Call.FlashMode.OFF
-        }
-        val status = webexViewModel.setCameraFlashMode(webexViewModel.flashMode)
-        Log.d(TAG, "flashModeClickListener status: $status")
-    }
-
-    private fun cameraFocusClickListener(call: Call?) {
-        Log.d(TAG, "cameraFocusClickListener")
-        val propertyText1 =
-            resources.getString(R.string.camera_focus) + "\nPointX: "
-        val propertyText2 = "PointY: "
-        showCameraDataOptionsBottomSheetFragment(
-            call,
-            CameraOptionsDataBottomSheetFragment.OptionType.CAMERA_FOCUS_POINT,
-            propertyText1,
-            propertyText2,
-            true
-        )
-    }
-
-    private fun cameraCustomExposureClickListener(call: Call?) {
-        Log.d(TAG, "cameraCustomExposureClickListener")
-        val propertyText1 =
-            resources.getString(R.string.camera_custom_exposure) + "\nDuration current: " + String.format(
-                "%f",
-                webexViewModel.getCameraExposureDuration()?.current
-            ) +
-                    " \nmin: " + String.format(
-                "%f",
-                webexViewModel.getCameraExposureDuration()?.min
-            ) + " max: " + String.format(
-                "%f",
-                webexViewModel.getCameraExposureDuration()?.max
-            )
-        val propertyText2 = "ISO: " + String.format(
-            "%.1f",
-            webexViewModel.getCameraExposureISO()?.current
-        ) +
-                " \nmin: " + String.format(
-            "%.1f",
-            webexViewModel.getCameraExposureISO()?.min
-        ) + " max: " + String.format(
-            "%.1f",
-            webexViewModel.getCameraExposureISO()?.max
-        )
-        showCameraDataOptionsBottomSheetFragment(
-            call,
-            CameraOptionsDataBottomSheetFragment.OptionType.CUSTOM_EXPOSURE,
-            propertyText1,
-            propertyText2,
-            true
-        )
-    }
-
-    private fun cameraAutoExposureClickListener(call: Call?) {
-        Log.d(TAG, "cameraAutoExposureClickListener")
-        val propertyText1 =
-            resources.getString(R.string.camera_auto_exposure) + " " + String.format(
-                "%.1f",
-                webexViewModel.getCameraExposureTargetBias()?.current
-            ) +
-                    " \n min: " + String.format(
-                "%.1f",
-                webexViewModel.getCameraExposureTargetBias()?.min
-            ) + " max: " + String.format(
-                "%.1f",
-                webexViewModel.getCameraExposureTargetBias()?.max
-            )
-        showCameraDataOptionsBottomSheetFragment(
-            call,
-            CameraOptionsDataBottomSheetFragment.OptionType.AUTO_EXPOSURE,
-            propertyText1,
-            null,
-            false
-        )
-    }
-
-    private fun takePhotoClickListener(call: Call?) {
-        Log.d(TAG, "takePhotoClickListener")
-        val success = webexViewModel.takePhoto()
-        if (!success) {
-            Toast.makeText(
-                activity,
-                "Photo capture not supported",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun zoomfactorValueSetListener(factor: Float) {
-        Log.d(TAG, "zoomfactorValueSetListener factor: $factor")
-        val status = webexViewModel.setVideoZoomFactor(factor)
-        Log.d(TAG, "zoomfactorValueSetListener factor: $factor status: $status")
-    }
-
-    private fun cameraFocusValueSetClickListener(pointX: Float, pointY: Float) {
-        Log.d(
-            TAG,
-            "cameraFocusValueSetClickListener pointX: $pointX, pointY: $pointY"
-        )
-        val status = webexViewModel.setCameraFocusAtPoint(pointX, pointY)
-        Log.d(TAG, "cameraFocusValueSetClickListener status: $status")
-    }
-
-    private fun cameraCustomExposureValueSetClickListener(
-        duration: Double,
-        iso: Float
-    ) {
-        Log.d(
-            TAG,
-            "cameraCustomExposureValueSetClickListener duration: $duration, iso: $iso"
-        )
-        val status = webexViewModel.setCameraCustomExposure(duration, iso)
-        Log.d(TAG, "cameraCustomExposureValueSetClickListener status: $status")
-    }
-
-    private fun cameraAutoExposureValueSetClickListener(targetBias: Float) {
-        Log.d(
-            TAG,
-            "cameraAutoExposureValueSetClickListener targetBias: $targetBias"
-        )
-        val status = webexViewModel.setCameraAutoExposure(targetBias)
-        Log.d(TAG, "cameraAutoExposureValueSetClickListener status: $status")
-    }
-
-    private fun compositeStreamLayoutClickListener(call: Call?) {
-        Log.d(
-            TAG,
-            "compositeStreamLayoutClickListener getCompositedLayout: ${webexViewModel.getCompositedLayout()}"
-        )
-
-        if (webexViewModel.compositedVideoLayout == MediaOption.CompositedVideoLayout.NOT_SUPPORTED) {
-            showDialogWithMessage(
-                requireContext(),
-                R.string.composite_stream,
-                resources.getString(R.string.composite_stream_not_supported)
-            )
-            return
-        }
-
-        var layout = webexViewModel.compositedVideoLayout
-
-        when (layout) {
-            MediaOption.CompositedVideoLayout.FILMSTRIP -> {
-                layout = MediaOption.CompositedVideoLayout.GRID
+    /*    private fun showCameraDataOptionsBottomSheetFragment(
+            call: Call?,
+            type: CameraOptionsDataBottomSheetFragment.OptionType,
+            propertyText1: String?,
+            propertyText2: String?,
+            property2Visibility: Boolean
+        ) {
+            cameraOptionsDataBottomSheetFragment.call = call
+            cameraOptionsDataBottomSheetFragment.type = type
+            cameraOptionsDataBottomSheetFragment.propertyText = propertyText1
+            cameraOptionsDataBottomSheetFragment.propertyText2 = propertyText2
+            cameraOptionsDataBottomSheetFragment.doMakeProperty2RelLayoutVisible =
+                property2Visibility
+            activity?.supportFragmentManager?.let {
+                cameraOptionsDataBottomSheetFragment.show(
+                    it,
+                    CameraOptionsDataBottomSheetFragment.TAG
+                )
             }
+        }*/
 
-            MediaOption.CompositedVideoLayout.GRID -> {
-                layout = MediaOption.CompositedVideoLayout.SINGLE
+    /* private fun zoomFactorClickListener(call: Call?) {
+         Log.d(TAG, "zoomFactorClickListener")
+         val propertyText1 =
+             resources.getString(R.string.zoom_factor) + " " + String.format(
+                 "%.1f",
+                 webexViewModel.getVideoZoomFactor()
+             )
+         showCameraDataOptionsBottomSheetFragment(
+             call,
+             CameraOptionsDataBottomSheetFragment.OptionType.ZOOM_FACTOR,
+             propertyText1,
+             null,
+             false
+         )
+     }
+
+     private fun torchModeClickListener(call: Call?) {
+         Log.d(TAG, "torchModeClickListener")
+         if (webexViewModel.torchMode == Call.TorchMode.OFF) {
+             webexViewModel.torchMode = Call.TorchMode.ON
+         } else if (webexViewModel.torchMode == Call.TorchMode.ON) {
+             webexViewModel.torchMode = Call.TorchMode.AUTO
+         } else {
+             webexViewModel.torchMode = Call.TorchMode.OFF
+         }
+         val status = webexViewModel.setCameraTorchMode(webexViewModel.torchMode)
+         Log.d(TAG, "torchModeClickListener status: $status")
+     }
+
+     private fun flashModeClickListener(call: Call?) {
+         Log.d(TAG, "flashModeClickListener")
+         if (webexViewModel.flashMode == Call.FlashMode.OFF) {
+             webexViewModel.flashMode = Call.FlashMode.ON
+         } else if (webexViewModel.flashMode == Call.FlashMode.ON) {
+             webexViewModel.flashMode = Call.FlashMode.AUTO
+         } else {
+             webexViewModel.flashMode = Call.FlashMode.OFF
+         }
+         val status = webexViewModel.setCameraFlashMode(webexViewModel.flashMode)
+         Log.d(TAG, "flashModeClickListener status: $status")
+     }
+
+     private fun cameraFocusClickListener(call: Call?) {
+         Log.d(TAG, "cameraFocusClickListener")
+         val propertyText1 =
+             resources.getString(R.string.camera_focus) + "\nPointX: "
+         val propertyText2 = "PointY: "
+         showCameraDataOptionsBottomSheetFragment(
+             call,
+             CameraOptionsDataBottomSheetFragment.OptionType.CAMERA_FOCUS_POINT,
+             propertyText1,
+             propertyText2,
+             true
+         )
+     }
+
+     private fun cameraCustomExposureClickListener(call: Call?) {
+         Log.d(TAG, "cameraCustomExposureClickListener")
+         val propertyText1 =
+             resources.getString(R.string.camera_custom_exposure) + "\nDuration current: " + String.format(
+                 "%f",
+                 webexViewModel.getCameraExposureDuration()?.current
+             ) +
+                     " \nmin: " + String.format(
+                 "%f",
+                 webexViewModel.getCameraExposureDuration()?.min
+             ) + " max: " + String.format(
+                 "%f",
+                 webexViewModel.getCameraExposureDuration()?.max
+             )
+         val propertyText2 = "ISO: " + String.format(
+             "%.1f",
+             webexViewModel.getCameraExposureISO()?.current
+         ) +
+                 " \nmin: " + String.format(
+             "%.1f",
+             webexViewModel.getCameraExposureISO()?.min
+         ) + " max: " + String.format(
+             "%.1f",
+             webexViewModel.getCameraExposureISO()?.max
+         )
+         showCameraDataOptionsBottomSheetFragment(
+             call,
+             CameraOptionsDataBottomSheetFragment.OptionType.CUSTOM_EXPOSURE,
+             propertyText1,
+             propertyText2,
+             true
+         )
+     }
+
+     private fun cameraAutoExposureClickListener(call: Call?) {
+         Log.d(TAG, "cameraAutoExposureClickListener")
+         val propertyText1 =
+             resources.getString(R.string.camera_auto_exposure) + " " + String.format(
+                 "%.1f",
+                 webexViewModel.getCameraExposureTargetBias()?.current
+             ) +
+                     " \n min: " + String.format(
+                 "%.1f",
+                 webexViewModel.getCameraExposureTargetBias()?.min
+             ) + " max: " + String.format(
+                 "%.1f",
+                 webexViewModel.getCameraExposureTargetBias()?.max
+             )
+         showCameraDataOptionsBottomSheetFragment(
+             call,
+             CameraOptionsDataBottomSheetFragment.OptionType.AUTO_EXPOSURE,
+             propertyText1,
+             null,
+             false
+         )
+     }
+
+     private fun takePhotoClickListener(call: Call?) {
+         Log.d(TAG, "takePhotoClickListener")
+         val success = webexViewModel.takePhoto()
+         if (!success) {
+             Toast.makeText(
+                 activity,
+                 "Photo capture not supported",
+                 Toast.LENGTH_LONG
+             ).show()
+         }
+     }
+
+     private fun zoomfactorValueSetListener(factor: Float) {
+         Log.d(TAG, "zoomfactorValueSetListener factor: $factor")
+         val status = webexViewModel.setVideoZoomFactor(factor)
+         Log.d(TAG, "zoomfactorValueSetListener factor: $factor status: $status")
+     }
+
+     private fun cameraFocusValueSetClickListener(pointX: Float, pointY: Float) {
+         Log.d(
+             TAG,
+             "cameraFocusValueSetClickListener pointX: $pointX, pointY: $pointY"
+         )
+         val status = webexViewModel.setCameraFocusAtPoint(pointX, pointY)
+         Log.d(TAG, "cameraFocusValueSetClickListener status: $status")
+     }
+
+     private fun cameraCustomExposureValueSetClickListener(
+         duration: Double,
+         iso: Float
+     ) {
+         Log.d(
+             TAG,
+             "cameraCustomExposureValueSetClickListener duration: $duration, iso: $iso"
+         )
+         val status = webexViewModel.setCameraCustomExposure(duration, iso)
+         Log.d(TAG, "cameraCustomExposureValueSetClickListener status: $status")
+     }
+
+     private fun cameraAutoExposureValueSetClickListener(targetBias: Float) {
+         Log.d(
+             TAG,
+             "cameraAutoExposureValueSetClickListener targetBias: $targetBias"
+         )
+         val status = webexViewModel.setCameraAutoExposure(targetBias)
+         Log.d(TAG, "cameraAutoExposureValueSetClickListener status: $status")
+     }
+
+     private fun compositeStreamLayoutClickListener(call: Call?) {
+         Log.d(
+             TAG,
+             "compositeStreamLayoutClickListener getCompositedLayout: ${webexViewModel.getCompositedLayout()}"
+         )
+
+         if (webexViewModel.compositedVideoLayout == MediaOption.CompositedVideoLayout.NOT_SUPPORTED) {
+             showDialogWithMessage(
+                 requireContext(),
+                 R.string.composite_stream,
+                 resources.getString(R.string.composite_stream_not_supported)
+             )
+             return
+         }
+
+         var layout = webexViewModel.compositedVideoLayout
+
+         when (layout) {
+             MediaOption.CompositedVideoLayout.FILMSTRIP -> {
+                 layout = MediaOption.CompositedVideoLayout.GRID
+             }
+
+             MediaOption.CompositedVideoLayout.GRID -> {
+                 layout = MediaOption.CompositedVideoLayout.SINGLE
+             }
+
+             MediaOption.CompositedVideoLayout.SINGLE -> {
+                 layout = MediaOption.CompositedVideoLayout.FILMSTRIP
+             }
+
+             else -> {}
+         }
+
+         webexViewModel.setCompositedLayout(layout)
+     }
+
+     private fun virtualBackgroundOptionsClickListener(call: Call?) {
+         webexViewModel.fetchVirtualBackgrounds()
+     }
+
+     private fun scalingModeClickListener(call: Call?) {
+         Log.d(TAG, "scalingModeClickListener")
+
+         when (webexViewModel.scalingMode) {
+             Call.VideoRenderMode.Fit -> {
+                 webexViewModel.scalingMode = Call.VideoRenderMode.CropFill
+             }
+
+             Call.VideoRenderMode.CropFill -> {
+                 webexViewModel.scalingMode = Call.VideoRenderMode.StretchFill
+             }
+
+             Call.VideoRenderMode.StretchFill -> {
+                 webexViewModel.scalingMode = Call.VideoRenderMode.Fit
+             }
+
+             Call.VideoRenderMode.NotSupported -> TODO()
+         }
+
+         webexViewModel.setRemoteVideoRenderMode(
+             call?.getCallId().orEmpty(),
+             webexViewModel.scalingMode
+         )
+     }*/
+
+    /*    private fun showBottomSheet(call: Call?) {
+            callOptionsBottomSheetFragment.call = call
+            callOptionsBottomSheetFragment.scalingModeValue =
+                webexViewModel.scalingMode
+            callOptionsBottomSheetFragment.compositeLayoutValue =
+                webexViewModel.compositedVideoLayout
+            callOptionsBottomSheetFragment.streamMode = webexViewModel.streamMode
+            callOptionsBottomSheetFragment.multiStreamNewApproach =
+                webexViewModel.multistreamNewApproach
+            callOptionsBottomSheetFragment.isSendingVideoForceLandscape =
+                webexViewModel.isSendingVideoForceLandscape
+            activity?.supportFragmentManager?.let {
+                callOptionsBottomSheetFragment.show(
+                    it,
+                    CallBottomSheetFragment.TAG
+                )
             }
+        }*/
 
-            MediaOption.CompositedVideoLayout.SINGLE -> {
-                layout = MediaOption.CompositedVideoLayout.FILMSTRIP
-            }
-
-            else -> {}
-        }
-
-        webexViewModel.setCompositedLayout(layout)
-    }
-
-    private fun virtualBackgroundOptionsClickListener(call: Call?) {
-        webexViewModel.fetchVirtualBackgrounds()
-    }
-
-    private fun scalingModeClickListener(call: Call?) {
-        Log.d(TAG, "scalingModeClickListener")
-
-        when (webexViewModel.scalingMode) {
-            Call.VideoRenderMode.Fit -> {
-                webexViewModel.scalingMode = Call.VideoRenderMode.CropFill
-            }
-
-            Call.VideoRenderMode.CropFill -> {
-                webexViewModel.scalingMode = Call.VideoRenderMode.StretchFill
-            }
-
-            Call.VideoRenderMode.StretchFill -> {
-                webexViewModel.scalingMode = Call.VideoRenderMode.Fit
-            }
-
-            Call.VideoRenderMode.NotSupported -> TODO()
-        }
-
-        webexViewModel.setRemoteVideoRenderMode(
-            call?.getCallId().orEmpty(),
-            webexViewModel.scalingMode
-        )
-    }*/
-
-/*    private fun showBottomSheet(call: Call?) {
-        callOptionsBottomSheetFragment.call = call
-        callOptionsBottomSheetFragment.scalingModeValue =
-            webexViewModel.scalingMode
-        callOptionsBottomSheetFragment.compositeLayoutValue =
-            webexViewModel.compositedVideoLayout
-        callOptionsBottomSheetFragment.streamMode = webexViewModel.streamMode
-        callOptionsBottomSheetFragment.multiStreamNewApproach =
-            webexViewModel.multistreamNewApproach
-        callOptionsBottomSheetFragment.isSendingVideoForceLandscape =
-            webexViewModel.isSendingVideoForceLandscape
-        activity?.supportFragmentManager?.let {
-            callOptionsBottomSheetFragment.show(
-                it,
-                CallBottomSheetFragment.TAG
-            )
-        }
-    }*/
-
-  /*  private fun showCameraOptionsBottomSheet(call: Call?) {
-        cameraOptionsBottomSheetFragment.call = call
-        cameraOptionsBottomSheetFragment.torchModeValue =
-            webexViewModel.torchMode
-        cameraOptionsBottomSheetFragment.flashModeValue =
-            webexViewModel.flashMode
-        activity?.supportFragmentManager?.let {
-            cameraOptionsBottomSheetFragment.show(
-                it,
-                CameraOptionsBottomSheetFragment.TAG
-            )
-        }
-    }*/
+    /*  private fun showCameraOptionsBottomSheet(call: Call?) {
+          cameraOptionsBottomSheetFragment.call = call
+          cameraOptionsBottomSheetFragment.torchModeValue =
+              webexViewModel.torchMode
+          cameraOptionsBottomSheetFragment.flashModeValue =
+              webexViewModel.flashMode
+          activity?.supportFragmentManager?.let {
+              cameraOptionsBottomSheetFragment.show(
+                  it,
+                  CameraOptionsBottomSheetFragment.TAG
+              )
+          }
+      }*/
 
     private fun updateNetworkStatusChange(mediaQualityInfo: Call.MediaQualityInfo) {
         when (mediaQualityInfo) {
@@ -4280,9 +4279,9 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         super.onStop()
     }
 
-  /*  private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
-    }*/
+    /*  private fun showSnackbar(message: String) {
+          Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+      }*/
 
     // Remote share callback
     override fun onShareStarted() {
@@ -4296,12 +4295,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     override fun onFrameSizeChanged(width: Int, height: Int) {
     }
 
-  /*  private fun startCallMonitoringForegroundService() {
-        // Start CallManagement service to cut call when app is killed from recent tasks
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            callManagementServiceIntent =
-                Intent(activity, CallManagementService::class.java)
-            activity?.startForegroundService(callManagementServiceIntent)
-        }
-    }*/
+    /*  private fun startCallMonitoringForegroundService() {
+          // Start CallManagement service to cut call when app is killed from recent tasks
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              callManagementServiceIntent =
+                  Intent(activity, CallManagementService::class.java)
+              activity?.startForegroundService(callManagementServiceIntent)
+          }
+      }*/
 }

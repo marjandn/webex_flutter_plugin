@@ -10,7 +10,6 @@ import ae.altkamul.webex_flutter_plugin.R
 import ae.altkamul.webex_flutter_plugin.WebexCallApp
 import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.calling.CallActivity
-import ae.altkamul.webex_flutter_plugin.calling.callModule
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityLoginWithTokenBinding
 import ae.altkamul.webex_flutter_plugin.mainAppModule
 import ae.altkamul.webex_flutter_plugin.person.personModule
@@ -103,7 +102,7 @@ class JWTLoginActivity : AppCompatActivity() {
                 webexModule,
                 loginModule,
                 JWTWebexModule,
-                callModule,
+
                 personModule,
             )
         )
