@@ -19,6 +19,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         webexViewModel.authLiveData.observe(this@BaseActivity, Observer {
             if (it != null && it == Constants.Callbacks.RE_LOGIN_REQUIRED) {
                 Log.d(tag, "onReAuthRequired Re login is required by user.")

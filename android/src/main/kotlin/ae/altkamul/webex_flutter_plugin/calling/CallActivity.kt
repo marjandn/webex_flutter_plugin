@@ -26,16 +26,23 @@ import ae.altkamul.webex_flutter_plugin.BaseActivity
 import ae.altkamul.webex_flutter_plugin.CallControlsFragment
 import ae.altkamul.webex_flutter_plugin.CallRejectService
 import ae.altkamul.webex_flutter_plugin.R
+import ae.altkamul.webex_flutter_plugin.WebexViewModel
 import ae.altkamul.webex_flutter_plugin.databinding.ActivityCallBinding
 import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
 import ae.altkamul.webex_flutter_plugin.utils.Constants
+import androidx.appcompat.app.AppCompatActivity
 import com.ciscowebex.androidsdk.phone.*
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem
 import com.ciscowebex.androidsdk.phone.closedCaptions.ClosedCaptionsInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
+import kotlin.math.log
 
 
-class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener,  CallObserverInterface {
+class CallActivity : AppCompatActivity(),
+  CallObserverInterface {
+    val webexViewModel: WebexViewModel by viewModel()
 
     lateinit var binding: ActivityCallBinding
     private var pictureInPictureParamsBuilder: PictureInPictureParams.Builder? =
@@ -46,55 +53,52 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
     //var fragmentMap : HashMap<String, CallControlsFragment> = HashMap()
     var argumentList: HashMap<String, Bundle> = HashMap()
 
+    val tag = "CallActivity"
 
     companion object {
         fun getOutgoingIntent(
             context: Context,
-            callerName: String,
-            callType: Boolean,
-            moveMeeting: Boolean
+            callerName: String
         ): Intent {
             val intent = Intent(context, CallActivity::class.java)
-            intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 0)
+//            intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 0)
             intent.putExtra(
                 Constants.Intent.OUTGOING_CALL_CALLER_ID,
                 callerName
             )
-            intent.putExtra(Constants.Intent.CALL_TYPE, callType)
-            intent.putExtra(Constants.Intent.MOVE_MEETING, moveMeeting)
             return intent
         }
+        /*
+                fun getIncomingIntent(
+                    context: Context,
+                    callId: String? = null
+                ): Intent {
+                    val intent = Intent(context, CallActivity::class.java)
+                    intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 1)
+                    intent.putExtra(Constants.Intent.CALL_ID, callId)
+                    return intent
+                }
 
-        fun getIncomingIntent(
-            context: Context,
-            callId: String? = null
-        ): Intent {
-            val intent = Intent(context, CallActivity::class.java)
-            intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 1)
-            intent.putExtra(Constants.Intent.CALL_ID, callId)
-            return intent
-        }
-
-        fun getCallAcceptIntent(
-            context: Context,
-            callId: String? = null
-        ): Intent {
-            val intent = Intent(context, CallActivity::class.java)
-            intent.action = Constants.Action.WEBEX_CALL_ACCEPT_ACTION
-            intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 1)
-            intent.putExtra(Constants.Intent.CALL_ID, callId)
-            intent.putExtra(Constants.Action.WEBEX_CALL_ACCEPT_ACTION, true)
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+                fun getCallAcceptIntent(
+                    context: Context,
+                    callId: String? = null
+                ): Intent {
+                    val intent = Intent(context, CallActivity::class.java)
+                    intent.action = Constants.Action.WEBEX_CALL_ACCEPT_ACTION
+                    intent.putExtra(Constants.Intent.CALLING_ACTIVITY_ID, 1)
+                    intent.putExtra(Constants.Intent.CALL_ID, callId)
+                    intent.putExtra(Constants.Action.WEBEX_CALL_ACCEPT_ACTION, true)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    return intent
+                }*/
 
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tag = "CallActivity"
+
         DataBindingUtil.setContentView<ActivityCallBinding>(
             this,
             R.layout.activity_call
@@ -110,51 +114,58 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             pictureInPictureParamsBuilder = PictureInPictureParams.Builder()
         }
+
+
     }
 
     fun reload() {
-        val callingActivity =
-            intent.getIntExtra(Constants.Intent.CALLING_ACTIVITY_ID, 0)
+
+/*        val callingActivity =
+            intent.getIntExtra(Constants.Intent.CALLING_ACTIVITY_ID, 0)*/
         val fragment = addNewFragment()
         Handler(Looper.getMainLooper()).postDelayed({
-            if (callingActivity == 0) {
+//            if (callingActivity == 0) {
                 val callerId =
                     intent.getStringExtra(Constants.Intent.OUTGOING_CALL_CALLER_ID)
-                val switchToUcmOrBroadworksCall =
-                    intent.getBooleanExtra(
-                        Constants.Intent.CALL_TYPE,
-                        false
-                    )
-                val moveMeeting = intent.getBooleanExtra(
-                    Constants.Intent.MOVE_MEETING,
-                    false
-                )
-                val companionMode: CompanionMode =
-                    if (moveMeeting) CompanionMode.MoveMeeting else CompanionMode.None
+
+
+                /*  val switchToUcmOrBroadworksCall =
+                  intent.getBooleanExtra(
+                      Constants.Intent.CALL_TYPE,
+                      false
+                  )
+          val moveMeeting = intent.getBooleanExtra(
+                  Constants.Intent.MOVE_MEETING,
+                  false
+              )*/
+                /*val companionMode: CompanionMode =
+                    if (moveMeeting) CompanionMode.MoveMeeting else CompanionMode.None*/
                 callerId?.let {
                     fragment.dialOutgoingCall(
-                        callerId,
-                        isCucmOrWxcCall = switchToUcmOrBroadworksCall,
-                        moveMeeting = companionMode
+                        callerId
                     )
                 }
-            } else if (intent.action == Constants.Action.WEBEX_CALL_ACTION) {
-                intent?.getStringExtra(Constants.Intent.CALL_ID)
-                    ?.let { callId ->
-                        handleIncomingWebexCallFromFCM(callId)
-                    }
-            } else if (intent.action == Constants.Action.WEBEX_CALL_ACCEPT_ACTION) {
-                val notificationManager =
-                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-                notificationManager?.cancel(Constants.Notification.WEBEX_CALL)
-            }
+            /*   } else if (intent.action == Constants.Action.WEBEX_CALL_ACTION) {
+
+                   intent?.getStringExtra(Constants.Intent.CALL_ID)
+                       ?.let { callId ->
+                           handleIncomingWebexCallFromFCM(callId)
+                       }
+               } else if (intent.action == Constants.Action.WEBEX_CALL_ACCEPT_ACTION) {
+                   Log.d("marjan", "WEBEX_CALL_ACCEPT_ACTION  ")
+
+
+                   val notificationManager =
+                       getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+                   notificationManager?.cancel(Constants.Notification.WEBEX_CALL)
+               }*/
         }, 100)
 
-        setupCallQueueView()
-        registerIncomingCallListener()
+//        setupCallQueueView()
+//        registerIncomingCallListener()
     }
 
-    private fun registerIncomingCallListener() {
+    /*private fun registerIncomingCallListener() {
         webexViewModel.setIncomingListener()
         webexViewModel.incomingListenerLiveData.observe(this, Observer {
             it?.let {
@@ -183,7 +194,7 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
                 }
             }
         }
-    }
+    }*/
 
     private fun getLastFragment(): CallControlsFragment? {
         // Only one CallControlFragment expected in the stack
@@ -232,7 +243,7 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
         return newCallControlFragment
     }
 
-    private fun resumeFragment(resumedCall: Call) {
+    /*private fun resumeFragment(resumedCall: Call) {
         var transaction = supportFragmentManager.beginTransaction()
         val newCallControlFragment = CallControlsFragment()
         newCallControlFragment.arguments = argumentList[resumedCall.getCallId()]
@@ -242,49 +253,49 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
             "call-" + resumedCall.getCallId()!!
         )
         transaction.commit()
-    }
+    }*/
 
-    private fun setupCallQueueView() {
-        callQueueAdapter = CallQueueAdapter(
-            calls,
-            object : CallQueueAdapter.OnItemActionListener {
-                override fun onCallResumed(callId: String) {
-                    var call = CallObjectStorage.getCallObject(callId)
-                    call?.let { resumedCall ->
-                        // Remove the resumed call from the hold queue
-                        calls.remove(resumedCall)
+    /* private fun setupCallQueueView() {
+         callQueueAdapter = CallQueueAdapter(
+             calls,
+             object : CallQueueAdapter.OnItemActionListener {
+                 override fun onCallResumed(callId: String) {
+                     var call = CallObjectStorage.getCallObject(callId)
+                     call?.let { resumedCall ->
+                         // Remove the resumed call from the hold queue
+                         calls.remove(resumedCall)
 
-                        // Save current fragment state mainly arguments
-                        dismissExistingDialogFragments()
-                        saveCurrentState()
+                         // Save current fragment state mainly arguments
+                         dismissExistingDialogFragments()
+                         saveCurrentState()
 
-                        // add current call to the queue
-                        val currentFragment: CallControlsFragment? =
-                            getLastFragment()
-                        var currentCallId =
-                            currentFragment?.getCurrentActiveCallId()
-                        currentCallId?.let {
-                            val currentCallObject =
-                                CallObjectStorage.getCallObject(it)
+                         // add current call to the queue
+                         val currentFragment: CallControlsFragment? =
+                             getLastFragment()
+                         var currentCallId =
+                             currentFragment?.getCurrentActiveCallId()
+                         currentCallId?.let {
+                             val currentCallObject =
+                                 CallObjectStorage.getCallObject(it)
 
-                            currentCallObject?.let {
-                                it.holdCall(true)
-                                calls.add(currentCallObject)
-                            }
+                             currentCallObject?.let {
+                                 it.holdCall(true)
+                                 calls.add(currentCallObject)
+                             }
 
-                            // resume the call
-                            resumeFragment(resumedCall)
-                            resumedCall.holdCall(false)
+                             // resume the call
+                             resumeFragment(resumedCall)
+                             resumedCall.holdCall(false)
 
-                        }
-                    }
-                    binding.callQueue?.adapter?.notifyDataSetChanged()
-                }
-            })
+                         }
+                     }
+                     binding.callQueue?.adapter?.notifyDataSetChanged()
+                 }
+             })
 
-        binding.callQueue.adapter = callQueueAdapter
-        binding.callQueue.visibility = View.GONE
-    }
+         binding.callQueue.adapter = callQueueAdapter
+         binding.callQueue.visibility = View.GONE
+     }*/
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -326,19 +337,19 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
                 // resume the new call
                 addNewFragment()
 
-                binding.callQueue?.adapter?.notifyDataSetChanged()
-                binding.callQueue.visibility = View.VISIBLE
+                /*  binding.callQueue?.adapter?.notifyDataSetChanged()
+                  binding.callQueue.visibility = View.VISIBLE*/
             }
 
         }
     }
 
-    private fun handleIncomingWebexCallFromFCM(callId: String) {
-        val fragment = getLastFragment()
-        fragment?.let {
-            fragment.handleFCMIncomingCall(callId)
-        }
-    }
+    /*    private fun handleIncomingWebexCallFromFCM(callId: String) {
+            val fragment = getLastFragment()
+            fragment?.let {
+                fragment.handleFCMIncomingCall(callId)
+            }
+        }*/
 
     override fun onBackPressed() {
         val fragment = getLastFragment()
@@ -386,7 +397,7 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
         toBeShownOnLockScreen()
     }
 
-    override fun onEndAndAnswer(
+   /* override fun onEndAndAnswer(
         currentCallId: String,
         newCallId: String,
         handler: CompletionHandler<Boolean>
@@ -419,7 +430,7 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
             })
 
 
-    }
+    }*/
 
     private fun pictureInPictureMode() {
         Log.d(tag, "pictureInPictureMode: Try to enter PIP mode")
@@ -474,13 +485,13 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
         call: Call?,
         event: CallObserver.CallDisconnectedEvent?
     ) {
-        runOnUiThread {
-            if (calls.contains(call)) {
-                calls.remove(call)
-                //binding.callQueue?.adapter?.notifyItemChanged(0)
-                binding.callQueue?.adapter?.notifyDataSetChanged()
-            }
-        }
+        /*        runOnUiThread {
+                    if (calls.contains(call)) {
+                        calls.remove(call)
+                        //binding.callQueue?.adapter?.notifyItemChanged(0)
+        //                binding.callQueue?.adapter?.notifyDataSetChanged()
+                    }
+                }*/
     }
 
     override fun onMediaQualityInfoChanged(mediaQualityInfo: Call.MediaQualityInfo) {
@@ -571,7 +582,7 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
             transaction.commit()
             calls.remove(resumedCall)
             //binding.callQueue?.adapter?.notifyItemChanged(0)
-            binding.callQueue?.adapter?.notifyDataSetChanged()
+//            binding.callQueue?.adapter?.notifyDataSetChanged()
         } else {
             super.finish()
         }
@@ -583,70 +594,70 @@ class CallActivity : BaseActivity(), CallControlsFragment.OnCallActionListener, 
     }
 
 
-    private fun sendNotificationForCall(
-        callId: String,
-        number: String,
-        spaceTitle: String
-    ) {
-        val notificationId = Constants.Notification.WEBEX_CALL
+    /* private fun sendNotificationForCall(
+         callId: String,
+         number: String,
+         spaceTitle: String
+     ) {
+         val notificationId = Constants.Notification.WEBEX_CALL
 
-        val acceptIntent =
-            CallActivity.getCallAcceptIntent(this, callId = callId)
-        val rejectIntent =
-            CallRejectService.getCallRejectIntent(this, callId = callId)
-        val fullScreenIntent =
-            LockScreenActivity.getLockScreenIntent(this, callId = callId)
+         val acceptIntent =
+             CallActivity.getCallAcceptIntent(this, callId = callId)
+         val rejectIntent =
+             CallRejectService.getCallRejectIntent(this, callId = callId)
+         val fullScreenIntent =
+             LockScreenActivity.getLockScreenIntent(this, callId = callId)
 
-        val intentFlag =
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        val acceptPendingIntent = PendingIntent.getActivity(
-            this,
-            Constants.Intent.ACCEPT_REQUEST_CODE,
-            acceptIntent,
-            intentFlag
-        )
-        val rejectPendingIntent = PendingIntent.getService(
-            this,
-            Constants.Intent.REJECT_REQUEST_CODE,
-            rejectIntent,
-            intentFlag
-        )
-        val fullScreenPendingIntent = PendingIntent.getActivity(
-            this,
-            Constants.Intent.FULLSCREEN_REQUEST_CODE,
-            fullScreenIntent,
-            intentFlag
-        )
-        val channelId = "Calls"
-        val defaultSoundUri =
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.app_notification_icon)
-            .setContentTitle(spaceTitle)
-            .setContentText("Call from Webex")
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri)
-            .addAction(0, "Accept", acceptPendingIntent)
-            .addAction(0, "Reject", rejectPendingIntent)
-            .setFullScreenIntent(fullScreenPendingIntent, true)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+         val intentFlag =
+             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+         val acceptPendingIntent = PendingIntent.getActivity(
+             this,
+             Constants.Intent.ACCEPT_REQUEST_CODE,
+             acceptIntent,
+             intentFlag
+         )
+         val rejectPendingIntent = PendingIntent.getService(
+             this,
+             Constants.Intent.REJECT_REQUEST_CODE,
+             rejectIntent,
+             intentFlag
+         )
+         val fullScreenPendingIntent = PendingIntent.getActivity(
+             this,
+             Constants.Intent.FULLSCREEN_REQUEST_CODE,
+             fullScreenIntent,
+             intentFlag
+         )
+         val channelId = "Calls"
+         val defaultSoundUri =
+             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+         val notificationBuilder = NotificationCompat.Builder(this, channelId)
+             .setSmallIcon(R.drawable.app_notification_icon)
+             .setContentTitle(spaceTitle)
+             .setContentText("Call from Webex")
+             .setAutoCancel(true)
+             .setSound(defaultSoundUri)
+             .addAction(0, "Accept", acceptPendingIntent)
+             .addAction(0, "Reject", rejectPendingIntent)
+             .setFullScreenIntent(fullScreenPendingIntent, true)
+             .setCategory(NotificationCompat.CATEGORY_CALL)
+             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+             .setPriority(NotificationCompat.PRIORITY_MAX)
 
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+         val notificationManager =
+             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Calls",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager?.createNotificationChannel(channel)
-        }
-        notificationManager?.notify(notificationId, notificationBuilder.build())
-    }
+         // Since android Oreo notification channel is needed.
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+             val channel = NotificationChannel(
+                 channelId,
+                 "Calls",
+                 NotificationManager.IMPORTANCE_HIGH
+             )
+             notificationManager?.createNotificationChannel(channel)
+         }
+         notificationManager?.notify(notificationId, notificationBuilder.build())
+     }*/
 
 
 }

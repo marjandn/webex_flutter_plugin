@@ -125,8 +125,7 @@ class JWTLoginActivity : AppCompatActivity() {
                 CallActivity.getOutgoingIntent(
                     this,
                     "23657226651",
-                    false,
-                    false
+
                 )
             )
         )
