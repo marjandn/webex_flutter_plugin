@@ -144,13 +144,13 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 //    private lateinit var cameraOptionsDataBottomSheetFragment: CameraOptionsDataBottomSheetFragment
 //    private lateinit var multiStreamOptionsBottomSheetFragment: MultiStreamOptionsBottomSheetFragment
 //    private lateinit var multiStreamDataOptionsBottomSheetFragment: MultiStreamDataOptionsBottomSheetFragment
-    private lateinit var mediaStreamBottomSheetFragment: MediaStreamBottomSheetFragment
-    private lateinit var photoViewerBottomSheetFragment: PhotoViewerBottomSheetFragment
-    private lateinit var breakoutSessionBottomSheetFragment: BreakoutSessionsBottomSheetFragment
+//    private lateinit var mediaStreamBottomSheetFragment: MediaStreamBottomSheetFragment
+//    private lateinit var photoViewerBottomSheetFragment: PhotoViewerBottomSheetFragment
+//    private lateinit var breakoutSessionBottomSheetFragment: BreakoutSessionsBottomSheetFragment
 
     //    private lateinit var switchAudioBottomSheetFragment: SwitchAudioBottomSheetFragment
 //    private lateinit var incomingInfoAdapter: IncomingCallBottomSheetFragment.IncomingInfoAdapter
-    private lateinit var breakoutSessionsAdapter: BreakoutSessionsBottomSheetFragment.BreakoutSessionsAdapter
+//    private lateinit var breakoutSessionsAdapter: BreakoutSessionsBottomSheetFragment.BreakoutSessionsAdapter
 //    private lateinit var captionsController: ClosedCaptionsController
     private val mAuxStreamViewMap: HashMap<View, AuxStreamViewHolder> =
         HashMap()
@@ -158,7 +158,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     var bottomSheetFragment: BackgroundOptionsBottomSheetFragment? = null
 //    var onCallActionListener: OnCallActionListener? = null
     private var breakoutSessions: List<BreakoutSession> = emptyList()
-    private var breakout: Breakout? = null
+//    private var breakout: Breakout? = null
     private var dialType = DialType.NONE
     private val mediaPlayer: MediaPlayer = MediaPlayer()
     private lateinit var passwordDialogBinding: DialogEnterMeetingPinBinding
@@ -1071,7 +1071,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
     override fun onPhotoCaptured(imageData: ByteArray?) {
         Log.d(TAG, "CallObserver onPhotoCaptured")
-        imageData?.let {
+    /*    imageData?.let {
             Log.d(
                 TAG,
                 "CallObserver onPhotoCaptured imageData Size: ${imageData.size}"
@@ -1083,7 +1083,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     PhotoViewerBottomSheetFragment.TAG
                 )
             }
-        }
+        }*/
     }
 
     override fun onMediaQualityInfoChanged(mediaQualityInfo: Call.MediaQualityInfo) {
@@ -1115,7 +1115,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onJoinableSessionUpdated(breakoutSessions: List<BreakoutSession>) {
-        this.breakoutSessions = breakoutSessions
+  /*      this.breakoutSessions = breakoutSessions
         breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
         if (breakoutSessionBottomSheetFragment.isAdded && breakoutSessionBottomSheetFragment.isVisible) {
             breakoutSessionsAdapter.notifyDataSetChanged()
@@ -1123,7 +1123,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         Log.d(
             tag,
             "BreakoutSession Joinable sessions updated : size -> ${breakoutSessions.size}"
-        )
+        )*/
     }
 
     override fun onJoinedSessionUpdated(breakoutSession: BreakoutSession) {
@@ -1133,7 +1133,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onReturnedToMainSession() {
-        breakout = null
+//        breakout = null
         val callInfo =
             webexViewModel.currentCallId?.let { webexViewModel.getCall(it) }
         lifecycleScope.launch(Dispatchers.Main) {
@@ -1144,12 +1144,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onSessionClosing() {
-        val closingText =
+       /* val closingText =
             "Breakout Session: Closing in ${breakout?.getDelay()} seconds"
         lifecycleScope.launch(Dispatchers.Main) {
             Toast.makeText(requireContext(), closingText, Toast.LENGTH_LONG)
                 .show()
-        }
+        }*/
     }
 
     override fun onSessionEnabled() {
@@ -1173,18 +1173,18 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onSessionStarted(breakout: Breakout) {
-        this.breakout = breakout
+       /* this.breakout = breakout
         lifecycleScope.launch(Dispatchers.Main) {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.breakout_session_started),
                 Toast.LENGTH_LONG
             ).show()
-        }
+        }*/
     }
 
     override fun onBreakoutUpdated(breakout: Breakout) {
-        this.breakout = breakout
+//        this.breakout = breakout
     }
 
     override fun onBreakoutError(error: BreakoutSession.BreakoutSessionError) {
@@ -1201,7 +1201,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     override fun onReceivingNoiseInfoChanged(info: ReceivingNoiseInfo) {
-        Log.d(
+       /* Log.d(
             tag,
             "ReceivingNoiseRemoval: Info change noiseDetected = ${info.isNoiseDetected()}, NREnabled = ${info.isNoiseRemovalEnabled()}"
         )
@@ -1213,7 +1213,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_none_filled)
         } else if (info.isNoiseRemovalEnabled()) {
             binding.ivReceivingNoiseRemoval.setImageResource(R.drawable.ic_noise_detected_canceled_filled)
-        }
+        }*/
     }
 
     override fun onClosedCaptionsArrived(captions: CaptionItem) {
@@ -1298,7 +1298,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                         Log.d(TAG, "stopShareLiveData Failed")
                     }
                 }
-                binding.annotationPolicy.visibility = INVISIBLE
+//                binding.annotationPolicy.visibility = INVISIBLE
             })
 
         webexViewModel.setCompositeLayoutLiveData.observe(
@@ -2007,12 +2007,12 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 incomingCallCancelEvent
             )*/
 
-        breakoutSessionsAdapter =
+       /* breakoutSessionsAdapter =
             BreakoutSessionsBottomSheetFragment.BreakoutSessionsAdapter {
                 webexViewModel.joinBreakoutSession(it)
                 breakoutSessionBottomSheetFragment.dismiss()
                 attemptingToJoinABreakoutSession = true
-            }
+            }*/
 
       /*  callOptionsBottomSheetFragment = CallBottomSheetFragment(
             { call -> *//*showIncomingCallBottomSheet()*//* },
@@ -2061,7 +2061,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     )
                 })*/
 
-        mediaStreamBottomSheetFragment = MediaStreamBottomSheetFragment(
+  /*      mediaStreamBottomSheetFragment = MediaStreamBottomSheetFragment(
             { renderView, personID, quality ->
                 pinStreamClickListener(
                     renderView,
@@ -2081,11 +2081,11 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     personID
                 )
             })
-
+*/
 //        initIncomingCallBottomSheet()
 
-        breakoutSessionBottomSheetFragment =
-            BreakoutSessionsBottomSheetFragment()
+       /* breakoutSessionBottomSheetFragment =
+            BreakoutSessionsBottomSheetFragment()*/
 
        /* cameraOptionsBottomSheetFragment =
             CameraOptionsBottomSheetFragment({ call ->
@@ -2108,7 +2108,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 { x, y -> cameraCustomExposureValueSetClickListener(x, y) },
                 { x -> cameraAutoExposureValueSetClickListener(x) })*/
 
-        photoViewerBottomSheetFragment = PhotoViewerBottomSheetFragment()
+  /*      photoViewerBottomSheetFragment = PhotoViewerBottomSheetFragment()*/
 
         /*    switchAudioBottomSheetFragment = SwitchAudioBottomSheetFragment({toggleAudioMode(AudioMode.EARPIECE)},
                 {toggleAudioMode(AudioMode.SPEAKER)}, {toggleAudioMode(AudioMode.BLUETOOTH)}, {toggleAudioMode(AudioMode.WIRED_HEADSET)})*/
@@ -2200,7 +2200,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         /*   binding.ibMoreOption.setOnClickListener(this)
            binding.btnReturnToMainSession.setOnClickListener(this)
            binding.ibSwitchToAudioVideoCall.setOnClickListener(this)*/
-        binding.ivReceivingNoiseRemoval.setOnClickListener(this)
+//        binding.ivReceivingNoiseRemoval.setOnClickListener(this)
 
 //        initAddedCallControls()
         binding.ivNetworkSignal.setOnClickListener(this)
@@ -2209,7 +2209,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
 
         passwordDialog = Dialog(requireContext())
 
-        binding.annotationPolicy.setOnClickListener(this)
+//        binding.annotationPolicy.setOnClickListener(this)
     }
 
     private fun startAudioDump() {
@@ -2271,7 +2271,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         }
     }*/
 
-    private fun showBreakoutSessions() {
+  /*  private fun showBreakoutSessions() {
         breakoutSessionsAdapter.sessions = breakoutSessions.toMutableList()
         breakoutSessionBottomSheetFragment.adapter = breakoutSessionsAdapter
         activity?.supportFragmentManager?.let {
@@ -2281,7 +2281,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             )
         }
         breakoutSessionsAdapter.notifyDataSetChanged()
-    }
+    }*/
 
  /*   fun answerCall(call: Call) {
         webexViewModel.answer(call, getMediaOption())
@@ -2367,7 +2367,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 /* binding.btnReturnToMainSession -> {
                      webexViewModel.returnToMainSession()
                  }*/
-                binding.ivReceivingNoiseRemoval -> {
+            /*    binding.ivReceivingNoiseRemoval -> {
                     if (webexViewModel.getReceivingNoiseInfo()
                             ?.isNoiseRemovalEnabled() == true
                     )
@@ -2396,7 +2396,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                                     "ReceivingNoiseRemoval enableAPIResult = error : ${it.error?.errorMessage.orEmpty()}"
                                 )
                         }
-                }
+                }*/
 
                 else -> {
                 }
@@ -2422,7 +2422,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                     webexViewModel.setLiveAnnotationPolicy(LiveAnnotationsPolicy.NeedAskForAnnotate)
                 }
             }
-            binding.annotationPolicy.text = policyList()[which]
+//            binding.annotationPolicy.text = policyList()[which]
             dialog.dismiss()
         }
         builder.show()
@@ -3536,7 +3536,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
     }
 
     private fun showCallHeader(callId: String) {
-        mHandler.post {
+       /* mHandler.post {
             try {
                 if (breakout == null) {
                     val callInfo = webexViewModel.getCall(callId)
@@ -3550,7 +3550,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
             } catch (e: Exception) {
                 Log.d(TAG, "error: ${e.message}")
             }
-        }
+        }*/
     }
 
     private fun onCallFailed(callId: String, failedError: WebexError<Any>?) {
@@ -4032,7 +4032,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
         personID: String?,
         alreadyPinned: Boolean
     ) {
-        mediaStreamBottomSheetFragment.call = call
+       /* mediaStreamBottomSheetFragment.call = call
         mediaStreamBottomSheetFragment.renderView = renderView
         mediaStreamBottomSheetFragment.alreadyPinned = alreadyPinned
         mediaStreamBottomSheetFragment.personID = personID
@@ -4047,7 +4047,7 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
                 it,
                 MediaStreamBottomSheetFragment.TAG
             )
-        }
+        }*/
     }
 
     private fun pinStreamClickListener(
@@ -4466,10 +4466,10 @@ class CallControlsFragment : Fragment(), OnClickListener, CallObserverInterface,
          binding.ibSwitchToAudioVideoCall.visibility = currentView*/
 
         binding.ivCancelCall.visibility = currentView
-        var returnToMainSessionVisibility = View.INVISIBLE
+        /*var returnToMainSessionVisibility = View.INVISIBLE
         if (currentView == View.VISIBLE && breakout != null) {
             returnToMainSessionVisibility = View.VISIBLE
-        }
+        }*/
 //        binding.btnReturnToMainSession.visibility = returnToMainSessionVisibility
     }
 
