@@ -419,50 +419,9 @@ class WebexViewModel(val webex: Webex, val repository: WebexRepository) : BaseVi
             } else {
                 result.error?.let { error ->
 
-                    when(error.errorCode){
-                        WebexError.ErrorCode.HOST_PIN_OR_MEETING_PASSWORD_REQUIRED.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.MeetingPinOrPasswordRequired, null))
-                        }
-                        WebexError.ErrorCode.INVALID_PASSWORD.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.InCorrectPassword, null, null))
-                        }
-
-                        WebexError.ErrorCode.INVALID_PASSWORD_OR_HOST_KEY.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.InCorrectPasswordOrHostKey, null, null))
-                        }
-                        WebexError.ErrorCode.CAPTCHA_REQUIRED.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.CaptchaRequired, null, error.data as Phone.Captcha))
-                        }
-                        WebexError.ErrorCode.INVALID_PASSWORD_WITH_CAPTCHA.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.InCorrectPasswordWithCaptcha, null, error.data as Phone.Captcha))
-                        }
-                        WebexError.ErrorCode.INVALID_PASSWORD_OR_HOST_KEY_WITH_CAPTCHA.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.InCorrectPasswordOrHostKeyWithCaptcha, null, error.data as Phone.Captcha))
-                        }
-                        WebexError.ErrorCode.CANNOT_START_INSTANT_MEETING.code -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.CannotStartInstantMeeting, null, null, result.error?.errorMessage))
-                        }
-                        else -> {
-                            _callingLiveData.postValue(
-                                WebexRepository.CallLiveData(
-                                    WebexRepository.CallEvent.DialFailed, null, null, result.error?.errorMessage))
-                        }
-
-                    }
+                    _callingLiveData.postValue(
+                        WebexRepository.CallLiveData(
+                            WebexRepository.CallEvent.DialFailed, null, null, result.error?.errorMessage))
                 } ?: run {
                     _callingLiveData.postValue(
                         WebexRepository.CallLiveData(
