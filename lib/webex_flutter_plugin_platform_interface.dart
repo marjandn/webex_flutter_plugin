@@ -8,7 +8,8 @@ abstract class WebexFlutterPluginPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static WebexFlutterPluginPlatform _instance = MethodChannelWebexFlutterPlugin();
+  static WebexFlutterPluginPlatform _instance =
+      MethodChannelWebexFlutterPlugin();
 
   /// The default instance of [WebexFlutterPluginPlatform] to use.
   ///
@@ -23,7 +24,7 @@ abstract class WebexFlutterPluginPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> startWebexCalling() {
+  Future<void> startWebexCalling({required String callerId}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

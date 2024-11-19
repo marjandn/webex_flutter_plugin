@@ -1,5 +1,6 @@
 package ae.altkamul.webex_flutter_plugin.auth
 
+import ae.altkamul.webex_flutter_plugin.Constants
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -101,7 +102,7 @@ class JWTLoginActivity : AppCompatActivity() {
                 loginModule,
                 JWTWebexModule,
 
-            )
+                )
         )
         AppConfiguration.setContext(applicationContext)
 
@@ -118,8 +119,8 @@ class JWTLoginActivity : AppCompatActivity() {
             Intent(
                 CallActivity.getOutgoingIntent(
                     this,
-                    "23657226651",
-
+                    intent.getStringExtra(Constants.Intent.OUTGOING_CALL_CALLER_ID)
+                        ?: "-"
                 )
             )
         )

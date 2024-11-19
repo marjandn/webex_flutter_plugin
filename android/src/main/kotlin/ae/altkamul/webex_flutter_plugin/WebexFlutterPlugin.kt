@@ -32,11 +32,16 @@ class WebexFlutterPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "startWebexCalling") {
-//      result.success("Android ${android.os.Build.VERSION.RELEASE}")
             val intent =
-                Intent(applicationContext(), JWTLoginActivity::class.java).apply {
+                Intent(
+                    applicationContext(),
+                    JWTLoginActivity::class.java
+                ).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
+                }.putExtra(
+                    Constants.Intent.OUTGOING_CALL_CALLER_ID,
+                    call.argument<String>("caller_id")
+                )
             applicationContext().startActivity(intent)
         } else {
             result.notImplemented()

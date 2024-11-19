@@ -39,7 +39,6 @@ class CallActivity : AppCompatActivity()  {
     var argumentList: HashMap<String, Bundle> = HashMap()
 
 
-
     companion object {
         fun getOutgoingIntent(
             context: Context,
@@ -77,7 +76,6 @@ class CallActivity : AppCompatActivity()  {
     }
 
     fun reload() {
-
         val fragment = addNewFragment()
         Handler(Looper.getMainLooper()).postDelayed({
             val callerId =
@@ -136,10 +134,12 @@ class CallActivity : AppCompatActivity()  {
         builder.setTitle(resources.getString(R.string.call_failed))
         builder.setMessage(message)
 
-        builder.setPositiveButton("OK") { _, _ ->
-
-
+        builder.setPositiveButton("Call again") { _, _ ->
             reload()
+        }
+
+        builder.setNegativeButton("Cancel") { _, _ ->
+             finish()
         }
 
         builder.show()
