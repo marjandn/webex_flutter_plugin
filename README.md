@@ -1,7 +1,7 @@
 # Webex Flutter Plugin
 
 
-🚀 **Webex Flutter Plugin** is a Flutter plugin designed to enable seamless video calling using the Webex Android SDK. Currently, it supports **Android** and allows developers to initiate video calls by passing a phone number from the Flutter side.
+🚀 **Webex Flutter Plugin** is a Flutter plugin designed to enable seamless video calling using the [Webex](https://developer.webex.com/docs) Android SDK. Currently, it supports **Android** and allows developers to initiate video calls by passing a phone number from the Flutter side.
 
 ---
 
@@ -20,8 +20,7 @@
 ## Features
 
 - 📞 **Initiate Video Calls**: Simply provide a number from Flutter, and the plugin takes care of starting a Webex video call.
-- 💻 **Android Support**: Built using for Android using Webex’s robust SDK.
-
+- 💻 **Android Support**: Built for Android using [Webex SDK](https://developer.webex.com/docs/sdks/android).
 
 ---
 
@@ -31,9 +30,7 @@ Add the plugin to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  webex_flutter_plugin:
-    git:
-      url: https://github.com/marjandn/webex_flutter_plugin.git
+  webex_flutter_plugin: ^latest version
 ```
 
 ---
