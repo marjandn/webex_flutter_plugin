@@ -5,7 +5,7 @@ homepage:
 
 environment:
   sdk: ^3.5.3
-  flutter: '>=3.3.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
@@ -37,14 +37,6 @@ flutter:
       android:
         package: ae.altkamul.webex_flutter_plugin
         pluginClass: WebexFlutterPlugin
-      ios:
-        pluginClass: WebexFlutterPlugin
-      linux:
-        pluginClass: WebexFlutterPlugin
-      macos:
-        pluginClass: WebexFlutterPlugin
-      windows:
-        pluginClass: WebexFlutterPluginCApi
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
