@@ -30,6 +30,8 @@ class JWTLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val sentToken =  intent.getStringExtra(Constants.Intent.JWTToken) ?: "";
+
         enableBackgroundConnection()
 
         DataBindingUtil.setContentView<ActivityLoginWithTokenBinding>(
@@ -77,9 +79,12 @@ class JWTLoginActivity : AppCompatActivity() {
                             if (it) {
                                 onLoggedIn()
                             } else {
-                                tokenText.visibility = View.VISIBLE
+                               /* tokenText.visibility = View.VISIBLE
                                 loginButton.visibility = View.VISIBLE
-                                loginFailedTextView.visibility = View.GONE
+                                loginFailedTextView.visibility = View.GONE*/
+
+
+                                loginViewModel.loginWithJWT(sentToken)
                             }
                         }
                     })

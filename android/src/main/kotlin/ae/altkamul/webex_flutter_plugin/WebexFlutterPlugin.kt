@@ -41,6 +41,9 @@ class WebexFlutterPlugin : FlutterPlugin, MethodCallHandler {
                 }.putExtra(
                     Constants.Intent.OUTGOING_CALL_CALLER_ID,
                     call.argument<String>("caller_id")
+                ).putExtra(
+                    Constants.Intent.JWTToken,
+                    call.argument<String>("jwt_token")
                 )
             applicationContext().startActivity(intent)
         } else {
