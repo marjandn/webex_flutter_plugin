@@ -28,7 +28,9 @@ class _MyAppState extends State<MyApp> {
   initPlatformState() async {
     try {
       await _webexFlutterPlugin.startWebexCalling(
-          callerId: _phoneController.text.trim());
+          callerId: _phoneController.text.trim(),
+          jwtToken:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJndWVzdC11c2VyLTczMjQyMzM0OSIsIm5hbWUiOiJHdWVzdCBVc2VyJ3MgRGlzcGxheSBOYW1lIiwiaXNzIjoiWTJselkyOXpjR0Z5YXpvdkwzVnlianBVUlVGTk9tVjFMV05sYm5SeVlXd3RNVjlyTDA5U1IwRk9TVnBCVkVsUFRpODBNR05rTldRMlppMWhNelF6TFRSa05XSXRZbU5tTUMwM016SmtNekk1TVRsaU5qSSIsImV4cCI6IjE3MzMwMzUzOTUifQ.Iof4i8399h6yFOD6hvFoYiFg6jte8r6RaUmgnZ1ZgR0');
     } on PlatformException {
       debugPrint('Something went wrong');
     }
@@ -51,9 +53,7 @@ class _MyAppState extends State<MyApp> {
                 TextField(
                   controller: _phoneController,
                 ),
-                ElevatedButton(
-                    onPressed: initPlatformState,
-                    child: const Text("Call Now ...!"))
+                ElevatedButton(onPressed: initPlatformState, child: const Text("Call Now ...!"))
               ],
             ),
           )),

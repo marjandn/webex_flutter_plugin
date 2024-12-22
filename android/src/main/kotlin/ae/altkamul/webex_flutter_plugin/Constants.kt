@@ -4,6 +4,7 @@ class Constants {
     object Intent {
 
         const val OUTGOING_CALL_CALLER_ID = "OUTGOING_CALL_CALLER_ID"
+        const val JWTToken = "JWT_Token"
         const val CALL_ID = "callid"
     }
 
