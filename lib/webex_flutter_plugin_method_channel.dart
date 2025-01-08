@@ -10,8 +10,8 @@ class MethodChannelWebexFlutterPlugin extends WebexFlutterPluginPlatform {
   final methodChannel = const MethodChannel('webex_flutter_plugin');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
+  Future<void> startWebexCalling({required String callerId, required String jwtToken}) async {
+    await methodChannel
+        .invokeMethod<String>('startWebexCalling', {'caller_id': callerId, 'jwt_token': jwtToken});
   }
 }

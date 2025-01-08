@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin_example
+package marjandn.webex_flutter_plugin_example
 
 import io.flutter.embedding.android.FlutterActivity
 
