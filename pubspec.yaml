@@ -1,7 +1,7 @@
 name: webex_flutter_plugin
 description: " Webex Flutter Plugin is a Flutter plugin designed to enable seamless video calling using the Webex Android SDK."
 version: 0.0.1
-homepage:
+homepage: https://github.com/marjandn/webex_flutter_plugin
 
 environment:
   sdk: ^3.5.3
