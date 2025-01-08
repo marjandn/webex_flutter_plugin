@@ -38,12 +38,14 @@ dependencies:
 ## Fast Use:
 
 ```
- initPlatformState() async {
+  initPlatformState() async {
     try {
       await _webexFlutterPlugin.startWebexCalling(
-          callerId: _phoneController.text.trim());
+          callerId: _phoneController.text.trim(), jwtToken: 'JWT Token');
     } on PlatformException {
       debugPrint('Something went wrong');
     }
+
+    if (!mounted) return;
   }
 ```

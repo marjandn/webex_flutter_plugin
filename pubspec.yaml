@@ -1,11 +1,11 @@
 name: webex_flutter_plugin
-description: "A new Flutter plugin project."
+description: " Webex Flutter Plugin is a Flutter plugin designed to enable seamless video calling using the Webex Android SDK."
 version: 0.0.1
 homepage:
 
 environment:
   sdk: ^3.5.3
-  flutter: '>=3.3.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
@@ -35,16 +35,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: ae.altkamul.webex_flutter_plugin
+        package: marjandn.webex_flutter_plugin
         pluginClass: WebexFlutterPlugin
-      ios:
-        pluginClass: WebexFlutterPlugin
-      linux:
-        pluginClass: WebexFlutterPlugin
-      macos:
-        pluginClass: WebexFlutterPlugin
-      windows:
-        pluginClass: WebexFlutterPluginCApi
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

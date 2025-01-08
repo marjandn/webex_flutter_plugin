@@ -23,7 +23,7 @@ abstract class WebexFlutterPluginPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<void> startWebexCalling({required String callerId, required String jwtToken}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

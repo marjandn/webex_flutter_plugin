@@ -1,4 +1,4 @@
-group = "ae.altkamul.webex_flutter_plugin"
+group = "marjandn.webex_flutter_plugin"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -32,7 +32,7 @@ android {
     compileSdk = 34
 
     if (project.android.hasProperty("namespace")) {
-        namespace = "ae.altkamul.webex_flutter_plugin"
+        namespace = "marjandn.webex_flutter_plugin"
     }
     dataBinding { enabled = true }
     compileOptions {

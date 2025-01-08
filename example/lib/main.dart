@@ -16,30 +16,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final _webexFlutterPlugin = WebexFlutterPlugin();
+
+  final _phoneController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
     try {
-      platformVersion = await _webexFlutterPlugin.getPlatformVersion() ??
-          'Unknown platform version';
+      await _webexFlutterPlugin.startWebexCalling(
+          callerId: _phoneController.text.trim(), jwtToken: 'Webex JWT Token');
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      debugPrint('Something went wrong');
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
   }
 
@@ -47,16 +40,21 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: TextButton(
-            child: Text('Start Calling...'),
-            onPressed: initPlatformState,
+          appBar: AppBar(
+            title: const Text('Webex Plugin example app'),
           ),
-        ),
-      ),
+          body: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _phoneController,
+                ),
+                ElevatedButton(onPressed: initPlatformState, child: const Text("Call Now ...!"))
+              ],
+            ),
+          )),
     );
   }
 }
