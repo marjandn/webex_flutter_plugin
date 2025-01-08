@@ -1,20 +1,20 @@
-package ae.altkamul.webex_flutter_plugin.auth
+package marjandn.webex_flutter_plugin.auth
 
-import ae.altkamul.webex_flutter_plugin.Constants
+import marjandn.webex_flutter_plugin.Constants
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import ae.altkamul.webex_flutter_plugin.R
-import ae.altkamul.webex_flutter_plugin.WebexCallApp
-import ae.altkamul.webex_flutter_plugin.WebexViewModel
-import ae.altkamul.webex_flutter_plugin.calling.CallActivity
-import ae.altkamul.webex_flutter_plugin.databinding.ActivityLoginWithTokenBinding
+import marjandn.webex_flutter_plugin.R
+import marjandn.webex_flutter_plugin.WebexCallApp
+import marjandn.webex_flutter_plugin.WebexViewModel
+import marjandn.webex_flutter_plugin.calling.CallActivity
+import marjandn.webex_flutter_plugin.databinding.ActivityLoginWithTokenBinding
 
-import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
-import ae.altkamul.webex_flutter_plugin.webexModule
+import marjandn.webex_flutter_plugin.utils.showDialogWithMessage
+import marjandn.webex_flutter_plugin.webexModule
 import com.ciscowebex.androidsdk.utils.AppConfiguration
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules

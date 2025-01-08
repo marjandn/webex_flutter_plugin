@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin
+package marjandn.webex_flutter_plugin
 
 import android.app.Application
 import android.content.Context

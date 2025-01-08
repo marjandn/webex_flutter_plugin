@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   initPlatformState() async {
     try {
       await _webexFlutterPlugin.startWebexCalling(
-          callerId: _phoneController.text.trim(), jwtToken: 'JWT Token');
+          callerId: _phoneController.text.trim(), jwtToken: 'Webex JWT Token');
     } on PlatformException {
       debugPrint('Something went wrong');
     }

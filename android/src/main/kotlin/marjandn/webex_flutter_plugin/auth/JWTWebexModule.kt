@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin.auth
+package marjandn.webex_flutter_plugin.auth
 
 import com.ciscowebex.androidsdk.Webex
 import com.ciscowebex.androidsdk.auth.JWTAuthenticator

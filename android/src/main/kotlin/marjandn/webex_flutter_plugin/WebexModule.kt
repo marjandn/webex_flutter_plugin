@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin
+package marjandn.webex_flutter_plugin
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

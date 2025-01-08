@@ -1,7 +1,7 @@
-package ae.altkamul.webex_flutter_plugin
+package marjandn.webex_flutter_plugin
 
-import ae.altkamul.webex_flutter_plugin.WebexCallApp.Companion.applicationContext
-import ae.altkamul.webex_flutter_plugin.auth.JWTLoginActivity
+import marjandn.webex_flutter_plugin.WebexCallApp.Companion.applicationContext
+import marjandn.webex_flutter_plugin.auth.JWTLoginActivity
 import android.content.Intent
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat.startActivity

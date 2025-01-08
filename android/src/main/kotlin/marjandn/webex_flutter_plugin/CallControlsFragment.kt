@@ -1,6 +1,6 @@
-package ae.altkamul.webex_flutter_plugin
+package marjandn.webex_flutter_plugin
 
-import ae.altkamul.webex_flutter_plugin.auth.JWTLoginActivity
+import marjandn.webex_flutter_plugin.auth.JWTLoginActivity
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
@@ -28,10 +28,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ciscowebex.androidsdk.WebexError
-import ae.altkamul.webex_flutter_plugin.databinding.FragmentCallControlsBinding
-import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
-import ae.altkamul.webex_flutter_plugin.utils.showDialogWithMessage
-import ae.altkamul.webex_flutter_plugin.utils.UIUtils
+import marjandn.webex_flutter_plugin.databinding.FragmentCallControlsBinding
+import marjandn.webex_flutter_plugin.utils.CallObjectStorage
+import marjandn.webex_flutter_plugin.utils.showDialogWithMessage
+import marjandn.webex_flutter_plugin.utils.UIUtils
 import com.ciscowebex.androidsdk.phone.Call
 import com.ciscowebex.androidsdk.phone.CallObserver
 import com.ciscowebex.androidsdk.phone.MediaOption
@@ -47,9 +47,9 @@ import com.ciscowebex.androidsdk.phone.ReceivingNoiseInfo
 import com.ciscowebex.androidsdk.phone.RemoteShareCallback
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem
 import com.ciscowebex.androidsdk.phone.closedCaptions.ClosedCaptionsInfo
-import ae.altkamul.webex_flutter_plugin.utils.GlobalExceptionHandler
-import ae.altkamul.webex_flutter_plugin.calling.CallActivity
-import ae.altkamul.webex_flutter_plugin.calling.CallObserverInterface
+import marjandn.webex_flutter_plugin.utils.GlobalExceptionHandler
+import marjandn.webex_flutter_plugin.calling.CallActivity
+import marjandn.webex_flutter_plugin.calling.CallObserverInterface
 import android.widget.ImageButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

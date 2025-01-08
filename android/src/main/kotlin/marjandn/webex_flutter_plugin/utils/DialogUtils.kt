@@ -1,11 +1,11 @@
-package ae.altkamul.webex_flutter_plugin.utils
+package marjandn.webex_flutter_plugin.utils
 
 import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import ae.altkamul.webex_flutter_plugin.R
+import marjandn.webex_flutter_plugin.R
 
 
 fun showDialogWithMessage(context: Context, titleResourceId: Int?, message: String, positiveButtonText: Int = android.R.string.ok) {

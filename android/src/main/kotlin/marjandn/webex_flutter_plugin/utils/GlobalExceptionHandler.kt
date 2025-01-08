@@ -1,9 +1,9 @@
-package ae.altkamul.webex_flutter_plugin.utils
+package marjandn.webex_flutter_plugin.utils
 
 import android.util.Log
 import com.ciscowebex.androidsdk.phone.Call
 import com.ciscowebex.androidsdk.phone.CallObserver
-import ae.altkamul.webex_flutter_plugin.utils.CallObjectStorage
+import marjandn.webex_flutter_plugin.utils.CallObjectStorage
 import kotlin.system.exitProcess
 
 internal class GlobalExceptionHandler : Thread.UncaughtExceptionHandler {

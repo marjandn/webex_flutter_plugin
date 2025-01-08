@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin.calling
+package marjandn.webex_flutter_plugin.calling
 
 import android.app.AlertDialog
 import android.app.PictureInPictureParams
@@ -14,11 +14,11 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import ae.altkamul.webex_flutter_plugin.CallControlsFragment
-import ae.altkamul.webex_flutter_plugin.Constants
-import ae.altkamul.webex_flutter_plugin.R
-import ae.altkamul.webex_flutter_plugin.WebexViewModel
-import ae.altkamul.webex_flutter_plugin.databinding.ActivityCallBinding
+import marjandn.webex_flutter_plugin.CallControlsFragment
+import marjandn.webex_flutter_plugin.Constants
+import marjandn.webex_flutter_plugin.R
+import marjandn.webex_flutter_plugin.WebexViewModel
+import marjandn.webex_flutter_plugin.databinding.ActivityCallBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.ciscowebex.androidsdk.phone.*
 import com.ciscowebex.androidsdk.phone.closedCaptions.CaptionItem

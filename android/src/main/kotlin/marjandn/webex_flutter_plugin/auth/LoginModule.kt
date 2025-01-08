@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin.auth
+package marjandn.webex_flutter_plugin.auth
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module

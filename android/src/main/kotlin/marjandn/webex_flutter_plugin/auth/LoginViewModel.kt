@@ -1,6 +1,6 @@
-package ae.altkamul.webex_flutter_plugin.auth
+package marjandn.webex_flutter_plugin.auth
 
-import ae.altkamul.webex_flutter_plugin.BaseViewModel
+import marjandn.webex_flutter_plugin.BaseViewModel
 import android.webkit.WebView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

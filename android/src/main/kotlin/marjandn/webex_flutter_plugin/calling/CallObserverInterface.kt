@@ -1,4 +1,4 @@
-package ae.altkamul.webex_flutter_plugin.calling
+package marjandn.webex_flutter_plugin.calling
 
 import com.ciscowebex.androidsdk.phone.Breakout
 import com.ciscowebex.androidsdk.phone.BreakoutSession
